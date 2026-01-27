@@ -11,11 +11,10 @@ const useStyles = makeStyles()(() => ({
 
 
     allPartsContainer: {
-        marginTop: "40px",
         display: "flex",
         // backgroundColor: "yellow",
         flexDirection: "column",
-        gap: "20vh",
+        gap: "15%",
         color: "white"
     },
 
@@ -32,7 +31,10 @@ const useStyles = makeStyles()(() => ({
     text: {
         fontFamily: '"Noto Sans Hebrew", sans-serif',
         fontSize: "22px",
+    },
+    textHello: {
         textAlign: "center",
+        marginTop: "15%"
     },
 
     leftButtonsContainer: {
@@ -48,9 +50,9 @@ const useStyles = makeStyles()(() => ({
         color: "white",
         fontFamily: '"Noto Sans Hebrew", sans-serif',
         height: "170px",
+        textAlign: "center",
         width: "170px",
         fontSize: "22px",
-        textAlign: "center",
         backgroundColor: "#6F0F46",
         boxShadow: "inset 0 0 20px rgba(0, 0, 0, 0.45)",
         "&:hover": {

@@ -8,12 +8,12 @@ const Home: React.FC = () => {
     return (
         <div className={classes.wholeHomeContainer}>
             <div className={classes.allPartsContainer}>
-                <Typography variant="h3" className={classes.text}>שלום User<br/>מה ברצונך לעשות?</Typography>
+                <Typography variant="h3" className={cx(classes.text, classes.textHello)}>שלום User<br/>מה ברצונך לעשות?</Typography>
 
                 <div className={classes.buttonsContainer}>
                     <Button className={classes.pagesButton} component={NavLink} to="/newDebriefing">
                         <AddIcon className={classes.icon}/>
-                        <Typography variant="h5" className={classes.text}>תחקיר חדש</Typography>
+                        <Typography variant="h5" className={classes.text}>צור תחקיר חדש</Typography>
                     </Button>
 
                     <div className={classes.leftButtonsContainer}>
