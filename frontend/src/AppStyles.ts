@@ -5,9 +5,11 @@ const useStyles = makeStyles()(() => ({
         margin: 0,
         width: "100vw",
         // width: "98.5vw",
-        height: "100vh",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
     },
-    
+
 }));
 
 export default useStyles;

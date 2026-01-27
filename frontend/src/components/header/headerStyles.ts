@@ -7,39 +7,32 @@ const useStyles = makeStyles()(() => ({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: "1%"
+        backgroundColor: "black"
     },
+
+
     rightSideContainer: {
         display: "flex",
-        gap: "5%",
-        width: "30%"
+        marginRight: "5px"
     },
     myAccountButton: {
         fontFamily: '"Noto Sans Hebrew", sans-serif',
-        color: "rgba(83, 83, 83, 1)",
-        backgroundColor: "rgba(251, 245, 225, 1)",
+        color: "white",
+        backgroundColor: "#6F0F46",
         borderRadius: "20px",
         fontSize: "14px",
-        width: "100px"  
+        width: "100px",
+        "&:hover": {
+            backgroundColor: "#550b35",
+            color: "white",
+        },
     },
-    rightSideContainerIcons: {
-        display: "flex",
-        gap: "10px"
-    },
-    shoppingCart: {
-        color: "rgba(83, 83, 83, 1)",
-        width: "35px",
-        height: "35px"
-    },
-    logo: {
-        width: "50px",
-        height: "50px",
-        marginLeft: "10px"
-    },
+
+
     headerTitlesContainer: {
-        width: "40%",
+        width: "35%",
         height: "100%",
-        gap: "20px",
+        // gap: "20px",
         display: "flex",
         justifyContent: "space-evenly",
         alignItems: "center"
@@ -47,7 +40,7 @@ const useStyles = makeStyles()(() => ({
     button: {
         width: "100%",
         fontFamily: '"Noto Sans Hebrew", sans-serif',
-        color: "black",
+        color: "white",
         padding: "13px",
         fontSize: "14px",
         fontWeight: "bold",
@@ -57,21 +50,27 @@ const useStyles = makeStyles()(() => ({
         "& , MuiButtonBase-root": {
             borderRadius: "0px"
         },
-
-
         // hide touch ripple element (extra safety)
         "& .MuiTouchRipple-root": {
             display: "none !important",
         },
 
         "&:hover": {
-            backgroundColor: "white",
-            borderBottom: "3px solid white",
+            backgroundColor: "rgb(58, 58, 58)",
+            borderBottom: "3px solid black",
+            color: "white"
             //transitionDuration: "0.2s"
         },
         "&.active": {
-            borderBottom: "3px solid black", // active state stays
+            borderBottom: "3px solid white", // active state stays
         }
+    },
+
+
+    logo: {
+        width: "50px",
+        height: "50px",
+        marginLeft: "10px"
     },
 }));
 
