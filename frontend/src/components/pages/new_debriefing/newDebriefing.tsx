@@ -1,44 +1,41 @@
-import { useState } from "react";
+import React, { useState, type FormEvent } from 'react';
+import axios from 'axios';
 
-export default function NewDebriefing() {
-  const [title, setTitle] = useState<string>("");
+const NewDebriefing: React.FC = () => {
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleSave = async () => {
-    if (!title) {
-      alert("Enter a title");
-      return;
-    }
-
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/debriefing", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title }),
+      // Send a POST request to your backend endpoint
+      const response = await axios.post("http://localhost:3001/api/debriefings", {
+        title,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to save debriefing");
-      }
-
-      const data = await response.json();
-      console.log(data);
-      alert("Debriefing saved!");
-      setTitle(""); // clear input after saving
-    } catch (error) {
-      console.error(error);
-      alert("Error saving debriefing: " + error );
+      setMessage(`Created debriefing: ${response.data.title}`);
+      setTitle("");
+    } 
+    catch (error) {
+      console.error('There was an error saving the data!', error);
+      setMessage('Error saving data.' + error);
     }
   };
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Debriefing title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <button onClick={handleSave}>Save</button>
+      <h2>Save Data to SQL Database</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>
+            Title:
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+          </label>
+        </div>
+        <button type="submit">Save Data</button>
+      </form>
+      {message && <p>{message}</p>}
     </div>
   );
-}
+};
+
+export default NewDebriefing;
