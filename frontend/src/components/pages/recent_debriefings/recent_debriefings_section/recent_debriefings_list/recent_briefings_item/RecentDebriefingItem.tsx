@@ -1,9 +1,29 @@
+import { Typography } from "@mui/material";
+import type { status } from "../../../../../../interfaces/recentDebriefingsItem";
+import useStyles from "./RecentDebriefingItemStyles";
+import DescriptionIcon from '@mui/icons-material/Description';
+
 type ItemProps = {
-  name: string;
+  title: string,
+  status: status,
+  system: string,
+  last_update_time: string,
+  creation_time: string;
 };
 
-const RecentDebriefingsItem: React.FC<ItemProps> = ({ name }: ItemProps) => {
-  return <div>{name}</div>;
+const RecentDebriefingsItem: React.FC<ItemProps> = ({ title, status, system, last_update_time, creation_time }: ItemProps) => {
+  const { classes, cx } = useStyles();
+
+  return (
+    <div className={classes.row}>
+      <DescriptionIcon />
+      <Typography variant="h6">{title}</Typography>
+      <Typography variant="h6">{system}</Typography>
+      <Typography variant="h6">{status}</Typography>
+      <Typography variant="h6">{last_update_time}</Typography>
+      <Typography variant="h6">{creation_time}</Typography>
+    </div>
+  )
 }
 
 export default RecentDebriefingsItem;

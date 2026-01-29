@@ -1,13 +1,48 @@
+import { Typography } from "@mui/material";
 import RecentDebriefingsList from "./recent_debriefings_list/RecentDebriefingList";
+import useStyles from "./recentDebriefingsSectionStyles";
+import type { RecentDebriefingsItem } from "../../../../interfaces/recentDebriefingsItem";
 
 const AllRecentDebriefingsSection: React.FC = () => {
-  const folder1Items = ["Debrief 1", "Debrief 2", "Debrief 3"];
+  const { classes, cx } = useStyles();
+
+  const recentDebriefingsItemList: RecentDebriefingsItem[] = [
+    {
+      title: "תחקיר 1",
+      status: "הושלם",
+      system: "X",
+      last_update_time: "29/01/2026 03:17",
+      creation_time: "29/01/2026 03:17"
+    },
+    {
+      title: "תחקיר 2",
+      status: "בתהליך",
+      system: "Y",
+      last_update_time: "29/01/2026 02:17",
+      creation_time: "29/01/2026 03:17"
+    },
+    {
+      title: "תחקיר 3",
+      status: "הושלם",
+      system: "Z",
+      last_update_time: "23/02/2025 11:53",
+      creation_time: "01/07/2025 08:00"
+    }
+  ];
 
   return (
     <div>
-      <h2>All Debriefings</h2>
 
-      <RecentDebriefingsList items={folder1Items} />
+      <div className={classes.tableHeader}>
+        <Typography variant="h6">פתח תחקיר</Typography>
+        <Typography variant="h6">שם תחקיר</Typography>
+        <Typography variant="h6">מערכת</Typography>
+        <Typography variant="h6">סטטוס</Typography>
+        <Typography variant="h6">זמן עדכון אחרון</Typography>
+        <Typography variant="h6">זמן יצירה</Typography>
+      </div>
+
+      <RecentDebriefingsList items={recentDebriefingsItemList} />
 
     </div>
   );
