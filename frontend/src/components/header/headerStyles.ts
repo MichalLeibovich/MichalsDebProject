@@ -57,9 +57,10 @@ const useStyles = makeStyles()(() => ({
 
         "&:hover": {
             backgroundColor: "rgb(58, 58, 58)",
-            borderBottom: "3px solid black",
-            color: "white"
-            //transitionDuration: "0.2s"
+            //borderBottom: "3px solid black",
+            // borderBottom: "3px solid transparent",
+            color: "white",
+            // transitionDuration: "0.2s"
         },
         "&.active": {
             borderBottom: "3px solid white", // active state stays
