@@ -14,7 +14,8 @@ const useStyles = makeStyles()(() => ({
         display: "flex",
         backgroundColor: "#6f0f4567",
         flexDirection: "column",
-        gap: "15%",
+        width: "50%",
+        // gap: "15%",
         color: "white",
         "& ,fading-border-element": {
             "&,fading-shadow-element": {
@@ -26,6 +27,37 @@ const useStyles = makeStyles()(() => ({
     text: {
         fontFamily: '"Noto Sans Hebrew", sans-serif',
     },
+    fieldsText: {
+        fontSize: "20px"
+    },
+    textFields: {
+        minWidth: "30%",
+        maxWidth: "60%",
+    },
+
+
+    fieldsTextAndFieldInOneLineContainer: {
+        display: "flex",
+        alignItems: "center",
+        gap: "7px"
+    },
+
+
+
+    times: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "20px"
+    },
+    timesField: {
+        width: "110px",
+        "&.MuiInputBase-input": {
+            textAlign: "center"
+
+        }
+    }
+
 
 }));
 

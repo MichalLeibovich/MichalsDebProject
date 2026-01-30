@@ -98,9 +98,9 @@ const NewDebriefing: React.FC = () => {
       <div className={classes.allPartsContainer}>
         <Typography variant="h4" className={classes.text}>תחקיר חדש</Typography>
         <form onSubmit={handleSubmit}>
-          <div>
-            <Typography variant="h5" className={classes.text}>כותרת:</Typography>
-            <TextField id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+          <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+            <Typography variant="h5" className={cx(classes.text, classes.fieldsText)}>כותרת:</Typography>
+            <TextField className={classes.textFields} id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
           </div>
 
           <div>
@@ -124,15 +124,15 @@ const NewDebriefing: React.FC = () => {
 
           <div>
             <Typography variant="h5" className={classes.text}>פרטים כלליים</Typography>
-            <div>
+            <div className={classes.fieldsTextAndFieldInOneLineContainer}>
               <Typography variant="h6" className={classes.text}>שם ממלא המסמך:</Typography>
               <TextField id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
             </div>
-            <div>
+            <div className={classes.fieldsTextAndFieldInOneLineContainer}>
               <Typography variant="h6" className={classes.text}>מ.א:</Typography>
               <TextField id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
             </div>
-            <div>
+            <div className={classes.fieldsTextAndFieldInOneLineContainer}>
               <Typography variant="h6" className={classes.text}>תאריך:</Typography>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -146,7 +146,7 @@ const NewDebriefing: React.FC = () => {
 
           <div>
             <Typography variant="h5" className={classes.text}>הגורמים המשתתפים</Typography>
-            <div>
+            <div className={classes.fieldsTextAndFieldInOneLineContainer}>
               <Typography variant="h6" className={classes.text}>מנהלי התקלה מצוות נוק:</Typography>
               <TextField id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
             </div>
@@ -289,7 +289,7 @@ const NewDebriefing: React.FC = () => {
                     />
 
                     {team in selectedTeams && (
-                      <div>
+                      <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                         <Typography variant="h6" className={classes.text}>שם/ות:</Typography>
                         <TextField
                           id="selectedTeamsNames"
@@ -311,7 +311,6 @@ const NewDebriefing: React.FC = () => {
             </div>
           </div>
 
-
           <div>
             <Typography variant="h5" className={classes.text}>תיאור התקלה</Typography>
             <div>
@@ -320,22 +319,24 @@ const NewDebriefing: React.FC = () => {
                 onChange={(e) => setErrorDescription(e.target.value)} required />
             </div>
 
-            <div>
+            <div className={classes.times}>
               <div>
                 <Typography variant="h6" className={classes.text}>זמן גילוי:</Typography>
-                <TextField id="discoveryTime" label="זמן גילוי" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
+                <TextField className={classes.timesField} id="discoveryTime" label="זמן גילוי" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
               </div>
               <div>
                 <Typography variant="h6" className={classes.text}>זמן התחלה:</Typography>
-                <TextField id="startTime" label="זמן התחלה" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+                <TextField className={classes.timesField} id="startTime" label="זמן התחלה" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
               </div>
               <div>
                 <Typography variant="h6" className={classes.text}>זמן סיום:</Typography>
-                <TextField id="endTime" label="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
+                <TextField className={classes.timesField} id="endTime" label="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
                 />
               </div>
             </div>
           </div>
+
+
 
           <div>
             <Typography variant="h5" className={classes.text}>פירוט התקלה</Typography>
@@ -416,6 +417,8 @@ const NewDebriefing: React.FC = () => {
 
             </div>
           </div>
+
+
 
           <div>
             <Typography variant="h5">פתרון התקלה</Typography>
