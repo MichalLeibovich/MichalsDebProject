@@ -9,6 +9,12 @@ type PersonInvolved = {
   phone: string;
 };
 
+type Event = {
+  id: number;
+  time: string;
+  occurrence: string;
+};
+
 const NewDebriefing: React.FC = () => {
   const { classes, cx } = useStyles();
   const [title, setTitle] = useState("");
@@ -19,17 +25,21 @@ const NewDebriefing: React.FC = () => {
   const [errorDiscoverers, setErrorDiscoverers] = useState<PersonInvolved[]>([
     { id: 0, name: "", phone: "" }
   ]);
-  const [errorSolverers, setErrorSolverers] = useState<PersonInvolved[]>([
+  const [errorSolvers, setErrorSolvers] = useState<PersonInvolved[]>([
     { id: 0, name: "", phone: "" }
   ]);
 
   const teams = ["אפקט הפרפר", "גאוסיין", "הרמוניה", "סוויטץ'", "סופרנובה", "סטארלייט"]
-  const [selected, setSelected] = useState<Record<string, string>>({});
+  const [selectedTeams, setSelectedTeams] = useState<Record<string, string>>({});
 
   const [errorDescription, setErrorDescription] = useState("");
   const [discoveryTime, setDiscoveryTime] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+
+  const [chainOfEvents, setChainOfEvents] = useState<Event[]>([
+    { id: 0, time: "", occurrence: "" }
+  ]);
 
   const [errorSolution, setErrorSolution] = useState("");
   const [totalTime, setTotalTime] = useState("");
@@ -41,18 +51,16 @@ const NewDebriefing: React.FC = () => {
   const [errorCause, setErrorCause] = useState("");
   const [whatWasDamagedDueError, setWhatWasDamagedDueError] = useState("");
 
-  errorManagingConclusion
-
 
   const [message, setMessage] = useState("");
 
 
   useEffect(() => {
-    console.log(selected);
-  }, [selected]);
+    console.log(selectedTeams);
+  }, [selectedTeams]);
 
   const toggle = (team: string) => {
-    setSelected((prev) => {
+    setSelectedTeams((prev) => {
       if (team in prev) {
         const copy = { ...prev };
         delete copy[team];   // uncheck → remove & clear
@@ -83,7 +91,7 @@ const NewDebriefing: React.FC = () => {
   return (
     <div className={classes.wholePageContainer}>
       <div className={classes.allPartsContainer}>
-        <Typography variant="h4" className={classes.text}>תחקיר חדש</Typography>
+        <Typography variant="h5" className={classes.text}>תחקיר חדש</Typography>
         <form onSubmit={handleSubmit}>
           <div>
             <label>כותרת:</label>
@@ -91,7 +99,7 @@ const NewDebriefing: React.FC = () => {
           </div>
 
           <div>
-            <Typography variant="h4">פרטים כלליים</Typography>
+            <Typography variant="h5">פרטים כלליים</Typography>
             <div>
               <label>שם ממלא המסמך:</label>
               <input id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
@@ -107,7 +115,7 @@ const NewDebriefing: React.FC = () => {
           </div>
 
           <div>
-            <Typography variant="h4">הגורמים המשתתפים</Typography>
+            <Typography variant="h5">הגורמים המשתתפים</Typography>
             <div>
               <label>מנהלי התקלה מצוות נוק:</label>
               <input id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
@@ -183,15 +191,16 @@ const NewDebriefing: React.FC = () => {
             <div>
               <Typography variant="h6">פותר התקלה</Typography>
 
-              {errorSolverers.map((person) => (
+              {errorSolvers.map((person) => (
                 <div key={person.id} style={{ marginBottom: "16px" }}>
                   <div>
                     <label>שם מלא:</label>
                     <input
+                      id="errorSolvers"
                       type="text"
                       value={person.name}
                       onChange={(e) =>
-                        setErrorSolverers((prev) =>
+                        setErrorSolvers((prev) =>
                           prev.map((p) =>
                             p.id === person.id
                               ? { ...p, name: e.target.value }
@@ -206,10 +215,11 @@ const NewDebriefing: React.FC = () => {
                   <div>
                     <label>מספר טלפון:</label>
                     <input
+                      id="phone"
                       type="number"
                       value={person.phone}
                       onChange={(e) =>
-                        setErrorSolverers((prev) =>
+                        setErrorSolvers((prev) =>
                           prev.map((p) =>
                             p.id === person.id
                               ? { ...p, phone: e.target.value }
@@ -226,7 +236,7 @@ const NewDebriefing: React.FC = () => {
               <button
                 type="button"
                 onClick={() =>
-                  setErrorSolverers((prev) => [
+                  setErrorSolvers((prev) => [
                     ...prev,
                     { id: Date.now(), name: "", phone: "" }
                   ])
@@ -238,7 +248,7 @@ const NewDebriefing: React.FC = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setErrorSolverers((prev) => {
+                  setErrorSolvers((prev) => {
                     if (prev.length <= 1) return prev; // leave at least one field
                     return prev.slice(0, prev.length - 1) // remove last
                   })
@@ -255,20 +265,20 @@ const NewDebriefing: React.FC = () => {
                   <div
                     key={team}>
                     <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <input type="checkbox" checked={team in selected}
+                      <input type="checkbox" checked={team in selectedTeams}
                         onChange={() => toggle(team)}
                       />
                       {team}
                     </label>
 
-                    {team in selected && (
+                    {team in selectedTeams && (
                       <label> שם/ות:
                         <input
                           type="text"
-                          value={selected[team]}
+                          value={selectedTeams[team]}
                           placeholder=""
                           onChange={(e) =>
-                            setSelected((prev) => ({
+                            setSelectedTeams((prev) => ({
                               ...prev,
                               [team]: e.target.value,
                             }))
@@ -285,7 +295,7 @@ const NewDebriefing: React.FC = () => {
 
 
           <div>
-            <Typography variant="h4">תיאור התקלה</Typography>
+            <Typography variant="h5">תיאור התקלה</Typography>
             <div>
               <label>תיאור התקלה:</label>
               <input id="errorDescription" type="text" value={errorDescription} onChange={(e) => setErrorDescription(e.target.value)} required />
@@ -308,11 +318,89 @@ const NewDebriefing: React.FC = () => {
           </div>
 
           <div>
-            <Typography variant="h6">פירוט התקלה</Typography>
+            <Typography variant="h5">פירוט התקלה</Typography>
+
+            <div>
+              <Typography variant="h6">השתלשלות האירועים:</Typography>
+
+              <div>
+                <Typography variant="h6">זמן</Typography>
+                <Typography variant="h6">התרחשות</Typography>
+              </div>
+
+              <div>
+                {chainOfEvents.map((event) => (
+                  <div key={event.id} style={{ marginBottom: "16px" }}>
+                    <div>
+                      <input
+                        id="eventTime"
+                        type="text"
+                        placeholder="זמן"
+                        value={event.time}
+                        onChange={(e) =>
+                          setChainOfEvents((prev) =>
+                            prev.map((p) =>
+                              p.id === event.id
+                                ? { ...p, time: e.target.value }
+                                : p
+                            )
+                          )
+                        }
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <input
+                        id="eventOccurrence"
+                        type="string"
+                        placeholder="התרחשות"
+                        value={event.occurrence}
+                        onChange={(e) =>
+                          setChainOfEvents((prev) =>
+                            prev.map((p) =>
+                              p.id === event.id
+                                ? { ...p, occurrence: e.target.value }
+                                : p
+                            )
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setChainOfEvents((prev) => [
+                      ...prev,
+                      { id: Date.now(), time: "", occurrence: "" }
+                    ])
+                  }
+                >
+                  +
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setChainOfEvents((prev) => {
+                      if (prev.length <= 1) return prev; // leave at least one field
+                      return prev.slice(0, prev.length - 1) // remove last
+                    })
+                  }}
+                >
+                  -
+                </button>
+              </div>
+
+            </div>
           </div>
 
           <div>
-            <Typography variant="h6">פתרון התקלה</Typography>
+            <Typography variant="h5">פתרון התקלה</Typography>
             <div>
               <label htmlFor="errorSolution">פתרון:</label>
               <input id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
