@@ -1,7 +1,11 @@
 import React, { useEffect, useState, type FormEvent } from 'react';
 import axios from 'axios';
 import useStyles from './newDebriefingStyles';
-import { Button, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 type PersonInvolved = {
   id: number;
@@ -18,9 +22,10 @@ type Event = {
 const NewDebriefing: React.FC = () => {
   const { classes, cx } = useStyles();
   const [title, setTitle] = useState("");
+  const [system, setSystem] = useState("");
   const [documentFillerName, setDocumentFillerName] = useState("");
   const [personalNumber, setPersonalNumber] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [date, setDate] = React.useState<Dayjs | null>(dayjs(Date.now()));
   const [errorDealers, setErrorDealers] = useState("");
   const [errorDiscoverers, setErrorDiscoverers] = useState<PersonInvolved[]>([
     { id: 0, name: "", phone: "" }
@@ -99,6 +104,25 @@ const NewDebriefing: React.FC = () => {
           </div>
 
           <div>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel id="demo-simple-select-label">מערכת</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={system}
+                label="מערכת"
+                onChange={(e) => setSystem(e.target.value)}>
+                <MenuItem value="אפקט הפרפר">אפקט הפרפר</MenuItem>
+                <MenuItem value="גאוסיין">גאוסיין</MenuItem>
+                <MenuItem value="הרמוניה">הרמוניה</MenuItem>
+                <MenuItem value="סוויטץ'">סוויטץ'</MenuItem>
+                <MenuItem value="סופרנובה">סופרנובה</MenuItem>
+                <MenuItem value="סטארלייט">סטארלייט</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+
+          <div>
             <Typography variant="h5" className={classes.text}>פרטים כלליים</Typography>
             <div>
               <Typography variant="h6" className={classes.text}>שם ממלא המסמך:</Typography>
@@ -110,7 +134,13 @@ const NewDebriefing: React.FC = () => {
             </div>
             <div>
               <Typography variant="h6" className={classes.text}>תאריך:</Typography>
-              <TextField id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Controlled picker"
+                  value={date}
+                  onChange={(newDate) => setDate(newDate)}
+                />
+              </LocalizationProvider>
             </div>
           </div>
 
