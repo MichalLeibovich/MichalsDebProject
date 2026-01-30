@@ -100,7 +100,7 @@ const NewDebriefing: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <div className={classes.fieldsTextAndFieldInOneLineContainer}>
             <Typography variant="h5" className={cx(classes.text, classes.fieldsText)}>כותרת:</Typography>
-            <TextField className={classes.textFields} id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            <TextField className={classes.allFields} id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
           </div>
 
           <div>

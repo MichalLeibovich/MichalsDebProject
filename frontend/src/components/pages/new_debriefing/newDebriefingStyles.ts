@@ -30,9 +30,42 @@ const useStyles = makeStyles()(() => ({
     fieldsText: {
         fontSize: "20px"
     },
-    textFields: {
+    regularSizedFields: {
         minWidth: "30%",
         maxWidth: "60%",
+    },
+    allFields: {
+
+        "& .MuiOutlinedInput-root": {
+            backgroundColor: "red",
+            borderRadius: "12px",
+
+            // default border
+            "& fieldset": {
+                borderColor: "#555", // dark grey
+            },
+
+            // hover border
+            "&:hover fieldset": {
+                borderColor: "#333",
+            },
+
+            // focused border
+            "&.Mui-focused fieldset": {
+                borderColor: "#000",
+                borderWidth: "2px",
+            },
+
+            // input text
+            "& input": {
+                color: "white",
+                padding: "10px 14px", // adjust top/bottom padding
+                textAlign: "center",  // horizontal center
+            },
+        },
+        width: "100%",
+        maxWidth: "320px",
+        minWidth: "220px",
     },
 
 
@@ -54,7 +87,6 @@ const useStyles = makeStyles()(() => ({
         width: "110px",
         "&.MuiInputBase-input": {
             textAlign: "center"
-
         }
     }
 
