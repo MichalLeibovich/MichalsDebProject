@@ -1,7 +1,7 @@
 import React, { useEffect, useState, type FormEvent } from 'react';
 import axios from 'axios';
 import useStyles from './newDebriefingStyles';
-import { Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 
 type PersonInvolved = {
   id: number;
@@ -20,7 +20,7 @@ const NewDebriefing: React.FC = () => {
   const [title, setTitle] = useState("");
   const [documentFillerName, setDocumentFillerName] = useState("");
   const [personalNumber, setPersonalNumber] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [errorDealers, setErrorDealers] = useState("");
   const [errorDiscoverers, setErrorDiscoverers] = useState<PersonInvolved[]>([
     { id: 0, name: "", phone: "" }
@@ -91,45 +91,43 @@ const NewDebriefing: React.FC = () => {
   return (
     <div className={classes.wholePageContainer}>
       <div className={classes.allPartsContainer}>
-        <Typography variant="h5" className={classes.text}>תחקיר חדש</Typography>
+        <Typography variant="h4" className={classes.text}>תחקיר חדש</Typography>
         <form onSubmit={handleSubmit}>
           <div>
-            <label>כותרת:</label>
-            <input id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            <Typography variant="h5" className={classes.text}>כותרת:</Typography>
+            <TextField id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
           </div>
 
           <div>
-            <Typography variant="h5">פרטים כלליים</Typography>
+            <Typography variant="h5" className={classes.text}>פרטים כלליים</Typography>
             <div>
-              <label>שם ממלא המסמך:</label>
-              <input id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
+              <Typography variant="h6" className={classes.text}>שם ממלא המסמך:</Typography>
+              <TextField id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
             </div>
             <div>
-              <label>מ.א:</label>
-              <input id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
+              <Typography variant="h6" className={classes.text}>מ.א:</Typography>
+              <TextField id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
             </div>
             <div>
-              <label>תאריך:</label>
-              <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              <Typography variant="h6" className={classes.text}>תאריך:</Typography>
+              <TextField id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
             </div>
           </div>
 
           <div>
-            <Typography variant="h5">הגורמים המשתתפים</Typography>
+            <Typography variant="h5" className={classes.text}>הגורמים המשתתפים</Typography>
             <div>
-              <label>מנהלי התקלה מצוות נוק:</label>
-              <input id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
+              <Typography variant="h6" className={classes.text}>מנהלי התקלה מצוות נוק:</Typography>
+              <TextField id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
             </div>
             <div>
-              <Typography variant="h6">מגלה התקלה</Typography>
+              <Typography variant="h6" className={classes.text}>מגלה התקלה</Typography>
 
               {errorDiscoverers.map((person) => (
                 <div key={person.id} style={{ marginBottom: "16px" }}>
                   <div>
-                    <label>שם מלא:</label>
-                    <input
-                      type="text"
-                      value={person.name}
+                    <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
+                    <TextField id="errorDealersName" type="text" value={person.name} required
                       onChange={(e) =>
                         setErrorDiscoverers((prev) =>
                           prev.map((p) =>
@@ -139,15 +137,12 @@ const NewDebriefing: React.FC = () => {
                           )
                         )
                       }
-                      required
                     />
                   </div>
 
                   <div>
-                    <label>מספר טלפון:</label>
-                    <input
-                      type="number"
-                      value={person.phone}
+                    <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
+                    <TextField id="errorDealerPhone" type="number" value={person.phone} required
                       onChange={(e) =>
                         setErrorDiscoverers((prev) =>
                           prev.map((p) =>
@@ -157,14 +152,12 @@ const NewDebriefing: React.FC = () => {
                           )
                         )
                       }
-                      required
                     />
                   </div>
                 </div>
               ))}
 
-              <button
-                type="button"
+              <Button variant="contained"
                 onClick={() =>
                   setErrorDiscoverers((prev) => [
                     ...prev,
@@ -173,10 +166,9 @@ const NewDebriefing: React.FC = () => {
                 }
               >
                 +
-              </button>
+              </Button>
 
-              <button
-                type="button"
+              <Button variant="contained"
                 onClick={() => {
                   setErrorDiscoverers((prev) => {
                     if (prev.length <= 1) return prev; // leave at least one field
@@ -185,20 +177,17 @@ const NewDebriefing: React.FC = () => {
                 }}
               >
                 -
-              </button>
+              </Button>
             </div>
 
             <div>
-              <Typography variant="h6">פותר התקלה</Typography>
+              <Typography variant="h6" className={classes.text}>פותר התקלה</Typography>
 
               {errorSolvers.map((person) => (
                 <div key={person.id} style={{ marginBottom: "16px" }}>
                   <div>
-                    <label>שם מלא:</label>
-                    <input
-                      id="errorSolvers"
-                      type="text"
-                      value={person.name}
+                    <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
+                    <TextField id="errorSolverName" type="text" value={person.name}
                       onChange={(e) =>
                         setErrorSolvers((prev) =>
                           prev.map((p) =>
@@ -213,10 +202,8 @@ const NewDebriefing: React.FC = () => {
                   </div>
 
                   <div>
-                    <label>מספר טלפון:</label>
-                    <input
-                      id="phone"
-                      type="number"
+                    <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
+                    <TextField id="errorSolverPhone" type="number"
                       value={person.phone}
                       onChange={(e) =>
                         setErrorSolvers((prev) =>
@@ -233,8 +220,7 @@ const NewDebriefing: React.FC = () => {
                 </div>
               ))}
 
-              <button
-                type="button"
+              <Button variant="contained"
                 onClick={() =>
                   setErrorSolvers((prev) => [
                     ...prev,
@@ -243,10 +229,9 @@ const NewDebriefing: React.FC = () => {
                 }
               >
                 +
-              </button>
+              </Button>
 
-              <button
-                type="button"
+              <Button variant="contained"
                 onClick={() => {
                   setErrorSolvers((prev) => {
                     if (prev.length <= 1) return prev; // leave at least one field
@@ -255,11 +240,11 @@ const NewDebriefing: React.FC = () => {
                 }}
               >
                 -
-              </button>
+              </Button>
             </div>
 
             <div>
-              <Typography variant="h6">צוותים שמעורבים בתקלה ומי מכל צוות:</Typography>
+              <Typography variant="h6" className={classes.text}>צוותים שמעורבים בתקלה ומי מכל צוות:</Typography>
               <div>
                 {teams.map((team) => (
                   <div
@@ -272,20 +257,21 @@ const NewDebriefing: React.FC = () => {
                     </label>
 
                     {team in selectedTeams && (
-                      <label> שם/ות:
-                        <input
+                      <div>
+                        <Typography variant="h6" className={classes.text}>שם/ות:</Typography>
+                        <TextField
+                          id="selectedTeamsNames"
                           type="text"
                           value={selectedTeams[team]}
-                          placeholder=""
-                          onChange={(e) =>
-                            setSelectedTeams((prev) => ({
-                              ...prev,
-                              [team]: e.target.value,
-                            }))
+                          onChange={(e) => setSelectedTeams((prev) => ({
+                            ...prev,
+                            [team]: e.target.value,
+                          }))
                           }
-                          style={{ width: "200px" }}
+                          variant="outlined"
                         />
-                      </label>
+                      </div>
+
                     )}
                   </div>
                 ))}
@@ -295,44 +281,46 @@ const NewDebriefing: React.FC = () => {
 
 
           <div>
-            <Typography variant="h5">תיאור התקלה</Typography>
+            <Typography variant="h5" className={classes.text}>תיאור התקלה</Typography>
             <div>
-              <label>תיאור התקלה:</label>
-              <input id="errorDescription" type="text" value={errorDescription} onChange={(e) => setErrorDescription(e.target.value)} required />
+              <Typography variant="h6" className={classes.text}>תיאור התקלה:</Typography>
+              <TextField id="errorDescription" label="תיאור התקלה" type="text" value={errorDescription}
+                onChange={(e) => setErrorDescription(e.target.value)} required />
             </div>
 
             <div>
               <div>
-                <label>זמן גילוי:</label>
-                <input id="discoveryTime" type="text" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
+                <Typography variant="h6" className={classes.text}>זמן גילוי:</Typography>
+                <TextField id="discoveryTime" label="זמן גילוי" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
               </div>
               <div>
-                <label>זמן התחלה:</label>
-                <input id="startTime" type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+                <Typography variant="h6" className={classes.text}>זמן התחלה:</Typography>
+                <TextField id="startTime" label="זמן התחלה" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
               </div>
               <div>
-                <label>זמן סיום:</label>
-                <input id="endTime" type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+                <Typography variant="h6" className={classes.text}>זמן סיום:</Typography>
+                <TextField id="endTime" label="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
+                />
               </div>
             </div>
           </div>
 
           <div>
-            <Typography variant="h5">פירוט התקלה</Typography>
+            <Typography variant="h5" className={classes.text}>פירוט התקלה</Typography>
 
             <div>
-              <Typography variant="h6">השתלשלות האירועים:</Typography>
+              <Typography variant="h6" className={classes.text}>השתלשלות האירועים:</Typography>
 
               <div>
-                <Typography variant="h6">זמן</Typography>
-                <Typography variant="h6">התרחשות</Typography>
+                <Typography variant="h6" className={classes.text}>זמן</Typography>
+                <Typography variant="h6" className={classes.text}>התרחשות</Typography>
               </div>
 
               <div>
                 {chainOfEvents.map((event) => (
                   <div key={event.id} style={{ marginBottom: "16px" }}>
                     <div>
-                      <input
+                      <TextField
                         id="eventTime"
                         type="text"
                         placeholder="זמן"
@@ -351,7 +339,7 @@ const NewDebriefing: React.FC = () => {
                     </div>
 
                     <div>
-                      <input
+                      <TextField
                         id="eventOccurrence"
                         type="string"
                         placeholder="התרחשות"
@@ -371,8 +359,7 @@ const NewDebriefing: React.FC = () => {
                   </div>
                 ))}
 
-                <button
-                  type="button"
+                <Button variant="contained"
                   onClick={() =>
                     setChainOfEvents((prev) => [
                       ...prev,
@@ -381,10 +368,9 @@ const NewDebriefing: React.FC = () => {
                   }
                 >
                   +
-                </button>
+                </Button>
 
-                <button
-                  type="button"
+                <Button variant="contained"
                   onClick={() => {
                     setChainOfEvents((prev) => {
                       if (prev.length <= 1) return prev; // leave at least one field
@@ -393,7 +379,7 @@ const NewDebriefing: React.FC = () => {
                   }}
                 >
                   -
-                </button>
+                </Button>
               </div>
 
             </div>
@@ -402,49 +388,48 @@ const NewDebriefing: React.FC = () => {
           <div>
             <Typography variant="h5">פתרון התקלה</Typography>
             <div>
-              <label htmlFor="errorSolution">פתרון:</label>
-              <input id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
+              <Typography variant="h6" className={classes.text}>פתרון:</Typography>
+              <TextField id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
             </div>
             <div>
-              <label htmlFor="teamsInvolved">זמן שלקח לפתור את התקלה:</label>
-              <input id="teamsInvolved" type="text" value={totalTime} onChange={(e) => setTotalTime(e.target.value)} required />
+              <Typography variant="h6" className={classes.text}>זמן שלקח לפתור את התקלה:</Typography>
+              <TextField id="totalTime" type="text" value={totalTime} onChange={(e) => setTotalTime(e.target.value)} required />
             </div>
           </div>
 
           <div>
-            <Typography variant="h6">סיכום אירוע</Typography>
+            <Typography variant="h5" className={classes.text}>סיכום אירוע</Typography>
             <div>
               <div>
-                <label>כיצד נודע לנו על התקלה:</label>
-                <input id="howErrorWasFound" type="text" value={howErrorWasFound} onChange={(e) => setHowErrorWasFound(e.target.value)} required />
+                <Typography variant="h6" className={classes.text}>כיצד נודע לנו על התקלה:</Typography>
+                <TextField id="howErrorWasFound" type="text" value={howErrorWasFound} onChange={(e) => setHowErrorWasFound(e.target.value)} required />
               </div>
               <div>
-                <label>מה נפגע במערכת:</label>
-                <input id="whatWasDamagedDueError" type="text" value={whatWasDamagedDueError} onChange={(e) => setWhatWasDamagedDueError(e.target.value)} required />
+                <Typography variant="h6" className={classes.text}>מה נפגע במערכת:</Typography>
+                <TextField id="whatWasDamagedDueError" type="text" value={whatWasDamagedDueError} onChange={(e) => setWhatWasDamagedDueError(e.target.value)} required />
               </div>
               <div>
-                <label>מה גרם לתקלה:</label>
-                <input id="errorCause" type="text" value={errorCause} onChange={(e) => setErrorCause(e.target.value)} required />
+                <Typography variant="h6" className={classes.text}>מה גרם לתקלה:</Typography>
+                <TextField id="errorCause" type="text" value={errorCause} onChange={(e) => setErrorCause(e.target.value)} required />
               </div>
             </div>
           </div>
 
           <div>
-            <Typography variant="h6">מסקנות להמשך</Typography>
+            <Typography variant="h5" className={classes.text}>מסקנות להמשך</Typography>
             <div>
               <div>
-                <label>מסקנות לגבי הניטור:</label>
-                <input id="monitoringConclusion" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
+                <Typography variant="h6" className={classes.text}>מסקנות לגבי הניטור:</Typography>
+                <TextField id="monitoringConclusion" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
               </div>
               <div>
-                <label>מסקנות לגבי ניהול התקלה:</label>
-                <input id="errorManagingConclusion" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
+                <Typography variant="h6" className={classes.text}>מסקנות לגבי ניהול התקלה:</Typography>
+                <TextField id="errorManagingConclusion" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
               </div>
             </div>
           </div>
 
-
-          <button type="submit">Save Data</button>
+          <Button type="submit" variant="contained">Save Data</Button>
         </form>
         {message && <p>{message}</p>}
       </div >
