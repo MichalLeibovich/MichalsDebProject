@@ -1,4 +1,4 @@
-import React, { useState, type FormEvent } from 'react';
+import React, { useEffect, useState, type FormEvent } from 'react';
 import axios from 'axios';
 import useStyles from './newDebriefingStyles';
 import { Typography } from '@mui/material';
@@ -16,8 +16,6 @@ const NewDebriefing: React.FC = () => {
   const [personalNumber, setPersonalNumber] = useState("");
   const [date, setDate] = useState("");
   const [errorDealers, setErrorDealers] = useState("");
-
-
   const [errorDiscoverers, setErrorDiscoverers] = useState<PersonInvolved[]>([
     { id: 0, name: "", phone: "" }
   ]);
@@ -26,10 +24,29 @@ const NewDebriefing: React.FC = () => {
   ]);
 
   const [teams, setTeams] = useState<string[]>([]);
+  const [selected, setSelected] = useState<Record<string, string>>({});
 
   const [errorDescription, setErrorDescription] = useState("");
 
   const [message, setMessage] = useState("");
+
+
+  useEffect(() => {
+    console.log(teams);
+  }, [teams]);
+
+  const toggle = (team: string) => {
+  setSelected((prev) => {
+    if (team in prev) {
+      const copy = { ...prev };
+      delete copy[team];   // uncheck → remove & clear
+      return copy;
+    }
+
+    return { ...prev, [team]: "" }; // check → add empty text
+  });
+};
+
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -192,107 +209,112 @@ const NewDebriefing: React.FC = () => {
             </div>
 
             <div>
-              <label>
-                <input
-                  type="checkbox"
-                  value="butterfly-effect"
-                  checked={teams.includes("אפקט הפרפר")}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setTeams((prev) =>
-                      prev.includes(value)
-                        ? prev.filter((v) => v !== value)
-                        : [...prev, value]
-                    );
-                  }}
-                />
-                אפקט הפרפר
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="gaussian"
-                  checked={teams.includes("גאוסיין")}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setTeams((prev) =>
-                      prev.includes(value)
-                        ? prev.filter((v) => v !== value)
-                        : [...prev, value]
-                    );
-                  }}
-                />
-                גאוסיין
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="harmony"
-                  checked={teams.includes("הרמוניה")}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setTeams((prev) =>
-                      prev.includes(value)
-                        ? prev.filter((v) => v !== value)
-                        : [...prev, value]
-                    );
-                  }}
-                />
-                הרמוניה
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="supernova"
-                  checked={teams.includes("סופרנובה")}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setTeams((prev) =>
-                      prev.includes(value)
-                        ? prev.filter((v) => v !== value)
-                        : [...prev, value]
-                    );
-                  }}
-                />
-                סופרנובה
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="switch"
-                  checked={teams.includes("סוויטץ'")}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setTeams((prev) =>
-                      prev.includes(value)
-                        ? prev.filter((v) => v !== value)
-                        : [...prev, value]
-                    );
-                  }}
-                />
-                סוויטץ'
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="starlight"
-                  checked={teams.includes("סטארלייט")}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setTeams((prev) =>
-                      prev.includes(value)
-                        ? prev.filter((v) => v !== value)
-                        : [...prev, value]
-                    );
-                  }}
-                />
-                סטארלייט
-              </label>
+              <Typography variant="h6">צוותים שמעורבים בתקלה ומי מכל צוות:</Typography>
+              <div>
+                <label>
+                  <input
+                    type="checkbox"
+                    value="אפקט הפרפר"
+                    checked={teams.includes("אפקט הפרפר")}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setTeams((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((v) => v !== value)
+                          : [...prev, value]
+                      );
+                    }}
+                  />
+                  אפקט הפרפר
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="checkbox"
+                    value="גאוסיין"
+                    checked={teams.includes("גאוסיין")}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setTeams((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((v) => v !== value)
+                          : [...prev, value]
+                      );
+                    }}
+                  />
+                  גאוסיין
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="checkbox"
+                    value="הרמוניה"
+                    checked={teams.includes("הרמוניה")}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setTeams((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((v) => v !== value)
+                          : [...prev, value]
+                      );
+                    }}
+                  />
+                  הרמוניה
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="checkbox"
+                    value="סופרנובה"
+                    checked={teams.includes("סופרנובה")}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setTeams((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((v) => v !== value)
+                          : [...prev, value]
+                      );
+                    }}
+                  />
+                  סופרנובה
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="checkbox"
+                    value="סוויטץ'"
+                    checked={teams.includes("סוויטץ'")}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setTeams((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((v) => v !== value)
+                          : [...prev, value]
+
+                      );
+                    }}
+
+                  />
+                  סוויטץ'
+                </label>
+                <br />
+                <label>
+                  <input
+                    type="checkbox"
+                    value="סטארלייט"
+                    checked={teams.includes("סטארלייט")}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setTeams((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((v) => v !== value)
+                          : [...prev, value]
+                      );
+                    }}
+                  />
+                  סטארלייט
+                </label>
+              </div>
             </div>
           </div>
 
