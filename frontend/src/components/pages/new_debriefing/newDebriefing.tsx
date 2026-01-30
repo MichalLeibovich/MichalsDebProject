@@ -1,7 +1,7 @@
 import React, { useEffect, useState, type FormEvent } from 'react';
 import axios from 'axios';
 import useStyles from './newDebriefingStyles';
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 
 type PersonInvolved = {
   id: number;
@@ -247,14 +247,16 @@ const NewDebriefing: React.FC = () => {
               <Typography variant="h6" className={classes.text}>צוותים שמעורבים בתקלה ומי מכל צוות:</Typography>
               <div>
                 {teams.map((team) => (
-                  <div
-                    key={team}>
-                    <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <input type="checkbox" checked={team in selectedTeams}
-                        onChange={() => toggle(team)}
-                      />
-                      {team}
-                    </label>
+                  <div key={team}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={team in selectedTeams}
+                          onChange={() => toggle(team)}
+                        />
+                      }
+                      label={team}
+                    />
 
                     {team in selectedTeams && (
                       <div>
