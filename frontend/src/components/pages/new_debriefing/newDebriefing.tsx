@@ -30,10 +30,16 @@ const NewDebriefing: React.FC = () => {
   const [discoveryTime, setDiscoveryTime] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+
+  const [errorSolution, setErrorSolution] = useState("");
   const [totalTime, setTotalTime] = useState("");
 
   const [errorManagingConclusion, setErrorManagingConclusion] = useState("");
   const [monitoringConclusion, setMonitoringConclusion] = useState("");
+
+  const [howErrorWasFound, setHowErrorWasFound] = useState("");
+  const [errorCause, setErrorCause] = useState("");
+  const [whatWasDamagedDueError, setWhatWasDamagedDueError] = useState("");
 
   errorManagingConclusion
 
@@ -80,31 +86,31 @@ const NewDebriefing: React.FC = () => {
         <Typography variant="h4" className={classes.text}>תחקיר חדש</Typography>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="title">כותרת:</label>
+            <label>כותרת:</label>
             <input id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
           </div>
 
           <div>
             <Typography variant="h4">פרטים כלליים</Typography>
             <div>
-              <label htmlFor="title">שם ממלא המסמך:</label>
-              <input id="title" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
+              <label>שם ממלא המסמך:</label>
+              <input id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
             </div>
             <div>
-              <label htmlFor="title">מ.א:</label>
-              <input id="title" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
+              <label>מ.א:</label>
+              <input id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
             </div>
             <div>
-              <label htmlFor="title">תאריך:</label>
-              <input id="title" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              <label>תאריך:</label>
+              <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
             </div>
           </div>
 
           <div>
             <Typography variant="h4">הגורמים המשתתפים</Typography>
             <div>
-              <label htmlFor="title">מנהלי התקלה מצוות נוק:</label>
-              <input id="title" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
+              <label>מנהלי התקלה מצוות נוק:</label>
+              <input id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
             </div>
             <div>
               <Typography variant="h6">מגלה התקלה</Typography>
@@ -159,6 +165,18 @@ const NewDebriefing: React.FC = () => {
                 }
               >
                 +
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setErrorDiscoverers((prev) => {
+                    if (prev.length <= 1) return prev; // leave at least one field
+                    return prev.slice(0, prev.length - 1) // remove last
+                  })
+                }}
+              >
+                -
               </button>
             </div>
 
@@ -216,6 +234,18 @@ const NewDebriefing: React.FC = () => {
               >
                 +
               </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setErrorSolverers((prev) => {
+                    if (prev.length <= 1) return prev; // leave at least one field
+                    return prev.slice(0, prev.length - 1) // remove last
+                  })
+                }}
+              >
+                -
+              </button>
             </div>
 
             <div>
@@ -257,22 +287,22 @@ const NewDebriefing: React.FC = () => {
           <div>
             <Typography variant="h4">תיאור התקלה</Typography>
             <div>
-              <label htmlFor="teamsInvolved">תיאור התקלה:</label>
-              <input id="teamsInvolved" type="text" value={errorDescription} onChange={(e) => setErrorDescription(e.target.value)} required />
+              <label>תיאור התקלה:</label>
+              <input id="errorDescription" type="text" value={errorDescription} onChange={(e) => setErrorDescription(e.target.value)} required />
             </div>
 
             <div>
               <div>
-                <label htmlFor="teamsInvolved">זמן גילוי:</label>
-                <input id="teamsInvolved" type="text" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
+                <label>זמן גילוי:</label>
+                <input id="discoveryTime" type="text" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
               </div>
               <div>
-                <label htmlFor="teamsInvolved">זמן התחלה:</label>
-                <input id="teamsInvolved" type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+                <label>זמן התחלה:</label>
+                <input id="startTime" type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
               </div>
               <div>
-                <label htmlFor="teamsInvolved">זמן סיום:</label>
-                <input id="teamsInvolved" type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+                <label>זמן סיום:</label>
+                <input id="endTime" type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
               </div>
             </div>
           </div>
@@ -284,8 +314,8 @@ const NewDebriefing: React.FC = () => {
           <div>
             <Typography variant="h6">פתרון התקלה</Typography>
             <div>
-              <label htmlFor="teamsInvolved">פתרון:</label>
-              <input id="teamsInvolved" type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+              <label htmlFor="errorSolution">פתרון:</label>
+              <input id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
             </div>
             <div>
               <label htmlFor="teamsInvolved">זמן שלקח לפתור את התקלה:</label>
@@ -295,18 +325,32 @@ const NewDebriefing: React.FC = () => {
 
           <div>
             <Typography variant="h6">סיכום אירוע</Typography>
+            <div>
+              <div>
+                <label>כיצד נודע לנו על התקלה:</label>
+                <input id="howErrorWasFound" type="text" value={howErrorWasFound} onChange={(e) => setHowErrorWasFound(e.target.value)} required />
+              </div>
+              <div>
+                <label>מה נפגע במערכת:</label>
+                <input id="whatWasDamagedDueError" type="text" value={whatWasDamagedDueError} onChange={(e) => setWhatWasDamagedDueError(e.target.value)} required />
+              </div>
+              <div>
+                <label>מה גרם לתקלה:</label>
+                <input id="errorCause" type="text" value={errorCause} onChange={(e) => setErrorCause(e.target.value)} required />
+              </div>
+            </div>
           </div>
 
           <div>
             <Typography variant="h6">מסקנות להמשך</Typography>
             <div>
               <div>
-                <label htmlFor="title">מסקנות לגבי הניטור:</label>
-                <input id="title" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
+                <label>מסקנות לגבי הניטור:</label>
+                <input id="monitoringConclusion" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
               </div>
               <div>
-                <label htmlFor="title">מסקנות לגבי ניהול התקלה:</label>
-                <input id="title" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
+                <label>מסקנות לגבי ניהול התקלה:</label>
+                <input id="errorManagingConclusion" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
               </div>
             </div>
           </div>
@@ -315,8 +359,8 @@ const NewDebriefing: React.FC = () => {
           <button type="submit">Save Data</button>
         </form>
         {message && <p>{message}</p>}
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
