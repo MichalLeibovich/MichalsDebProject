@@ -23,29 +23,39 @@ const NewDebriefing: React.FC = () => {
     { id: 0, name: "", phone: "" }
   ]);
 
-  const [teams, setTeams] = useState<string[]>([]);
+  const teams = ["אפקט הפרפר", "גאוסיין", "הרמוניה", "סוויטץ'", "סופרנובה", "סטארלייט"]
   const [selected, setSelected] = useState<Record<string, string>>({});
 
   const [errorDescription, setErrorDescription] = useState("");
+  const [discoveryTime, setDiscoveryTime] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [totalTime, setTotalTime] = useState("");
+
+  const [errorManagingConclusion, setErrorManagingConclusion] = useState("");
+  const [monitoringConclusion, setMonitoringConclusion] = useState("");
+
+  errorManagingConclusion
+
 
   const [message, setMessage] = useState("");
 
 
   useEffect(() => {
-    console.log(teams);
-  }, [teams]);
+    console.log(selected);
+  }, [selected]);
 
   const toggle = (team: string) => {
-  setSelected((prev) => {
-    if (team in prev) {
-      const copy = { ...prev };
-      delete copy[team];   // uncheck → remove & clear
-      return copy;
-    }
+    setSelected((prev) => {
+      if (team in prev) {
+        const copy = { ...prev };
+        delete copy[team];   // uncheck → remove & clear
+        return copy;
+      }
 
-    return { ...prev, [team]: "" }; // check → add empty text
-  });
-};
+      return { ...prev, [team]: "" }; // check → add empty text
+    });
+  };
 
 
   const handleSubmit = async (e: FormEvent) => {
@@ -211,109 +221,34 @@ const NewDebriefing: React.FC = () => {
             <div>
               <Typography variant="h6">צוותים שמעורבים בתקלה ומי מכל צוות:</Typography>
               <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    value="אפקט הפרפר"
-                    checked={teams.includes("אפקט הפרפר")}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setTeams((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((v) => v !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  אפקט הפרפר
-                </label>
-                <br />
-                <label>
-                  <input
-                    type="checkbox"
-                    value="גאוסיין"
-                    checked={teams.includes("גאוסיין")}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setTeams((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((v) => v !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  גאוסיין
-                </label>
-                <br />
-                <label>
-                  <input
-                    type="checkbox"
-                    value="הרמוניה"
-                    checked={teams.includes("הרמוניה")}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setTeams((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((v) => v !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  הרמוניה
-                </label>
-                <br />
-                <label>
-                  <input
-                    type="checkbox"
-                    value="סופרנובה"
-                    checked={teams.includes("סופרנובה")}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setTeams((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((v) => v !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  סופרנובה
-                </label>
-                <br />
-                <label>
-                  <input
-                    type="checkbox"
-                    value="סוויטץ'"
-                    checked={teams.includes("סוויטץ'")}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setTeams((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((v) => v !== value)
-                          : [...prev, value]
+                {teams.map((team) => (
+                  <div
+                    key={team}>
+                    <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <input type="checkbox" checked={team in selected}
+                        onChange={() => toggle(team)}
+                      />
+                      {team}
+                    </label>
 
-                      );
-                    }}
-
-                  />
-                  סוויטץ'
-                </label>
-                <br />
-                <label>
-                  <input
-                    type="checkbox"
-                    value="סטארלייט"
-                    checked={teams.includes("סטארלייט")}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setTeams((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((v) => v !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  סטארלייט
-                </label>
+                    {team in selected && (
+                      <label> שם/ות:
+                        <input
+                          type="text"
+                          value={selected[team]}
+                          placeholder=""
+                          onChange={(e) =>
+                            setSelected((prev) => ({
+                              ...prev,
+                              [team]: e.target.value,
+                            }))
+                          }
+                          style={{ width: "200px" }}
+                        />
+                      </label>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -325,6 +260,21 @@ const NewDebriefing: React.FC = () => {
               <label htmlFor="teamsInvolved">תיאור התקלה:</label>
               <input id="teamsInvolved" type="text" value={errorDescription} onChange={(e) => setErrorDescription(e.target.value)} required />
             </div>
+
+            <div>
+              <div>
+                <label htmlFor="teamsInvolved">זמן גילוי:</label>
+                <input id="teamsInvolved" type="text" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
+              </div>
+              <div>
+                <label htmlFor="teamsInvolved">זמן התחלה:</label>
+                <input id="teamsInvolved" type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+              </div>
+              <div>
+                <label htmlFor="teamsInvolved">זמן סיום:</label>
+                <input id="teamsInvolved" type="text" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+              </div>
+            </div>
           </div>
 
           <div>
@@ -333,6 +283,14 @@ const NewDebriefing: React.FC = () => {
 
           <div>
             <Typography variant="h6">פתרון התקלה</Typography>
+            <div>
+              <label htmlFor="teamsInvolved">פתרון:</label>
+              <input id="teamsInvolved" type="text" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+            </div>
+            <div>
+              <label htmlFor="teamsInvolved">זמן שלקח לפתור את התקלה:</label>
+              <input id="teamsInvolved" type="text" value={totalTime} onChange={(e) => setTotalTime(e.target.value)} required />
+            </div>
           </div>
 
           <div>
@@ -340,9 +298,19 @@ const NewDebriefing: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="title">מסקנות להמשך</label>
-            <input id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            <Typography variant="h6">מסקנות להמשך</Typography>
+            <div>
+              <div>
+                <label htmlFor="title">מסקנות לגבי הניטור:</label>
+                <input id="title" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
+              </div>
+              <div>
+                <label htmlFor="title">מסקנות לגבי ניהול התקלה:</label>
+                <input id="title" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
+              </div>
+            </div>
           </div>
+
 
           <button type="submit">Save Data</button>
         </form>
