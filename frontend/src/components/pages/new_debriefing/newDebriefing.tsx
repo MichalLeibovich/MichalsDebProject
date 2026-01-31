@@ -56,6 +56,8 @@ const NewDebriefing: React.FC = () => {
   const [errorCause, setErrorCause] = useState("");
   const [whatWasDamagedDueError, setWhatWasDamagedDueError] = useState("");
 
+  const [status, setStatus] = useState("");
+
 
   const [message, setMessage] = useState("");
 
@@ -96,264 +98,288 @@ const NewDebriefing: React.FC = () => {
   return (
     <div className={classes.wholePageContainer}>
       <div className={classes.allPartsContainer}>
-        <Typography variant="h4" className={classes.text}>תחקיר חדש</Typography>
+        <Typography variant="h3" className={cx(classes.text, classes.titleNewDebriefing)}>תחקיר חדש</Typography>
         <form onSubmit={handleSubmit}>
-          <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-            <Typography variant="h5" className={cx(classes.text, classes.fieldsText)}>כותרת:</Typography>
-            <TextField className={classes.allFields} id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-          </div>
-
-          <div>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-label">מערכת</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={system}
-                label="מערכת"
-                onChange={(e) => setSystem(e.target.value)}>
-                <MenuItem value="אפקט הפרפר">אפקט הפרפר</MenuItem>
-                <MenuItem value="גאוסיין">גאוסיין</MenuItem>
-                <MenuItem value="הרמוניה">הרמוניה</MenuItem>
-                <MenuItem value="סוויטץ'">סוויטץ'</MenuItem>
-                <MenuItem value="סופרנובה">סופרנובה</MenuItem>
-                <MenuItem value="סטארלייט">סטארלייט</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-
-          <div>
-            <Typography variant="h5" className={classes.text}>פרטים כלליים</Typography>
+          <div className={classes.titleContainer}>
             <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-              <Typography variant="h6" className={classes.text}>שם ממלא המסמך:</Typography>
-              <TextField id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
+              <Typography variant="h5" className={cx(classes.text, classes.fieldsTitle)}>כותרת:</Typography>
+              <TextField className={cx(classes.allFields, classes.titleField)} id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
             </div>
             <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-              <Typography variant="h6" className={classes.text}>מ.א:</Typography>
-              <TextField id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
-            </div>
-            <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-              <Typography variant="h6" className={classes.text}>תאריך:</Typography>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Controlled picker"
-                  value={date}
-                  onChange={(newDate) => setDate(newDate)}
-                />
-              </LocalizationProvider>
+              <Typography variant="h5" className={cx(classes.text, classes.fieldsTitle)}>מערכת</Typography>
+
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-label">מערכת</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={system}
+                  label="מערכת"
+                  onChange={(e) => setSystem(e.target.value)}>
+                  <MenuItem value="אפקט הפרפר">אפקט הפרפר</MenuItem>
+                  <MenuItem value="גאוסיין">גאוסיין</MenuItem>
+                  <MenuItem value="הרמוניה">הרמוניה</MenuItem>
+                  <MenuItem value="סוויטץ'">סוויטץ'</MenuItem>
+                  <MenuItem value="סופרנובה">סופרנובה</MenuItem>
+                  <MenuItem value="סטארלייט">סטארלייט</MenuItem>
+                </Select>
+              </FormControl>
             </div>
           </div>
 
+
+
           <div>
-            <Typography variant="h5" className={classes.text}>הגורמים המשתתפים</Typography>
-            <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-              <Typography variant="h6" className={classes.text}>מנהלי התקלה מצוות נוק:</Typography>
-              <TextField id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
+            <div className={classes.generalInfoPart}>
+
+              <Typography className={cx(classes.titleSubject, classes.text)} variant="h4">פרטים כלליים</Typography>
+
+              <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                <Typography variant="h6" className={classes.text}>שם ממלא המסמך:</Typography>
+                <TextField className={cx(classes.allFields, classes.personInfoFields)} id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
+              </div>
+
+              <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                <Typography variant="h6" className={classes.text}>מ.א:</Typography>
+                <TextField className={cx(classes.allFields, classes.personInfoFields)} id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
+              </div>
+
+              <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                <Typography variant="h6" className={classes.text}>תאריך:</Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Controlled picker"
+                    value={date}
+                    onChange={(newDate) => setDate(newDate)}
+                  />
+                </LocalizationProvider>
+              </div>
             </div>
-            <div>
-              <Typography variant="h6" className={classes.text}>מגלה התקלה</Typography>
+          </div>
 
-              {errorDiscoverers.map((person) => (
-                <div key={person.id} style={{ marginBottom: "16px" }}>
-                  <div>
-                    <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
-                    <TextField id="errorDealersName" type="text" value={person.name} required
-                      onChange={(e) =>
-                        setErrorDiscoverers((prev) =>
-                          prev.map((p) =>
-                            p.id === person.id
-                              ? { ...p, name: e.target.value }
-                              : p
-                          )
-                        )
-                      }
-                    />
-                  </div>
 
-                  <div>
-                    <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
-                    <TextField id="errorDealerPhone" type="number" value={person.phone} required
-                      onChange={(e) =>
-                        setErrorDiscoverers((prev) =>
-                          prev.map((p) =>
-                            p.id === person.id
-                              ? { ...p, phone: e.target.value }
-                              : p
-                          )
-                        )
-                      }
-                    />
-                  </div>
-                </div>
-              ))}
+          <div>
+            <Typography variant="h4" className={cx(classes.text, classes.titleSubject)}>הגורמים המשתתפים</Typography>
+            <div className={classes.peopleInvolved}>
 
-              <Button variant="contained"
-                onClick={() =>
-                  setErrorDiscoverers((prev) => [
-                    ...prev,
-                    { id: Date.now(), name: "", phone: "" }
-                  ])
-                }
-              >
-                +
-              </Button>
+              <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                <Typography variant="h6" className={classes.text}>מנהלי התקלה מצוות נוק:</Typography>
+                <TextField className={cx(classes.allFields)} id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
+              </div>
+              <div className={classes.generalInfoErrorSelversAndDescoverers}>
+                <div>
+                  <Typography variant="h6" className={classes.text}>מגלה התקלה</Typography>
 
-              <Button variant="contained"
-                onClick={() => {
-                  setErrorDiscoverers((prev) => {
-                    if (prev.length <= 1) return prev; // leave at least one field
-                    return prev.slice(0, prev.length - 1) // remove last
-                  })
-                }}
-              >
-                -
-              </Button>
-            </div>
-
-            <div>
-              <Typography variant="h6" className={classes.text}>פותר התקלה</Typography>
-
-              {errorSolvers.map((person) => (
-                <div key={person.id} style={{ marginBottom: "16px" }}>
-                  <div>
-                    <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
-                    <TextField id="errorSolverName" type="text" value={person.name}
-                      onChange={(e) =>
-                        setErrorSolvers((prev) =>
-                          prev.map((p) =>
-                            p.id === person.id
-                              ? { ...p, name: e.target.value }
-                              : p
-                          )
-                        )
-                      }
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
-                    <TextField id="errorSolverPhone" type="number"
-                      value={person.phone}
-                      onChange={(e) =>
-                        setErrorSolvers((prev) =>
-                          prev.map((p) =>
-                            p.id === person.id
-                              ? { ...p, phone: e.target.value }
-                              : p
-                          )
-                        )
-                      }
-                      required
-                    />
-                  </div>
-                </div>
-              ))}
-
-              <Button variant="contained"
-                onClick={() =>
-                  setErrorSolvers((prev) => [
-                    ...prev,
-                    { id: Date.now(), name: "", phone: "" }
-                  ])
-                }
-              >
-                +
-              </Button>
-
-              <Button variant="contained"
-                onClick={() => {
-                  setErrorSolvers((prev) => {
-                    if (prev.length <= 1) return prev; // leave at least one field
-                    return prev.slice(0, prev.length - 1) // remove last
-                  })
-                }}
-              >
-                -
-              </Button>
-            </div>
-
-            <div>
-              <Typography variant="h6" className={classes.text}>צוותים שמעורבים בתקלה ומי מכל צוות:</Typography>
-              <div>
-                {teams.map((team) => (
-                  <div key={team}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={team in selectedTeams}
-                          onChange={() => toggle(team)}
-                        />
-                      }
-                      label={team}
-                    />
-
-                    {team in selectedTeams && (
-                      <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-                        <Typography variant="h6" className={classes.text}>שם/ות:</Typography>
-                        <TextField
-                          id="selectedTeamsNames"
-                          type="text"
-                          value={selectedTeams[team]}
-                          onChange={(e) => setSelectedTeams((prev) => ({
-                            ...prev,
-                            [team]: e.target.value,
-                          }))
+                  {errorDiscoverers.map((person) => (
+                    <div key={person.id} style={{ marginBottom: "16px" }}>
+                      <div>
+                        <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
+                        <TextField className={cx(classes.allFields, classes.personInfoFields)} id="errorDealersName" type="text" value={person.name} required
+                          onChange={(e) =>
+                            setErrorDiscoverers((prev) =>
+                              prev.map((p) =>
+                                p.id === person.id
+                                  ? { ...p, name: e.target.value }
+                                  : p
+                              )
+                            )
                           }
-                          variant="outlined"
                         />
                       </div>
 
-                    )}
-                  </div>
-                ))}
+                      <div>
+                        <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
+                        <TextField className={cx(classes.allFields, classes.personInfoFields)} id="errorDealerPhone" type="number" value={person.phone} required
+                          onChange={(e) =>
+                            setErrorDiscoverers((prev) =>
+                              prev.map((p) =>
+                                p.id === person.id
+                                  ? { ...p, phone: e.target.value }
+                                  : p
+                              )
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <Button variant="contained"
+                    onClick={() =>
+                      setErrorDiscoverers((prev) => [
+                        ...prev,
+                        { id: Date.now(), name: "", phone: "" }
+                      ])
+                    }
+                  >
+                    +
+                  </Button>
+
+                  <Button variant="contained"
+                    onClick={() => {
+                      setErrorDiscoverers((prev) => {
+                        if (prev.length <= 1) return prev; // leave at least one field
+                        return prev.slice(0, prev.length - 1) // remove last
+                      })
+                    }}
+                  >
+                    -
+                  </Button>
+                </div>
+
+                <div>
+                  <Typography variant="h6" className={classes.text}>פותר התקלה</Typography>
+
+                  {errorSolvers.map((person) => (
+                    <div key={person.id} style={{ marginBottom: "16px" }}>
+                      <div>
+                        <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
+                        <TextField className={cx(classes.allFields, classes.personInfoFields)} id="errorSolverName" type="text" value={person.name}
+                          onChange={(e) =>
+                            setErrorSolvers((prev) =>
+                              prev.map((p) =>
+                                p.id === person.id
+                                  ? { ...p, name: e.target.value }
+                                  : p
+                              )
+                            )
+                          }
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
+                        <TextField className={cx(classes.allFields, classes.personInfoFields)} id="errorSolverPhone" type="number"
+                          value={person.phone}
+                          onChange={(e) =>
+                            setErrorSolvers((prev) =>
+                              prev.map((p) =>
+                                p.id === person.id
+                                  ? { ...p, phone: e.target.value }
+                                  : p
+                              )
+                            )
+                          }
+                          required
+                        />
+                      </div>
+                    </div>
+
+
+                  ))}
+
+                  <Button variant="contained"
+                    onClick={() =>
+                      setErrorSolvers((prev) => [
+                        ...prev,
+                        { id: Date.now(), name: "", phone: "" }
+                      ])
+                    }
+                  >
+                    +
+                  </Button>
+
+                  <Button variant="contained"
+                    onClick={() => {
+                      setErrorSolvers((prev) => {
+                        if (prev.length <= 1) return prev; // leave at least one field
+                        return prev.slice(0, prev.length - 1) // remove last
+                      })
+                    }}
+                  >
+                    -
+                  </Button>
+                </div>
+              </div>
+
+
+              <div>
+                <Typography variant="h6" className={classes.text}>צוותים שמעורבים בתקלה ומי מכל צוות:</Typography>
+                <div>
+                  {teams.map((team) => (
+                    <div key={team}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={team in selectedTeams}
+                            onChange={() => toggle(team)}
+                          />
+                        }
+                        label={team}
+                      />
+
+                      {team in selectedTeams && (
+                        <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                          <Typography variant="h6" className={classes.text}>שם/ות:</Typography>
+                          <TextField
+                            className={cx(classes.allFields, classes.personInfoFields)}
+                            id="selectedTeamsNames"
+                            type="text"
+                            value={selectedTeams[team]}
+                            onChange={(e) => setSelectedTeams((prev) => ({
+                              ...prev,
+                              [team]: e.target.value,
+                            }))
+                            }
+                            variant="outlined"
+                          />
+                        </div>
+
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
           <div>
-            <Typography variant="h5" className={classes.text}>תיאור התקלה</Typography>
-            <div>
-              <Typography variant="h6" className={classes.text}>תיאור התקלה:</Typography>
-              <TextField id="errorDescription" label="תיאור התקלה" type="text" value={errorDescription}
-                onChange={(e) => setErrorDescription(e.target.value)} required />
-            </div>
+            <Typography variant="h4" className={cx(classes.text, classes.titleSubject)}>תיאור התקלה</Typography>
+            <div className={classes.errorDescribing}>
+              <div>
+                <Typography variant="h6" className={classes.text}>תיאור התקלה:</Typography>
+                <TextField className={cx(classes.allFields, classes.errorDescriptionField)} id="errorDescription" label="תיאור התקלה" type="text" value={errorDescription}
+                  onChange={(e) => setErrorDescription(e.target.value)} required />
+              </div>
 
-            <div className={classes.times}>
-              <div>
-                <Typography variant="h6" className={classes.text}>זמן גילוי:</Typography>
-                <TextField className={classes.timesField} id="discoveryTime" label="זמן גילוי" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
-              </div>
-              <div>
-                <Typography variant="h6" className={classes.text}>זמן התחלה:</Typography>
-                <TextField className={classes.timesField} id="startTime" label="זמן התחלה" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
-              </div>
-              <div>
-                <Typography variant="h6" className={classes.text}>זמן סיום:</Typography>
-                <TextField className={classes.timesField} id="endTime" label="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
-                />
+              <div className={classes.times}>
+                <div>
+                  <Typography variant="h6" className={classes.text}>זמן גילוי:</Typography>
+                  <TextField className={cx(classes.allFields, classes.timesField)} id="discoveryTime" label="זמן גילוי" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
+                </div>
+                <div>
+                  <Typography variant="h6" className={classes.text}>זמן התחלה:</Typography>
+                  <TextField className={cx(classes.allFields, classes.timesField)} id="startTime" label="זמן התחלה" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+                </div>
+                <div>
+                  <Typography variant="h6" className={classes.text}>זמן סיום:</Typography>
+                  <TextField className={cx(classes.allFields, classes.timesField)} id="endTime" label="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
+                  />
+                </div>
               </div>
             </div>
           </div>
 
 
 
-          <div>
-            <Typography variant="h5" className={classes.text}>פירוט התקלה</Typography>
+          <div className={classes.errorElaboration}>
+            <Typography className={cx(classes.text, classes.titleSubject)} variant="h4">פירוט התקלה</Typography>
 
             <div>
               <Typography variant="h6" className={classes.text}>השתלשלות האירועים:</Typography>
 
-              <div>
+              <div className={classes.eventsTableHeader}>
                 <Typography variant="h6" className={classes.text}>זמן</Typography>
                 <Typography variant="h6" className={classes.text}>התרחשות</Typography>
               </div>
 
               <div>
                 {chainOfEvents.map((event) => (
-                  <div key={event.id} style={{ marginBottom: "16px" }}>
+                  <div className={classes.eventsTable} key={event.id}>
                     <div>
                       <TextField
+                        className={cx(classes.allFields, classes.timesField)}
                         id="eventTime"
                         type="text"
                         placeholder="זמן"
@@ -373,6 +399,7 @@ const NewDebriefing: React.FC = () => {
 
                     <div>
                       <TextField
+                        className={cx(classes.allFields)}
                         id="eventOccurrence"
                         type="string"
                         placeholder="התרחשות"
@@ -421,50 +448,74 @@ const NewDebriefing: React.FC = () => {
 
 
           <div>
-            <Typography variant="h5">פתרון התקלה</Typography>
-            <div>
-              <Typography variant="h6" className={classes.text}>פתרון:</Typography>
-              <TextField id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
-            </div>
-            <div>
-              <Typography variant="h6" className={classes.text}>זמן שלקח לפתור את התקלה:</Typography>
-              <TextField id="totalTime" type="text" value={totalTime} onChange={(e) => setTotalTime(e.target.value)} required />
+            <Typography variant="h4" className={cx(classes.text, classes.titleSubject)}>פתרון התקלה</Typography>
+            <div className={classes.errorSolutionPart}>
+              <div>
+                <Typography variant="h6" className={classes.text}>פתרון:</Typography>
+                <TextField className={cx(classes.allFields)} id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
+              </div>
+              <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                <Typography variant="h6" className={classes.text}>זמן שלקח לפתור את התקלה:</Typography>
+                <TextField className={cx(classes.allFields)} id="totalTime" type="text" value={totalTime} onChange={(e) => setTotalTime(e.target.value)} required />
+              </div>
             </div>
           </div>
 
           <div>
-            <Typography variant="h5" className={classes.text}>סיכום אירוע</Typography>
-            <div>
+            <Typography variant="h4" className={cx(classes.text, classes.titleSubject)}>סיכום אירוע</Typography>
+            <div className={classes.sumerizingPart}>
               <div>
                 <Typography variant="h6" className={classes.text}>כיצד נודע לנו על התקלה:</Typography>
-                <TextField id="howErrorWasFound" type="text" value={howErrorWasFound} onChange={(e) => setHowErrorWasFound(e.target.value)} required />
+                <TextField className={cx(classes.allFields)} id="howErrorWasFound" type="text" value={howErrorWasFound} onChange={(e) => setHowErrorWasFound(e.target.value)} required />
               </div>
               <div>
                 <Typography variant="h6" className={classes.text}>מה נפגע במערכת:</Typography>
-                <TextField id="whatWasDamagedDueError" type="text" value={whatWasDamagedDueError} onChange={(e) => setWhatWasDamagedDueError(e.target.value)} required />
+                <TextField className={cx(classes.allFields)} id="whatWasDamagedDueError" type="text" value={whatWasDamagedDueError} onChange={(e) => setWhatWasDamagedDueError(e.target.value)} required />
               </div>
               <div>
                 <Typography variant="h6" className={classes.text}>מה גרם לתקלה:</Typography>
-                <TextField id="errorCause" type="text" value={errorCause} onChange={(e) => setErrorCause(e.target.value)} required />
+                <TextField className={cx(classes.allFields)} id="errorCause" type="text" value={errorCause} onChange={(e) => setErrorCause(e.target.value)} required />
               </div>
             </div>
           </div>
 
           <div>
-            <Typography variant="h5" className={classes.text}>מסקנות להמשך</Typography>
-            <div>
+            <Typography variant="h4" className={cx(classes.text, classes.titleSubject)}>מסקנות להמשך</Typography>
+            <div className={classes.conclusionPart}>
               <div>
                 <Typography variant="h6" className={classes.text}>מסקנות לגבי הניטור:</Typography>
-                <TextField id="monitoringConclusion" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
+                <TextField className={cx(classes.allFields)} id="monitoringConclusion" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
               </div>
               <div>
                 <Typography variant="h6" className={classes.text}>מסקנות לגבי ניהול התקלה:</Typography>
-                <TextField id="errorManagingConclusion" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
+                <TextField className={cx(classes.allFields)} id="errorManagingConclusion" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
               </div>
             </div>
           </div>
 
-          <Button type="submit" variant="contained">Save Data</Button>
+
+          <div className={classes.debriefingStatusPart}>
+            <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+              <Typography variant="h5" className={cx(classes.text, classes.fieldsTitle)}>סטטוס</Typography>
+
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-label">סטטוס</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={status}
+                  label="סטטוס התחקיר"
+                  onChange={(e) => setStatus(e.target.value)}>
+                  <MenuItem value="בתהליך">בתהליך</MenuItem>
+                  <MenuItem value="מוכן">מוכן</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </div>
+
+          <div className={classes.submitButtonContainer}>
+            <Button className={cx(classes.submitButton, classes.text)} type="submit" variant="contained">שמירת תחקיר</Button>
+          </div>
         </form>
         {message && <p>{message}</p>}
       </div >
