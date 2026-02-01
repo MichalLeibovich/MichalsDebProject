@@ -24,6 +24,7 @@ const useStyles = makeStyles()(() => ({
             }
         },
         marginBottom: "50px",
+        marginTop: "50px",
         borderRadius: "30px"
     },
 
@@ -94,7 +95,8 @@ const useStyles = makeStyles()(() => ({
 
     titleNewDebriefing: {
         textAlign: "center",
-        marginBottom: "30px"
+        marginBottom: "30px",
+        marginTop: "20px"
     },
 
     // החלק של הכותרת
