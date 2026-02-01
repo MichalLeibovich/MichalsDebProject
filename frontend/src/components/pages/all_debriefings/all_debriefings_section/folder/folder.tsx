@@ -6,6 +6,7 @@ type FolderProps = {
 };
 
 const Folder: React.FC<FolderProps> = ({ title, children }) => {
+  // const { classes, cx } = useStyles();
   const [open, setOpen] = useState(false);
 
   return (

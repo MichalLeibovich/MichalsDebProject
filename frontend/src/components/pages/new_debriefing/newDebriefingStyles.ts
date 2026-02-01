@@ -6,6 +6,7 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
         justifyContent: "center",
         width: "100%",
+        height: "100%",
         backgroundColor: "#0F1027",
         fontFamily: '"Noto Sans Hebrew", sans-serif',
     },
@@ -21,7 +22,9 @@ const useStyles = makeStyles()(() => ({
             "&,fading-shadow-element": {
                 boxShadow: "0 0 20px 5px rgba(0, 0, 0, 0.5)" /* Fades a black shadow outwards */
             }
-        }
+        },
+        marginBottom: "50px",
+        borderRadius: "30px"
     },
 
     text: {
@@ -77,7 +80,8 @@ const useStyles = makeStyles()(() => ({
     titleSubject: {
         marginTop: "50px",
         marginBottom: "20px",
-        textAlign: "center"
+        textAlign: "center",
+        backgroundColor: "#6f0f45c7"
     },
 
 
@@ -111,10 +115,13 @@ const useStyles = makeStyles()(() => ({
     },
 
     // החלק של הפרטים הכלליים
+    generalInfoWholePart: {
+        display: "flex",
+        justifyContent: "center"
+    },
     generalInfoPart: {
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         gap: "10px"
     },
 
@@ -129,6 +136,22 @@ const useStyles = makeStyles()(() => ({
     generalInfoErrorSelversAndDescoverers: {
         display: "flex",
         gap: "130px"
+    },
+    errorSolverOrDiscoverer: {
+        textAlign: "center",
+        marginBottom: "10px"
+    },
+    plusOrMinusButtonContainer: {
+        display: "flex",
+        gap: "10px"
+    },
+    plusOrMinusButton: {
+        borderRadius: "30px",
+        fontSize: "20px",
+        backgroundColor: "#6f0f45ce",
+        "&.MuiButton-contained": {
+            minWidth: "50px"
+        }
     },
 
 
@@ -160,13 +183,18 @@ const useStyles = makeStyles()(() => ({
     errorElaboration: {
         display: "flex",
         flexDirection: "column",
-        marginRight: "5%",
+        alignItems: "center",
         gap: "20px"
-
+    },
+    titleChainOfEvents: {
+        textAlign: "center",
+        marginBottom: "20px"
     },
     eventsTableHeader: {
         display: "flex",
-        marginRight: "5%",
+        // marginRight: "5%",
+        marginRight: "20%",
+        // gap: "50%"
         gap: "50%"
     },
     eventsTable: {
@@ -229,10 +257,6 @@ const useStyles = makeStyles()(() => ({
         width: "200px",
         height: "50px"
     }
-
-
-
-
 
 
 

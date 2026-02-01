@@ -1,4 +1,4 @@
-export type status = "הושלם" | "בתהליך";
+export type status = "מוכן" | "בתהליך";
 
 export interface RecentDebriefingsItem {
   title: string,

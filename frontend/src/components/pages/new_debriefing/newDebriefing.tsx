@@ -34,7 +34,7 @@ const NewDebriefing: React.FC = () => {
     { id: 0, name: "", phone: "" }
   ]);
 
-  const teams = ["אפקט הפרפר", "גאוסיין", "הרמוניה", "סוויטץ'", "סופרנובה", "סטארלייט"]
+  const teams = ["אפקט הפרפר", "גאוסיין", "גואט", "הרמוניה", "מגן עליון", "סוויטץ'", "סופרנובה", "סטארלייט"]
   const [selectedTeams, setSelectedTeams] = useState<Record<string, string>>({});
 
   const [errorDescription, setErrorDescription] = useState("");
@@ -119,6 +119,7 @@ const NewDebriefing: React.FC = () => {
                   <MenuItem value="אפקט הפרפר">אפקט הפרפר</MenuItem>
                   <MenuItem value="גאוסיין">גאוסיין</MenuItem>
                   <MenuItem value="הרמוניה">הרמוניה</MenuItem>
+                  <MenuItem value="מגן עליון">מגן עליון</MenuItem>
                   <MenuItem value="סוויטץ'">סוויטץ'</MenuItem>
                   <MenuItem value="סופרנובה">סופרנובה</MenuItem>
                   <MenuItem value="סטארלייט">סטארלייט</MenuItem>
@@ -130,29 +131,30 @@ const NewDebriefing: React.FC = () => {
 
 
           <div>
-            <div className={classes.generalInfoPart}>
+            <Typography className={cx(classes.titleSubject, classes.text)} variant="h4">פרטים כלליים</Typography>
+            <div className={classes.generalInfoWholePart}>
+              <div className={classes.generalInfoPart}>
 
-              <Typography className={cx(classes.titleSubject, classes.text)} variant="h4">פרטים כלליים</Typography>
+                <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                  <Typography variant="h6" className={classes.text}>שם ממלא המסמך:</Typography>
+                  <TextField className={cx(classes.allFields, classes.personInfoFields)} id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
+                </div>
 
-              <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-                <Typography variant="h6" className={classes.text}>שם ממלא המסמך:</Typography>
-                <TextField className={cx(classes.allFields, classes.personInfoFields)} id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
-              </div>
+                <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                  <Typography variant="h6" className={classes.text}>מ.א:</Typography>
+                  <TextField className={cx(classes.allFields, classes.personInfoFields)} id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
+                </div>
 
-              <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-                <Typography variant="h6" className={classes.text}>מ.א:</Typography>
-                <TextField className={cx(classes.allFields, classes.personInfoFields)} id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
-              </div>
-
-              <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-                <Typography variant="h6" className={classes.text}>תאריך:</Typography>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Controlled picker"
-                    value={date}
-                    onChange={(newDate) => setDate(newDate)}
-                  />
-                </LocalizationProvider>
+                <div className={classes.fieldsTextAndFieldInOneLineContainer}>
+                  <Typography variant="h6" className={classes.text}>תאריך:</Typography>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Controlled picker"
+                      value={date}
+                      onChange={(newDate) => setDate(newDate)}
+                    />
+                  </LocalizationProvider>
+                </div>
               </div>
             </div>
           </div>
@@ -168,7 +170,7 @@ const NewDebriefing: React.FC = () => {
               </div>
               <div className={classes.generalInfoErrorSelversAndDescoverers}>
                 <div>
-                  <Typography variant="h6" className={classes.text}>מגלה התקלה</Typography>
+                  <Typography className={cx(classes.text, classes.errorSolverOrDiscoverer)} variant="h6">מגלה התקלה</Typography>
 
                   {errorDiscoverers.map((person) => (
                     <div key={person.id} style={{ marginBottom: "16px" }}>
@@ -204,31 +206,37 @@ const NewDebriefing: React.FC = () => {
                     </div>
                   ))}
 
-                  <Button variant="contained"
-                    onClick={() =>
-                      setErrorDiscoverers((prev) => [
-                        ...prev,
-                        { id: Date.now(), name: "", phone: "" }
-                      ])
-                    }
-                  >
-                    +
-                  </Button>
+                  <div className={classes.plusOrMinusButtonContainer}>
+                    <Button
+                      className={classes.plusOrMinusButton}
+                      variant="contained"
+                      onClick={() =>
+                        setErrorDiscoverers((prev) => [
+                          ...prev,
+                          { id: Date.now(), name: "", phone: "" }
+                        ])
+                      }
+                    >
+                      +
+                    </Button>
 
-                  <Button variant="contained"
-                    onClick={() => {
-                      setErrorDiscoverers((prev) => {
-                        if (prev.length <= 1) return prev; // leave at least one field
-                        return prev.slice(0, prev.length - 1) // remove last
-                      })
-                    }}
-                  >
-                    -
-                  </Button>
+                    <Button
+                      className={classes.plusOrMinusButton}
+                      variant="contained"
+                      onClick={() => {
+                        setErrorDiscoverers((prev) => {
+                          if (prev.length <= 1) return prev; // leave at least one field
+                          return prev.slice(0, prev.length - 1) // remove last
+                        })
+                      }}
+                    >
+                      -
+                    </Button>
+                  </div>
                 </div>
 
                 <div>
-                  <Typography variant="h6" className={classes.text}>פותר התקלה</Typography>
+                  <Typography className={cx(classes.text, classes.errorSolverOrDiscoverer)} variant="h6">פותר התקלה</Typography>
 
                   {errorSolvers.map((person) => (
                     <div key={person.id} style={{ marginBottom: "16px" }}>
@@ -269,27 +277,33 @@ const NewDebriefing: React.FC = () => {
 
                   ))}
 
-                  <Button variant="contained"
-                    onClick={() =>
-                      setErrorSolvers((prev) => [
-                        ...prev,
-                        { id: Date.now(), name: "", phone: "" }
-                      ])
-                    }
-                  >
-                    +
-                  </Button>
+                  <div className={classes.plusOrMinusButtonContainer}>
+                    <Button
+                      className={classes.plusOrMinusButton}
+                      variant="contained"
+                      onClick={() =>
+                        setErrorSolvers((prev) => [
+                          ...prev,
+                          { id: Date.now(), name: "", phone: "" }
+                        ])
+                      }
+                    >
+                      +
+                    </Button>
 
-                  <Button variant="contained"
-                    onClick={() => {
-                      setErrorSolvers((prev) => {
-                        if (prev.length <= 1) return prev; // leave at least one field
-                        return prev.slice(0, prev.length - 1) // remove last
-                      })
-                    }}
-                  >
-                    -
-                  </Button>
+                    <Button
+                      className={classes.plusOrMinusButton}
+                      variant="contained"
+                      onClick={() => {
+                        setErrorSolvers((prev) => {
+                          if (prev.length <= 1) return prev; // leave at least one field
+                          return prev.slice(0, prev.length - 1) // remove last
+                        })
+                      }}
+                    >
+                      -
+                    </Button>
+                  </div>
                 </div>
               </div>
 
@@ -363,85 +377,91 @@ const NewDebriefing: React.FC = () => {
 
 
 
-          <div className={classes.errorElaboration}>
+          <div>
             <Typography className={cx(classes.text, classes.titleSubject)} variant="h4">פירוט התקלה</Typography>
-
-            <div>
-              <Typography variant="h6" className={classes.text}>השתלשלות האירועים:</Typography>
-
-              <div className={classes.eventsTableHeader}>
-                <Typography variant="h6" className={classes.text}>זמן</Typography>
-                <Typography variant="h6" className={classes.text}>התרחשות</Typography>
-              </div>
-
+            <div className={classes.errorElaboration}>
               <div>
-                {chainOfEvents.map((event) => (
-                  <div className={classes.eventsTable} key={event.id}>
-                    <div>
-                      <TextField
-                        className={cx(classes.allFields, classes.timesField)}
-                        id="eventTime"
-                        type="text"
-                        placeholder="זמן"
-                        value={event.time}
-                        onChange={(e) =>
-                          setChainOfEvents((prev) =>
-                            prev.map((p) =>
-                              p.id === event.id
-                                ? { ...p, time: e.target.value }
-                                : p
-                            )
-                          )
-                        }
-                        required
-                      />
-                    </div>
+                <Typography variant="h5" className={cx(classes.text, classes.titleChainOfEvents)}>השתלשלות האירועים:</Typography>
 
-                    <div>
-                      <TextField
-                        className={cx(classes.allFields)}
-                        id="eventOccurrence"
-                        type="string"
-                        placeholder="התרחשות"
-                        value={event.occurrence}
-                        onChange={(e) =>
-                          setChainOfEvents((prev) =>
-                            prev.map((p) =>
-                              p.id === event.id
-                                ? { ...p, occurrence: e.target.value }
-                                : p
+                <div className={classes.eventsTableHeader}>
+                  <Typography variant="h6" className={classes.text}>זמן</Typography>
+                  <Typography variant="h6" className={classes.text}>התרחשות</Typography>
+                </div>
+
+                <div>
+                  {chainOfEvents.map((event) => (
+                    <div className={classes.eventsTable} key={event.id}>
+                      <div>
+                        <TextField
+                          className={cx(classes.allFields, classes.timesField)}
+                          id="eventTime"
+                          type="text"
+                          placeholder="זמן"
+                          value={event.time}
+                          onChange={(e) =>
+                            setChainOfEvents((prev) =>
+                              prev.map((p) =>
+                                p.id === event.id
+                                  ? { ...p, time: e.target.value }
+                                  : p
+                              )
                             )
-                          )
-                        }
-                        required
-                      />
+                          }
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <TextField
+                          className={cx(classes.allFields)}
+                          id="eventOccurrence"
+                          type="string"
+                          placeholder="התרחשות"
+                          value={event.occurrence}
+                          onChange={(e) =>
+                            setChainOfEvents((prev) =>
+                              prev.map((p) =>
+                                p.id === event.id
+                                  ? { ...p, occurrence: e.target.value }
+                                  : p
+                              )
+                            )
+                          }
+                          required
+                        />
+                      </div>
                     </div>
+                  ))}
+                  <div className={classes.plusOrMinusButtonContainer}>
+                    <Button
+                      className={classes.plusOrMinusButton}
+                      variant="contained"
+                      onClick={() =>
+                        setChainOfEvents((prev) => [
+                          ...prev,
+                          { id: Date.now(), time: "", occurrence: "" }
+                        ])
+                      }
+                    >
+                      +
+                    </Button>
+
+                    <Button
+                      className={classes.plusOrMinusButton}
+                      variant="contained"
+                      onClick={() => {
+                        setChainOfEvents((prev) => {
+                          if (prev.length <= 1) return prev; // leave at least one field
+                          return prev.slice(0, prev.length - 1) // remove last
+                        })
+                      }}
+                    >
+                      -
+                    </Button>
                   </div>
-                ))}
+                </div>
 
-                <Button variant="contained"
-                  onClick={() =>
-                    setChainOfEvents((prev) => [
-                      ...prev,
-                      { id: Date.now(), time: "", occurrence: "" }
-                    ])
-                  }
-                >
-                  +
-                </Button>
-
-                <Button variant="contained"
-                  onClick={() => {
-                    setChainOfEvents((prev) => {
-                      if (prev.length <= 1) return prev; // leave at least one field
-                      return prev.slice(0, prev.length - 1) // remove last
-                    })
-                  }}
-                >
-                  -
-                </Button>
               </div>
-
             </div>
           </div>
 
@@ -496,18 +516,18 @@ const NewDebriefing: React.FC = () => {
 
           <div className={classes.debriefingStatusPart}>
             <div className={classes.fieldsTextAndFieldInOneLineContainer}>
-              <Typography variant="h5" className={cx(classes.text, classes.fieldsTitle)}>סטטוס</Typography>
+              <Typography variant="h5" className={cx(classes.text, classes.fieldsTitle)}>סיימת למלא את התחקיר?</Typography>
 
               <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-label">סטטוס</InputLabel>
+                <InputLabel id="demo-simple-select-label">סטטוס סיום</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={status}
                   label="סטטוס התחקיר"
                   onChange={(e) => setStatus(e.target.value)}>
-                  <MenuItem value="בתהליך">בתהליך</MenuItem>
-                  <MenuItem value="מוכן">מוכן</MenuItem>
+                  <MenuItem value="בתהליך">עדיין לא</MenuItem>
+                  <MenuItem value="מוכן">סיימתי</MenuItem>
                 </Select>
               </FormControl>
             </div>

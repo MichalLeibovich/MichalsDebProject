@@ -9,7 +9,7 @@ const AllDebriefings: React.FC = () => {
 
         <div className={classes.wholePage}>
             <div className={classes.allPartsContainer}>
-                <Typography variant="h2">Recent Debriefings</Typography>
+                <Typography variant="h3">כל התחקירים</Typography>
                 <AllDebriefingsSection />
             </div>
         </div>

@@ -9,7 +9,7 @@ const AllRecentDebriefingsSection: React.FC = () => {
   const recentDebriefingsItemList: RecentDebriefingsItem[] = [
     {
       title: "תחקיר 1",
-      status: "הושלם",
+      status: "מוכן",
       system: "X",
       last_update_time: "29/01/2026 03:17",
       creation_time: "29/01/2026 03:17"
@@ -23,7 +23,7 @@ const AllRecentDebriefingsSection: React.FC = () => {
     },
     {
       title: "תחקיר 3",
-      status: "הושלם",
+      status: "מוכן",
       system: "Z",
       last_update_time: "23/02/2025 11:53",
       creation_time: "01/07/2025 08:00"
