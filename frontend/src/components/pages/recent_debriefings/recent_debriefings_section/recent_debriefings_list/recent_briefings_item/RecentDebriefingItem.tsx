@@ -16,12 +16,14 @@ const RecentDebriefingsItem: React.FC<ItemProps> = ({ title, status, system, las
 
   return (
     <div className={classes.row}>
-      <DescriptionIcon />
-      <Typography className={classes.text} variant="h6">{title}</Typography>
-      <Typography className={classes.text} variant="h6">{system}</Typography>
-      <Typography className={classes.text} variant="h6">{status}</Typography>
-      <Typography className={classes.text} variant="h6">{last_update_time}</Typography>
-      <Typography className={classes.text} variant="h6">{creation_time}</Typography>
+      <div className={classes.openDebriefing}>
+        <DescriptionIcon />
+      </div>
+      <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">{title}</Typography>
+      <Typography className={cx(classes.text, classes.system)} variant="h6">{system}</Typography>
+      <Typography className={cx(classes.text, classes.status)} variant="h6">{status}</Typography>
+      <Typography className={cx(classes.text, classes.lastUpdateTime)} variant="h6">{last_update_time}</Typography>
+      <Typography className={cx(classes.text, classes.creationTime)} variant="h6">{creation_time}</Typography>
     </div>
   )
 }

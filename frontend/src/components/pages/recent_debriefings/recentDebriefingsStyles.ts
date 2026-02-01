@@ -16,7 +16,7 @@ const useStyles = makeStyles()(() => ({
         gap: "15%",
         color: "white",
         fontFamily: '"Noto Sans Hebrew", sans-serif',
-        width: "80%",
+        width: "90%",
         marginTop: "20px"
     },
 

@@ -34,12 +34,12 @@ const AllRecentDebriefingsSection: React.FC = () => {
     <div>
 
       <div className={classes.tableHeader}>
-        <Typography className={classes.text} variant="h6">פתח תחקיר</Typography>
-        <Typography className={classes.text} variant="h6">שם תחקיר</Typography>
-        <Typography className={classes.text} variant="h6">מערכת</Typography>
-        <Typography className={classes.text} variant="h6">סטטוס</Typography>
-        <Typography className={classes.text} variant="h6">זמן עדכון אחרון</Typography>
-        <Typography className={classes.text} variant="h6">זמן יצירה</Typography>
+        <Typography className={cx(classes.text, classes.openDebriefing)} variant="h6">פתח תחקיר</Typography>
+        <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">שם תחקיר</Typography>
+        <Typography className={cx(classes.text, classes.system)} variant="h6">מערכת</Typography>
+        <Typography className={cx(classes.text, classes.status)} variant="h6">סטטוס</Typography>
+        <Typography className={cx(classes.text, classes.lastUpdateTime)} variant="h6">זמן עדכון אחרון</Typography>
+        <Typography className={cx(classes.text, classes.creationTime)} variant="h6">זמן יצירה</Typography>
       </div>
 
       <RecentDebriefingsList items={recentDebriefingsItemList} />
