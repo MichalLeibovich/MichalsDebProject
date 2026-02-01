@@ -23,9 +23,13 @@ const NewDebriefing: React.FC = () => {
   const { classes, cx } = useStyles();
   const [title, setTitle] = useState("");
   const [system, setSystem] = useState("");
+
+  // personal info
   const [documentFillerName, setDocumentFillerName] = useState("");
-  const [personalNumber, setPersonalNumber] = useState("");
-  const [date, setDate] = React.useState<Dayjs | null>(dayjs(Date.now()));
+  const [personalNumber, setPersonalNumber] = useState(0);
+  const [date, setDate] = useState<Dayjs | null>(dayjs()); // today
+
+  // people involved
   const [errorDealers, setErrorDealers] = useState("");
   const [errorDiscoverers, setErrorDiscoverers] = useState<PersonInvolved[]>([
     { id: 0, name: "", phone: "" }
@@ -33,32 +37,37 @@ const NewDebriefing: React.FC = () => {
   const [errorSolvers, setErrorSolvers] = useState<PersonInvolved[]>([
     { id: 0, name: "", phone: "" }
   ]);
-
   const teams = ["אפקט הפרפר", "גאוסיין", "גואט", "הרמוניה", "מגן עליון", "סוויטץ'", "סופרנובה", "סטארלייט"]
   const [selectedTeams, setSelectedTeams] = useState<Record<string, string>>({});
 
+  // error description
   const [errorDescription, setErrorDescription] = useState("");
   const [discoveryTime, setDiscoveryTime] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
+  // error elaboration
   const [chainOfEvents, setChainOfEvents] = useState<Event[]>([
     { id: 0, time: "", occurrence: "" }
   ]);
 
+  // error solution
   const [errorSolution, setErrorSolution] = useState("");
   const [totalTime, setTotalTime] = useState("");
 
-  const [errorManagingConclusion, setErrorManagingConclusion] = useState("");
-  const [monitoringConclusion, setMonitoringConclusion] = useState("");
-
+  // error summary
   const [howErrorWasFound, setHowErrorWasFound] = useState("");
   const [errorCause, setErrorCause] = useState("");
   const [whatWasDamagedDueError, setWhatWasDamagedDueError] = useState("");
 
+  // error conclusion
+  const [errorManagingConclusion, setErrorManagingConclusion] = useState("");
+  const [monitoringConclusion, setMonitoringConclusion] = useState("");
+
+  // additional notes
   const [additionalNotes, setAdditionalNotes] = useState("");
 
-
+  // status
   const [status, setStatus] = useState("");
 
 
@@ -85,12 +94,73 @@ const NewDebriefing: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      console.log({
+        title,
+        system,
+        documentFillerName,
+        personalNumber,
+        date,
+        status
+      });
       // Send a POST request to your backend endpoint
       const response = await axios.post("http://localhost:3001/api/debriefings", {
-        title,
+        title, system, documentFillerName, date: date?.format("YYYY-MM-DD") ?? null, // convert Dayjs to SQL DATE
+        personalNumber: Number(personalNumber),  // convert string to number, errorDescription,
+        discoveryTime, startTime, endTime, errorSolution, totalTime, howErrorWasFound, errorCause,
+        whatWasDamagedDueError, errorManagingConclusion, monitoringConclusion, additionalNotes, status
       });
-      setMessage(`Created debriefing: ${response.data.title}`);
+      setMessage(`Created debriefing: ${response.data.title} at ${response.data.created_at}`);
       setTitle("");
+      setSystem("");
+
+      // personal info
+      setDocumentFillerName("");
+      setPersonalNumber(0);
+      setDate(dayjs());
+
+      // people involved
+      setErrorDealers("");
+      setErrorDiscoverers([
+        { id: 0, name: "", phone: "" }
+      ]);
+      setErrorSolvers([
+        { id: 0, name: "", phone: "" }
+      ]);
+      setSelectedTeams({});
+
+      // error description
+      setErrorDescription("");
+      setDiscoveryTime("");
+      setStartTime("");
+      setEndTime("");
+
+      // error elaboration
+      setChainOfEvents([
+        { id: 0, time: "", occurrence: "" }
+      ]);
+
+      // error solution
+      setErrorSolution("");
+      setTotalTime("");
+
+      // error summary
+      setHowErrorWasFound("");
+      setErrorCause("");
+      setWhatWasDamagedDueError("");
+
+      // error conclusion
+      setErrorManagingConclusion("");
+      setMonitoringConclusion("");
+
+      // additional notes
+      setAdditionalNotes("");
+
+      // status
+      setStatus("");
+
+
+      setMessage("");
+
     }
     catch (error) {
       console.error('There was an error saving the data!', error);
@@ -146,7 +216,14 @@ const NewDebriefing: React.FC = () => {
 
                 <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                   <Typography variant="h6" className={classes.text}>מ.א:</Typography>
-                  <TextField className={cx(classes.allFields, classes.personInfoFields)} id="personalNumber" type="number" value={personalNumber} onChange={(e) => setPersonalNumber(e.target.value)} required />
+                  <TextField className={cx(classes.allFields, classes.personInfoFields)} id="personalNumber" type="number" value={personalNumber} required
+                    onChange={(e) => {
+                      if (Number(e.target.value)) {
+                        setPersonalNumber(Number(e.target.value))
+                      }
+                    }
+                    }
+                  />
                 </div>
 
                 <div className={classes.fieldsTextAndFieldInOneLineContainer}>
