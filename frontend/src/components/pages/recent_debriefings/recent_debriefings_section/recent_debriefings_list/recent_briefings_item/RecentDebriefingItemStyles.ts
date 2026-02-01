@@ -7,6 +7,9 @@ const useStyles = makeStyles()(() => ({
         borderRadius: "3px",
         justifyContent: "space-around",
         marginTop: "4px"
+    },
+    text: {
+        fontFamily: '"Noto Sans Hebrew", sans-serif',
     }
 
 }));

@@ -5,7 +5,11 @@ const useStyles = makeStyles()(() => ({
         display: "flex",
         backgroundColor: "#6F0F46", //#6F0F46
         borderRadius: "3px",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
+    },
+
+    text: {
+        fontFamily: '"Noto Sans Hebrew", sans-serif',
     }
 
 
