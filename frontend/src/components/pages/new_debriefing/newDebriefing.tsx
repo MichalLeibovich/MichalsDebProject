@@ -56,6 +56,9 @@ const NewDebriefing: React.FC = () => {
   const [errorCause, setErrorCause] = useState("");
   const [whatWasDamagedDueError, setWhatWasDamagedDueError] = useState("");
 
+  const [additionalNotes, setAdditionalNotes] = useState("");
+
+
   const [status, setStatus] = useState("");
 
 
@@ -111,6 +114,7 @@ const NewDebriefing: React.FC = () => {
               <FormControl sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel id="demo-simple-select-label">מערכת</InputLabel>
                 <Select
+                  className={classes.selectField}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={system}
@@ -149,7 +153,8 @@ const NewDebriefing: React.FC = () => {
                   <Typography variant="h6" className={classes.text}>תאריך:</Typography>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                      label="Controlled picker"
+                      className={classes.datePickerField}
+                      label="תאריך התחקיר"
                       value={date}
                       onChange={(newDate) => setDate(newDate)}
                     />
@@ -166,7 +171,7 @@ const NewDebriefing: React.FC = () => {
 
               <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                 <Typography variant="h6" className={classes.text}>מנהלי התקלה מצוות נוק:</Typography>
-                <TextField className={cx(classes.allFields)} id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
+                <TextField className={cx(classes.allFields, classes.errorDealersTextField)} id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
               </div>
               <div className={classes.generalInfoErrorSelversAndDescoverers}>
                 <div>
@@ -353,7 +358,7 @@ const NewDebriefing: React.FC = () => {
             <div className={classes.errorDescribing}>
               <div>
                 <Typography variant="h6" className={classes.text}>תיאור התקלה:</Typography>
-                <TextField className={cx(classes.allFields, classes.errorDescriptionField)} id="errorDescription" label="תיאור התקלה" type="text" value={errorDescription}
+                <TextField className={cx(classes.allFields, classes.errorDescriptionAndSolutionFields)} id="errorDescription" type="text" value={errorDescription}
                   onChange={(e) => setErrorDescription(e.target.value)} required />
               </div>
 
@@ -369,6 +374,7 @@ const NewDebriefing: React.FC = () => {
                 <div>
                   <Typography variant="h6" className={classes.text}>זמן סיום:</Typography>
                   <TextField className={cx(classes.allFields, classes.timesField)} id="endTime" label="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
+                  // <TextField className={cx(classes.allFields, classes.timesField)} id="endTime" placeholder="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
                   />
                 </div>
               </div>
@@ -396,7 +402,7 @@ const NewDebriefing: React.FC = () => {
                           className={cx(classes.allFields, classes.timesField)}
                           id="eventTime"
                           type="text"
-                          placeholder="זמן"
+                          label="זמן"
                           value={event.time}
                           onChange={(e) =>
                             setChainOfEvents((prev) =>
@@ -413,10 +419,10 @@ const NewDebriefing: React.FC = () => {
 
                       <div>
                         <TextField
-                          className={cx(classes.allFields)}
+                          className={cx(classes.allFields, classes.occurrenceField)}
                           id="eventOccurrence"
                           type="string"
-                          placeholder="התרחשות"
+                          label="התרחשות"
                           value={event.occurrence}
                           onChange={(e) =>
                             setChainOfEvents((prev) =>
@@ -472,11 +478,11 @@ const NewDebriefing: React.FC = () => {
             <div className={classes.errorSolutionPart}>
               <div>
                 <Typography variant="h6" className={classes.text}>פתרון:</Typography>
-                <TextField className={cx(classes.allFields)} id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
+                <TextField className={cx(classes.allFields, classes.errorDescriptionAndSolutionFields)} id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
               </div>
               <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                 <Typography variant="h6" className={classes.text}>זמן שלקח לפתור את התקלה:</Typography>
-                <TextField className={cx(classes.allFields)} id="totalTime" type="text" value={totalTime} onChange={(e) => setTotalTime(e.target.value)} required />
+                <TextField className={cx(classes.allFields, classes.totalTimesField)} id="totalTime" type="text" value={totalTime} onChange={(e) => setTotalTime(e.target.value)} required />
               </div>
             </div>
           </div>
@@ -486,15 +492,15 @@ const NewDebriefing: React.FC = () => {
             <div className={classes.sumerizingPart}>
               <div>
                 <Typography variant="h6" className={classes.text}>כיצד נודע לנו על התקלה:</Typography>
-                <TextField className={cx(classes.allFields)} id="howErrorWasFound" type="text" value={howErrorWasFound} onChange={(e) => setHowErrorWasFound(e.target.value)} required />
+                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="howErrorWasFound" type="text" value={howErrorWasFound} onChange={(e) => setHowErrorWasFound(e.target.value)} required />
               </div>
               <div>
                 <Typography variant="h6" className={classes.text}>מה נפגע במערכת:</Typography>
-                <TextField className={cx(classes.allFields)} id="whatWasDamagedDueError" type="text" value={whatWasDamagedDueError} onChange={(e) => setWhatWasDamagedDueError(e.target.value)} required />
+                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="whatWasDamagedDueError" type="text" value={whatWasDamagedDueError} onChange={(e) => setWhatWasDamagedDueError(e.target.value)} required />
               </div>
               <div>
                 <Typography variant="h6" className={classes.text}>מה גרם לתקלה:</Typography>
-                <TextField className={cx(classes.allFields)} id="errorCause" type="text" value={errorCause} onChange={(e) => setErrorCause(e.target.value)} required />
+                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="errorCause" type="text" value={errorCause} onChange={(e) => setErrorCause(e.target.value)} required />
               </div>
             </div>
           </div>
@@ -504,11 +510,11 @@ const NewDebriefing: React.FC = () => {
             <div className={classes.conclusionPart}>
               <div>
                 <Typography variant="h6" className={classes.text}>מסקנות לגבי הניטור:</Typography>
-                <TextField className={cx(classes.allFields)} id="monitoringConclusion" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
+                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="monitoringConclusion" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
               </div>
               <div>
                 <Typography variant="h6" className={classes.text}>מסקנות לגבי ניהול התקלה:</Typography>
-                <TextField className={cx(classes.allFields)} id="errorManagingConclusion" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
+                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="errorManagingConclusion" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
               </div>
             </div>
           </div>
@@ -521,6 +527,7 @@ const NewDebriefing: React.FC = () => {
               <FormControl sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel id="demo-simple-select-label">סטטוס סיום</InputLabel>
                 <Select
+                  className={classes.selectField}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={status}
@@ -532,6 +539,18 @@ const NewDebriefing: React.FC = () => {
               </FormControl>
             </div>
           </div>
+
+          <div className={classes.additionalNotesPart}>
+            {status === "בתהליך" && (
+              <div>
+                <Typography variant="h6" className={classes.text}>הערות נוספות:</Typography>
+                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="additionalNotes"
+                  placeholder="מה לא סיימת בתחקיר..."
+                  type="text" value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} required />
+              </div>
+            )}
+          </div>
+
 
           <div className={classes.submitButtonContainer}>
             <Button className={cx(classes.submitButton, classes.text)} type="submit" variant="contained">שמירת תחקיר</Button>

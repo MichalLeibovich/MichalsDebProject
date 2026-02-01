@@ -16,6 +16,7 @@ const useStyles = makeStyles()(() => ({
         backgroundColor: "#6f0f4567",
         flexDirection: "column",
         width: "50%",
+        minWidth: "400px",
         // gap: "15%",
         color: "white",
         "& ,fading-border-element": {
@@ -41,9 +42,6 @@ const useStyles = makeStyles()(() => ({
     // },
 
     allFields: {
-        maxWidth: "320px",
-        minWidth: "220px",
-
         "& .MuiOutlinedInput-root": {
             backgroundColor: "#6f0f4556",
             borderRadius: "12px",
@@ -70,6 +68,34 @@ const useStyles = makeStyles()(() => ({
                 padding: "10px 14px", // adjust top/bottom padding
             },
         },
+
+        /* ===== LABEL ===== */
+        "& .MuiInputLabel-root": {
+            color: "#95748C",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            transformOrigin: "center",
+            pointerEvents: "none",
+            transition: "0.2s ease",
+        },
+
+        /* label when focused */
+        "& .MuiInputLabel-root.Mui-focused": {
+            // color: "#95748C",
+        },
+
+        /* label when it shrinks (typing / value exists) */
+        "& .MuiInputLabel-root.MuiInputLabel-shrink": {
+            top: 0,
+            transform: "translate(-50%, -6px)",
+            fontSize: "12px",
+        },
+
+        /* hide required asterisk */
+        "& .MuiInputLabel-asterisk": {
+            display: "none",
+        },
     },
 
     fieldsTextAndFieldInOneLineContainer: {
@@ -87,11 +113,6 @@ const useStyles = makeStyles()(() => ({
 
 
 
-    personInfoFields: {
-    },
-
-
-
 
     titleNewDebriefing: {
         textAlign: "center",
@@ -101,7 +122,7 @@ const useStyles = makeStyles()(() => ({
 
     // החלק של הכותרת
     titleField: {
-        // width: "100%",
+        minWidth: "33vw",
         fontSize: "25px",
         "& .MuiOutlinedInput-root": {
             "& input": {
@@ -126,6 +147,53 @@ const useStyles = makeStyles()(() => ({
         flexDirection: "column",
         gap: "10px"
     },
+    personInfoFields: {
+        minWidth: "200px"
+    },
+    datePickerField: {
+        width: "220px",
+        color: "white",                    // text color
+        fontFamily: '"Noto Sans Hebrew", sans-serif',
+        backgroundColor: "#6f0f4556",      // background of the field
+
+        /* outline / border */
+        "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#6f0f4556",
+        },
+
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#6f0f45ab",
+        },
+
+        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#6f0f45ab",
+        },
+
+        /* input text */
+        "& .MuiOutlinedInput-input": {
+            padding: "10px 14px",
+            textAlign: "center",
+            color: "white",
+            fontFamily: '"Noto Sans Hebrew", sans-serif',
+        },
+
+        /* label */
+        "& .MuiInputLabel-root": {
+            color: "#6f0f45ab",
+        },
+        "& .MuiInputLabel-root.Mui-focused": {
+            color: "#6f0f45ab",
+        },
+        "& .MuiInputLabel-root.MuiInputLabel-shrink": {
+            color: "#a26a8bab",
+            fontFamily: '"Noto Sans Hebrew", sans-serif',
+        },
+
+        /* calendar icon */
+        "& .MuiSvgIcon-root": {
+            color: "white",
+        },
+    },
 
 
     // החלק של הגורמים המשתתפים
@@ -134,6 +202,9 @@ const useStyles = makeStyles()(() => ({
         flexDirection: "column",
         alignItems: "center",
         gap: "30px"
+    },
+    errorDealersTextField: {
+        minWidth: "300px"
     },
     generalInfoErrorSelversAndDescoverers: {
         display: "flex",
@@ -165,9 +236,12 @@ const useStyles = makeStyles()(() => ({
         alignItems: "center",
         gap: "20px"
     },
-    errorDescriptionField: {
-        width: "100%",
-        height: "20%"
+    errorDescriptionAndSolutionFields: {
+        width: "35vw",
+        "& .MuiOutlinedInput-root": {
+            height: "15vh",          // total field height
+            alignItems: "flex-start", // text starts at top
+        },
     },
     // החלק של הזמנים
     times: {
@@ -177,7 +251,18 @@ const useStyles = makeStyles()(() => ({
         gap: "20px"
     },
     timesField: {
-        width: "110px",
+        width: "7vw",
+
+        /* ===== INPUT ===== */
+        "& .MuiOutlinedInput-root": {
+            "& input": {
+                textAlign: "center",
+            },
+
+            "&.Mui-focused fieldset": {
+                /* optional border styling */
+            },
+        },
     },
 
 
@@ -194,10 +279,9 @@ const useStyles = makeStyles()(() => ({
     },
     eventsTableHeader: {
         display: "flex",
-        // marginRight: "5%",
-        marginRight: "20%",
-        // gap: "50%"
-        gap: "50%"
+        marginRight: "7%",
+        gap: "42%",
+        marginBottom: "10px"
     },
     eventsTable: {
         display: "flex",
@@ -205,6 +289,23 @@ const useStyles = makeStyles()(() => ({
         gap: "10px",
         marginBottom: "16px"
     },
+    occurrenceField: {
+        minWidth: "35vw",
+        "& .MuiOutlinedInput-root": {
+            height: "15vh",          // total field height
+            alignItems: "flex-start", // text starts at top
+        },
+        "& .MuiInputLabel-root": {
+            color: "#95748C",
+            left: "92%",
+            top: "18%",
+            transform: "translate(-50%, -50%)",
+            transformOrigin: "center",
+            pointerEvents: "none",
+            transition: "0.2s ease",
+        },
+    },
+
 
 
 
@@ -215,6 +316,14 @@ const useStyles = makeStyles()(() => ({
         alignItems: "center",
         gap: "20px"
     },
+    totalTimesField: {
+        /* ===== INPUT ===== */
+        "& .MuiOutlinedInput-root": {
+            "& input": {
+                textAlign: "center",
+            },
+        },
+    },
 
 
     // החלק של סיכום האירוע
@@ -223,6 +332,22 @@ const useStyles = makeStyles()(() => ({
         flexDirection: "column",
         alignItems: "center",
         gap: "20px"
+    },
+    summaryAndConclusionFields: {
+        minWidth: "35vw",
+        "& .MuiOutlinedInput-root": {
+            height: "10vh",          // total field height
+            alignItems: "flex-start", // text starts at top
+        },
+        "& .MuiInputLabel-root": {
+            color: "#95748C",
+            left: "92%",
+            top: "18%",
+            transform: "translate(-50%, -50%)",
+            transformOrigin: "center",
+            pointerEvents: "none",
+            transition: "0.2s ease",
+        },
     },
 
 
@@ -240,7 +365,44 @@ const useStyles = makeStyles()(() => ({
         marginTop: "50px",
         display: "flex",
         justifyContent: "center",
-        marginBottom: "50px"
+    },
+
+    selectField: {
+        color: "white",              // text color
+        fontFamily: '"Noto Sans Hebrew", sans-serif',
+        backgroundColor: "#6f0f4556", // background color of input box
+
+        /* target the outlined input inside Select */
+        "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#6f0f4556",
+        },
+
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#6f0f45ab",
+        },
+
+        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#6f0f45ab",
+        },
+
+        /* text alignment inside the select */
+        "& .MuiSelect-select": {
+            padding: "10px 14px",
+            textAlign: "center",
+        },
+
+        /* dropdown arrow color */
+        "& .MuiSelect-icon": {
+            color: "white",
+        },
+    },
+
+
+    // החלק של ההערות הנוספות
+    additionalNotesPart: {
+        display: "flex",
+        justifyContent: "center",
+        marginBottom: "50px",
     },
 
 
@@ -249,7 +411,6 @@ const useStyles = makeStyles()(() => ({
     submitButtonContainer: {
         display: "flex",
         justifyContent: "center",
-        marginBottom: "30px",
 
     },
     submitButton: {
@@ -257,7 +418,8 @@ const useStyles = makeStyles()(() => ({
         fontSize: "20px",
         borderRadius: "7px",
         width: "200px",
-        height: "50px"
+        height: "50px",
+        marginBottom: "50px",
     }
 
 
