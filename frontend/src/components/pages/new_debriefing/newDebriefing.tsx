@@ -105,8 +105,8 @@ const NewDebriefing: React.FC = () => {
       // Send a POST request to your backend endpoint
       const response = await axios.post("http://localhost:3001/api/debriefings", {
         title, system, documentFillerName, date: date?.format("YYYY-MM-DD") ?? null, // convert Dayjs to SQL DATE
-        personalNumber: Number(personalNumber),  // convert string to number, errorDescription,
-        discoveryTime, startTime, endTime, errorSolution, totalTime, howErrorWasFound, errorCause,
+        personalNumber: Number(personalNumber),  // convert string to number,
+        errorDescription, discoveryTime, startTime, endTime, errorSolution, totalTime, howErrorWasFound, errorCause,
         whatWasDamagedDueError, errorManagingConclusion, monitoringConclusion, additionalNotes, status
       });
       setMessage(`Created debriefing: ${response.data.title} at ${response.data.created_at}`);

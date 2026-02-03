@@ -31,9 +31,9 @@ def create_debriefing():
     date = data.get("date")
 
     # people involved
-    errorDealers = data.get("errorDealers")
-    errorDiscoverers = data.get("errorDiscoverers")
-    errorSolvers = data.get("errorSolvers")
+    # errorDealers = data.get("errorDealers")
+    # errorDiscoverers = data.get("errorDiscoverers")
+    # errorSolvers = data.get("errorSolvers")
     #todo טבלה נפרדת selectedTeams = data.get("selectedTeams")
 
     # error description
@@ -47,7 +47,7 @@ def create_debriefing():
     # { id: 0, time: "", occurrence: "" }
 
     # error solution
-    errorSolution = data.get("title")
+    errorSolution = data.get("errorSolution")
     totalTime = data.get("totalTime")
 
     # error summary
@@ -65,11 +65,36 @@ def create_debriefing():
     # status
     status = data.get("status")
 
-    is_required_field_empty = ((not title) or (not system) or (not documentFillerName) or (not personalNumber) or (not date) or
-                               (not errorDealers) or (not errorDiscoverers) or (not errorSolvers) or (not errorDescription) or
-                               (not discoveryTime) or (not startTime) or (not endTime) or (not errorSolution) or (not totalTime) or
-                               (not howErrorWasFound) or (not errorCause) or (not whatWasDamagedDueError) or
-                               (not errorManagingConclusion) or (not monitoringConclusion) or (not status))
+    # is_required_field_empty = ((not title) or (not system) or (not documentFillerName) or (not personalNumber) or (not date) or
+    #                            (not errorDealers) or (not errorDiscoverers) or (not errorSolvers) or (not errorDescription) or
+    #                            (not discoveryTime) or (not startTime) or (not endTime) or (not errorSolution) or (not totalTime) or
+    #                            (not howErrorWasFound) or (not errorCause) or (not whatWasDamagedDueError) or
+    #                            (not errorManagingConclusion) or (not monitoringConclusion) or (not status))
+
+    def missing(value):
+        return value is None
+
+    is_required_field_empty = (
+            missing(title) or
+            missing(system) or
+            missing(documentFillerName) or
+            missing(personalNumber) or
+            missing(date) or
+            missing(errorDescription) or
+            missing(discoveryTime) or
+            missing(startTime) or
+            missing(endTime) or
+            missing(errorSolution) or
+            missing(totalTime) or
+            missing(howErrorWasFound) or
+            missing(errorCause) or
+            missing(whatWasDamagedDueError) or
+            missing(errorManagingConclusion) or
+            missing(monitoringConclusion) or
+            missing(status)
+    )
+
+
     if is_required_field_empty:
         return jsonify({"message": "Required field is missing"}), 400
 
@@ -78,16 +103,15 @@ def create_debriefing():
         cur = conn.cursor()
 
         cur.execute(
-            """            INSERT INTO debriefing_project.debriefings (title, system, documentFillerName, personalNumber, date, errorDescription, 
-            discoveryTime, startTime, endTime, errorSolution, totalTime, howErrorWasFound, errorCause, 
+            """INSERT INTO debriefing_project.debriefings (title, system, documentFillerName, personalNumber, date,
+            errorDescription, discoveryTime, startTime, endTime, errorSolution, totalTime, howErrorWasFound, errorCause, 
             whatWasDamagedDueError, errorManagingConclusion, monitoringConclusion, additionalNotes, status)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id, title, system, status, updated_at, created_at;
-
             """,
-            (title, system, documentFillerName, personalNumber, date, errorDescription, discoveryTime, startTime, errorSolution,
-             totalTime, howErrorWasFound, errorCause, whatWasDamagedDueError, errorManagingConclusion, monitoringConclusion,
-             additionalNotes, status)
+            (title, system, documentFillerName, personalNumber, date, errorDescription, discoveryTime, startTime, endTime,
+             errorSolution, totalTime, howErrorWasFound, errorCause, whatWasDamagedDueError, errorManagingConclusion,
+             monitoringConclusion, additionalNotes, status)
         )
 
         new_row = cur.fetchone()
