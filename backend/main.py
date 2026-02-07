@@ -15,6 +15,7 @@ def get_db_connection():
         port="5432"
     )
 
+
 @app.route("/api/debriefings", methods=["POST"])
 def create_debriefing():
     data = request.get_json()
@@ -30,11 +31,12 @@ def create_debriefing():
     personalNumber = data.get("personalNumber")
     date = data.get("date")
 
-    # people involved
-    # errorDealers = data.get("errorDealers")
-    # errorDiscoverers = data.get("errorDiscoverers")
-    # errorSolvers = data.get("errorSolvers")
-    #todo טבלה נפרדת selectedTeams = data.get("selectedTeams")
+    # people involved - CHILD FIELDS
+    # expects a list of {name, role, phone}
+    people = data.get("peopleInvolved", [])
+    # people involved - CHILD FIELDS
+    # expects a list of {team_name, people_names}
+    selected_teams = data.get("selectedTeams", [])
 
     # error description
     errorDescription = data.get("errorDescription")
@@ -42,9 +44,9 @@ def create_debriefing():
     startTime = data.get("startTime")
     endTime = data.get("endTime")
 
-    # error elaboration
-    # todo טבלה נפרדת chainOfEvents = data.get("chainOfEvents")
-    # { id: 0, time: "", occurrence: "" }
+    # error elaboration - CHILD FIELDS
+    # expects a list of {time, occurrence}
+    events = data.get("chainOfEvents", [])
 
     # error solution
     errorSolution = data.get("errorSolution")
@@ -65,37 +67,21 @@ def create_debriefing():
     # status
     status = data.get("status")
 
-    # is_required_field_empty = ((not title) or (not system) or (not documentFillerName) or (not personalNumber) or (not date) or
-    #                            (not errorDealers) or (not errorDiscoverers) or (not errorSolvers) or (not errorDescription) or
-    #                            (not discoveryTime) or (not startTime) or (not endTime) or (not errorSolution) or (not totalTime) or
-    #                            (not howErrorWasFound) or (not errorCause) or (not whatWasDamagedDueError) or
-    #                            (not errorManagingConclusion) or (not monitoringConclusion) or (not status))
+    # try:
+    #     personalNumber = int(personalNumber)
+    # except (TypeError, ValueError):
+    #     return jsonify({"message": "Invalid personalNumber"}), 400
+    #
+    # from datetime import datetime
+    # try:
+    #     date = datetime.strptime(date, "%Y-%m-%d").date()
+    # except (ValueError, TypeError):
+    #     return jsonify({"message": "Invalid date format"}), 400
 
-    def missing(value):
-        return value is None
-
-    is_required_field_empty = (
-            missing(title) or
-            missing(system) or
-            missing(documentFillerName) or
-            missing(personalNumber) or
-            missing(date) or
-            missing(errorDescription) or
-            missing(discoveryTime) or
-            missing(startTime) or
-            missing(endTime) or
-            missing(errorSolution) or
-            missing(totalTime) or
-            missing(howErrorWasFound) or
-            missing(errorCause) or
-            missing(whatWasDamagedDueError) or
-            missing(errorManagingConclusion) or
-            missing(monitoringConclusion) or
-            missing(status)
-    )
-
-
-    if is_required_field_empty:
+    if not all([title, system, documentFillerName, personalNumber, date, errorDescription, discoveryTime, startTime,
+                endTime,
+                errorSolution, totalTime, howErrorWasFound, errorCause, whatWasDamagedDueError,
+                errorManagingConclusion, monitoringConclusion, status]):
         return jsonify({"message": "Required field is missing"}), 400
 
     try:
@@ -103,31 +89,52 @@ def create_debriefing():
         cur = conn.cursor()
 
         cur.execute(
-            """INSERT INTO debriefing_project.debriefings (title, system, documentFillerName, personalNumber, date,
+            """INSERT INTO debriefing_project.debriefings 
+            (title, system, documentFillerName, personalNumber, date,
             errorDescription, discoveryTime, startTime, endTime, errorSolution, totalTime, howErrorWasFound, errorCause, 
             whatWasDamagedDueError, errorManagingConclusion, monitoringConclusion, additionalNotes, status)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            RETURNING id, title, system, status, updated_at, created_at;
+            RETURNING id;
             """,
-            (title, system, documentFillerName, personalNumber, date, errorDescription, discoveryTime, startTime, endTime,
-             errorSolution, totalTime, howErrorWasFound, errorCause, whatWasDamagedDueError, errorManagingConclusion,
-             monitoringConclusion, additionalNotes, status)
+            (title, system, documentFillerName, personalNumber, date, errorDescription,
+             discoveryTime, startTime, endTime, errorSolution, totalTime, howErrorWasFound,
+             errorCause, whatWasDamagedDueError, errorManagingConclusion, monitoringConclusion,
+             additionalNotes, status)
         )
 
-        new_row = cur.fetchone()
-        conn.commit()
+        debriefing_id = cur.fetchone()[0]
 
+        # --- Insert people involved ---
+        for person in people:
+            cur.execute(
+                """INSERT INTO debriefing_project.debriefing_people
+                   (debriefing_id, person_name, role, phone)
+                   VALUES (%s, %s, %s, %s);""",
+                (debriefing_id, person["name"], person["role"], person.get("phone"))
+            )
+
+        # --- Insert chain of events ---
+        for event in events:
+            cur.execute(
+                """INSERT INTO debriefing_project.debriefing_events
+                   (debriefing_id, event_time, occurrence)
+                   VALUES (%s, %s, %s);""",
+                (debriefing_id, event["time"], event["occurrence"])
+            )
+
+        for team in selected_teams:
+            cur.execute(
+                """INSERT INTO debriefing_project.debriefing_selected_teams
+                   (debriefing_id, team_name, people_names)
+                   VALUES (%s, %s, %s);""",
+                (debriefing_id, team["teamName"], team["peopleNames"])
+            )
+
+        conn.commit()
         cur.close()
         conn.close()
 
-        return jsonify({
-            "id": new_row[0],
-            "title": new_row[1],
-            "system": new_row[2],
-            "status": new_row[3],
-            "updated_at": new_row[4],
-            "created_at": new_row[5],
-        }), 201
+        return jsonify({"message": "Debriefing created", "id": debriefing_id}), 201
 
     except Exception as e:
         print(e)

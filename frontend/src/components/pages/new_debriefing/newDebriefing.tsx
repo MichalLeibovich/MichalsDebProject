@@ -30,7 +30,7 @@ const NewDebriefing: React.FC = () => {
   const [date, setDate] = useState<Dayjs | null>(dayjs()); // today
 
   // people involved
-  const [errorDealers, setErrorDealers] = useState("");
+  const [errorDealers, setErrorDealers] = useState(""); //מנהלי התקלה
   const [errorDiscoverers, setErrorDiscoverers] = useState<PersonInvolved[]>([
     { id: 0, name: "", phone: "" }
   ]);
@@ -102,12 +102,38 @@ const NewDebriefing: React.FC = () => {
         date,
         status
       });
+
+      const peopleInvolved = [
+        { name: errorDealers, role: "Dealer" },   // single string
+        ...errorDiscoverers.map(p => ({
+          name: p.name,
+          role: "Discoverer",
+          phone: p.phone
+        })),
+        ...errorSolvers.map(p => ({
+          name: p.name,
+          personalNumber: p.phone,
+          role: "Solver",
+          phone: p.phone
+        }))
+      ];
+
+      const selectedTeamsArray = Object.entries(selectedTeams).map(([teamName, peopleNames]) => ({
+        teamName,
+        peopleNames
+      }));
+
+
       // Send a POST request to your backend endpoint
       const response = await axios.post("http://localhost:3001/api/debriefings", {
         title, system, documentFillerName, date: date?.format("YYYY-MM-DD") ?? null, // convert Dayjs to SQL DATE
         personalNumber: Number(personalNumber),  // convert string to number,
-        errorDescription, discoveryTime, startTime, endTime, errorSolution, totalTime, howErrorWasFound, errorCause,
-        whatWasDamagedDueError, errorManagingConclusion, monitoringConclusion, additionalNotes, status
+        errorDescription, discoveryTime, startTime, endTime, errorSolution, totalTime,
+        howErrorWasFound, errorCause, whatWasDamagedDueError,
+        errorManagingConclusion, monitoringConclusion, additionalNotes, status,
+        peopleInvolved,
+        chainOfEvents: chainOfEvents.map(e => ({ time: e.time, occurrence: e.occurrence })),
+        selectedTeamsArray: selectedTeamsArray
       });
       setMessage(`Created debriefing: ${response.data.title} at ${response.data.created_at}`);
       setTitle("");
