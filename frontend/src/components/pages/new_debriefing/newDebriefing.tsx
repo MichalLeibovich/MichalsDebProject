@@ -118,11 +118,6 @@ const NewDebriefing: React.FC = () => {
         }))
       ];
 
-      const selectedTeamsArray = Object.entries(selectedTeams).map(([teamName, peopleNames]) => ({
-        teamName,
-        peopleNames
-      }));
-
 
       // Send a POST request to your backend endpoint
       const response = await axios.post("http://localhost:3001/api/debriefings", {
@@ -133,7 +128,7 @@ const NewDebriefing: React.FC = () => {
         errorManagingConclusion, monitoringConclusion, additionalNotes, status,
         peopleInvolved,
         chainOfEvents: chainOfEvents.map(e => ({ time: e.time, occurrence: e.occurrence })),
-        selectedTeamsArray: selectedTeamsArray
+        selectedTeams
       });
       setMessage(`Created debriefing: ${response.data.title} at ${response.data.created_at}`);
       setTitle("");

@@ -36,7 +36,7 @@ def create_debriefing():
     people = data.get("peopleInvolved", [])
     # people involved - CHILD FIELDS
     # expects a list of {team_name, people_names}
-    selected_teams = data.get("selectedTeams", [])
+    selected_teams = data.get("selectedTeams", {})
 
     # error description
     errorDescription = data.get("errorDescription")
@@ -122,12 +122,12 @@ def create_debriefing():
                 (debriefing_id, event["time"], event["occurrence"])
             )
 
-        for team in selected_teams:
+        for team_name, people_names in selected_teams.items():
             cur.execute(
                 """INSERT INTO debriefing_project.debriefing_selected_teams
                    (debriefing_id, team_name, people_names)
                    VALUES (%s, %s, %s);""",
-                (debriefing_id, team["teamName"], team["peopleNames"])
+                (debriefing_id, team_name, people_names)
             )
 
         conn.commit()
