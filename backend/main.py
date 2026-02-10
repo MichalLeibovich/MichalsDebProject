@@ -227,6 +227,48 @@ def get_recent_debriefings():
         return jsonify({"message": "Failed to fetch debriefings"}), 500
 
 
+@app.route("/api/all_debriefings", methods=["GET"])
+def get_all_debriefings():
+    system = request.args.get("system")  # optional
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+            SELECT
+                id,
+                title,
+                status,
+                created_at,
+                updated_at
+            FROM debriefing_project.debriefings
+            WHERE system = %s
+            ORDER BY updated_at DESC;
+        """, (system,))
+
+        rows = cur.fetchall()
+
+        debriefings = []
+        for row in rows:
+            debriefings.append({
+                "id": row[0],
+                "title": row[1],
+                "status": row[2],
+                "created_at": row[3],
+                "updated_at": row[4],
+            })
+
+        cur.close()
+        conn.close()
+
+        return jsonify(debriefings), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Failed to fetch debriefings"}), 500
+
+
 
 if __name__ == "__main__":
     app.run(port=3001, debug=True)

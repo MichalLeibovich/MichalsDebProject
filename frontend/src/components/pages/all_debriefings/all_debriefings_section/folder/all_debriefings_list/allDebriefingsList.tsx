@@ -1,17 +1,19 @@
+import type { AllDebriefingsItem as AllDebriefingsItemType } from "../../../../../../interfaces/allDebriefingsItem";
 import AllDebriefingsItem from "./all_debriefings_item/allDebriefingItem";
 import useStyles from "./allDebriefingsListStyles";
 
 type ListProps = {
-  items: string[];
+  items: AllDebriefingsItemType[];
 };
 
 const AllDebriefingsList: React.FC<ListProps> = ({ items }: ListProps) => {
-    const { classes, cx } = useStyles();
+  const { classes, cx } = useStyles();
 
   return (
-    <div  className={classes.debriefingsList}>
+    <div className={classes.debriefingsList}>
       {items.map((item) => (
-        <AllDebriefingsItem key={item} name={item} />
+        <AllDebriefingsItem key={item.created_at} title={item.title} status={item.status}
+          last_update_time={item.updated_at} creation_time={item.created_at} />
       ))}
     </div>
   );

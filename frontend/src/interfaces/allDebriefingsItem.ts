@@ -1,3 +1,9 @@
+export type status = "מוכן" | "בתהליך";
+
 export interface AllDebriefingsItem {
-  title: string
+  title: string,
+  system: string,
+  status: status,
+  created_at: string,
+  updated_at: string,
 }
