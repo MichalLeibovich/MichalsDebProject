@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import type { status } from "../../../../../../interfaces/recentDebriefingsItem";
 import useStyles from "./RecentDebriefingItemStyles";
 import DescriptionIcon from '@mui/icons-material/Description';
+import dayjs from "dayjs";
 
 type ItemProps = {
   title: string,
@@ -22,8 +23,8 @@ const RecentDebriefingsItem: React.FC<ItemProps> = ({ title, status, system, las
       <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">{title}</Typography>
       <Typography className={cx(classes.text, classes.system)} variant="h6">{system}</Typography>
       <Typography className={cx(classes.text, classes.status)} variant="h6">{status}</Typography>
-      <Typography className={cx(classes.text, classes.lastUpdateTime)} variant="h6">{last_update_time}</Typography>
-      <Typography className={cx(classes.text, classes.creationTime)} variant="h6">{creation_time}</Typography>
+      <Typography className={cx(classes.text, classes.lastUpdateTime)} variant="h6">{dayjs(last_update_time).format("HH:mm DD-MM-YYYY")}</Typography>
+      <Typography className={cx(classes.text, classes.creationTime)} variant="h6">{dayjs(creation_time).format("HH:mm DD-MM-YYYY")}</Typography>
     </div>
   )
 }

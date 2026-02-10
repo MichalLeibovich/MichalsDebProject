@@ -186,8 +186,8 @@ def create_user():
         return jsonify({"message": "Database error"}), 500
 
 
-@app.route("/api/debriefings", methods=["GET"])
-def get_debriefings():
+@app.route("/api/recent_debriefings", methods=["GET"])
+def get_recent_debriefings():
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -198,7 +198,6 @@ def get_debriefings():
                 title,
                 system,
                 status,
-                last_update_time,
                 created_at,
                 updated_at
             FROM debriefing_project.debriefings
@@ -214,9 +213,8 @@ def get_debriefings():
                 "title": row[1],
                 "system": row[2],
                 "status": row[3],
-                "lastUpdateTime": row[4],
-                "createdAt": row[5],
-                "updatedAt": row[6],
+                "created_at": row[4],
+                "updated_at": row[5],
             })
 
         cur.close()

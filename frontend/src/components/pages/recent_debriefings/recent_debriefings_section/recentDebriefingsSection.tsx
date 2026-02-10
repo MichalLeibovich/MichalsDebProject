@@ -7,7 +7,7 @@ import axios from "axios";
 
 const AllRecentDebriefingsSection: React.FC = () => {
   const { classes, cx } = useStyles();
-  const { recentDebriefingsItemList, setRecentDebriefingsItemList } = useState<recentDebriefingsItem>([]);
+  const [ recentDebriefingsItemList, setRecentDebriefingsItemList ] = useState<RecentDebriefingsItem[]>([]);
 
   // const recentDebriefingsItemList: RecentDebriefingsItem[] = [
   //   {
@@ -34,16 +34,16 @@ const AllRecentDebriefingsSection: React.FC = () => {
   // ];
 
 
-    useEffect(() => {
-  axios.get("http://localhost:3001/api/debriefings")
-    .then(res => {
-      console.log(res.data);
-      setRecentDebriefingsItemList(res.data);
-    })
-    .catch(err => {
-      console.error(err);
-    });
-}, []);
+  useEffect(() => {
+    axios.get("http://localhost:3001/api/recent_debriefings")
+      .then(res => {
+        console.log(res.data);
+        setRecentDebriefingsItemList(res.data);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }, []);
 
   return (
     <div>
