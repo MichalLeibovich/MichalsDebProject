@@ -186,6 +186,49 @@ def create_user():
         return jsonify({"message": "Database error"}), 500
 
 
+@app.route("/api/debriefings", methods=["GET"])
+def get_debriefings():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+            SELECT
+                id,
+                title,
+                system,
+                status,
+                last_update_time,
+                created_at,
+                updated_at
+            FROM debriefing_project.debriefings
+            ORDER BY updated_at DESC;
+        """)
+
+        rows = cur.fetchall()
+
+        debriefings = []
+        for row in rows:
+            debriefings.append({
+                "id": row[0],
+                "title": row[1],
+                "system": row[2],
+                "status": row[3],
+                "lastUpdateTime": row[4],
+                "createdAt": row[5],
+                "updatedAt": row[6],
+            })
+
+        cur.close()
+        conn.close()
+
+        return jsonify(debriefings), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Failed to fetch debriefings"}), 500
+
+
 
 if __name__ == "__main__":
     app.run(port=3001, debug=True)

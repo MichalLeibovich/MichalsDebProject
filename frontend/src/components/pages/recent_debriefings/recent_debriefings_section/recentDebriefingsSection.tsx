@@ -2,33 +2,48 @@ import { Typography } from "@mui/material";
 import RecentDebriefingsList from "./recent_debriefings_list/RecentDebriefingList";
 import useStyles from "./recentDebriefingsSectionStyles";
 import type { RecentDebriefingsItem } from "../../../../interfaces/recentDebriefingsItem";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const AllRecentDebriefingsSection: React.FC = () => {
   const { classes, cx } = useStyles();
+  const { recentDebriefingsItemList, setRecentDebriefingsItemList } = useState<recentDebriefingsItem>([]);
 
-  const recentDebriefingsItemList: RecentDebriefingsItem[] = [
-    {
-      title: "תחקיר 1",
-      status: "מוכן",
-      system: "X",
-      last_update_time: "29/01/2026 03:17",
-      creation_time: "29/01/2026 03:17"
-    },
-    {
-      title: "תחקיר 2",
-      status: "בתהליך",
-      system: "Y",
-      last_update_time: "29/01/2026 02:17",
-      creation_time: "29/01/2026 03:17"
-    },
-    {
-      title: "תחקיר 3",
-      status: "מוכן",
-      system: "Z",
-      last_update_time: "23/02/2025 11:53",
-      creation_time: "01/07/2025 08:00"
-    }
-  ];
+  // const recentDebriefingsItemList: RecentDebriefingsItem[] = [
+  //   {
+  //     title: "תחקיר 1",
+  //     status: "מוכן",
+  //     system: "X",
+  //     last_update_time: "29/01/2026 03:17",
+  //     creation_time: "29/01/2026 03:17"
+  //   },
+  //   {
+  //     title: "תחקיר 2",
+  //     status: "בתהליך",
+  //     system: "Y",
+  //     last_update_time: "29/01/2026 02:17",
+  //     creation_time: "29/01/2026 03:17"
+  //   },
+  //   {
+  //     title: "תחקיר 3",
+  //     status: "מוכן",
+  //     system: "Z",
+  //     last_update_time: "23/02/2025 11:53",
+  //     creation_time: "01/07/2025 08:00"
+  //   }
+  // ];
+
+
+    useEffect(() => {
+  axios.get("http://localhost:3001/api/debriefings")
+    .then(res => {
+      console.log(res.data);
+      setRecentDebriefingsItemList(res.data);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}, []);
 
   return (
     <div>
