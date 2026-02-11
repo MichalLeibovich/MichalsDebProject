@@ -5,6 +5,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import dayjs from "dayjs";
 
 type ItemProps = {
+  id: number,
   title: string,
   status: status,
   system: string,
@@ -12,12 +13,12 @@ type ItemProps = {
   creation_time: string;
 };
 
-const RecentDebriefingsItem: React.FC<ItemProps> = ({ title, status, system, last_update_time, creation_time }: ItemProps) => {
+const RecentDebriefingsItem: React.FC<ItemProps> = ({ id, title, status, system, last_update_time, creation_time }: ItemProps) => {
   const { classes, cx } = useStyles();
 
   return (
     <div className={classes.row}>
-      <div className={classes.openDebriefing} onClick={() => window.open("openedDebriefing", "_blank")}>
+      <div className={classes.openDebriefing} onClick={() => window.open(`/openedDebriefing/${id}`, "_blank")}>
         <DescriptionIcon />
       </div>
       <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">{title}</Typography>

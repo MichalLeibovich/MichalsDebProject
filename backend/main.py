@@ -310,5 +310,42 @@ def get_user():
         return jsonify({"message": "Failed to fetch debriefings"}), 500
 
 
+@app.route("/openedDebriefing/<int:id>", methods=["GET"])
+def get_opened_debriefing(id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM debriefings WHERE id = %s", (id,))
+    row = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    if not row:
+        return jsonify({"error": "Not found"}), 404
+
+    # Map the row to your field names
+    return jsonify({
+        "id": row[0],
+        "title": row[1],
+        "system": row[2],
+        "documentFillerName": row[3],
+        "personalNumber": row[4],
+        "date": row[5],
+        "errorDescription": row[6],
+        "discoveryTime": row[7],
+        "startTime": row[8],
+        "endTime": row[9],
+        "errorSolution": row[10],
+        "totalTime": row[11],
+        "howErrorWasFound": row[12],
+        "errorCause": row[13],
+        "whatWasDamagedDueError": row[14],
+        "errorManagingConclusion": row[15],
+        "monitoringConclusion": row[16],
+        "additionalNotes": row[17],
+        "status": row[18]
+    })
+
+
 if __name__ == "__main__":
     app.run(port=3001, debug=True)

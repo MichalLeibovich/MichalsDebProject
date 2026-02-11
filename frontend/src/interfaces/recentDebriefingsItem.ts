@@ -1,6 +1,7 @@
 export type status = "מוכן" | "בתהליך";
 
 export interface RecentDebriefingsItem {
+  id: number,
   title: string,
   system: string,
   status: status,

@@ -6,6 +6,7 @@ import AllDebriefings from './components/pages/all_debriefings/allDebriefing';
 import RecentDebriefings from './components/pages/recent_debriefings/recentDebriefings';
 import NewDebriefing from './components/pages/new_debriefing/newDebriefing';
 import MyAccount from './components/pages/my_account/myAccount';
+import OpenedDebriefing from './components/pages/opened_debriefing/openedDebriefing';
 
 const App: React.FC = () => {
   const { classes } = useStyles();
@@ -19,7 +20,7 @@ const App: React.FC = () => {
           <Route path="/recentDebriefings" element={<RecentDebriefings />} />
           <Route path="/newDebriefing" element={<NewDebriefing />} />
           <Route path="/myAccount" element={<MyAccount />} />
-          <Route path="/openedDebriefing" element={<AllDebriefings />} />
+          <Route path="/openedDebriefing/:id" element={<OpenedDebriefing />} />
         </Routes>
       </BrowserRouter>
     </div>

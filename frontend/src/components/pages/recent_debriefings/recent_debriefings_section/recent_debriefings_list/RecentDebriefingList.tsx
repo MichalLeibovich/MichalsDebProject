@@ -9,7 +9,7 @@ const RecentDebriefingsList: React.FC<ListProps> = ({ items }: ListProps) => {
   return (
     <div>
       {items.map((item) => (
-        <RecentDebriefingsItem key={item.created_at} title={item.title} status={item.status} system={item.system}
+        <RecentDebriefingsItem key={item.id} id={item.id} title={item.title} status={item.status} system={item.system}
         last_update_time={item.updated_at} creation_time={item.created_at}/>
       ))}
     </div>
