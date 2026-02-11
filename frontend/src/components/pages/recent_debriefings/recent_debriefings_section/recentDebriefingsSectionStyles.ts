@@ -1,6 +1,10 @@
 import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()(() => ({
+    refreshIcon: {
+        height: "100px",
+        width: "100px"
+    },
     tableHeader: {
         display: "flex",
         backgroundColor: "#6F0F46", //#6F0F46

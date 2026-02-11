@@ -4,10 +4,12 @@ import useStyles from "./recentDebriefingsSectionStyles";
 import type { RecentDebriefingsItem } from "../../../../interfaces/recentDebriefingsItem";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const AllRecentDebriefingsSection: React.FC = () => {
   const { classes, cx } = useStyles();
   const [recentDebriefingsItemList, setRecentDebriefingsItemList] = useState<RecentDebriefingsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // const recentDebriefingsItemList: RecentDebriefingsItem[] = [
   //   {
@@ -42,22 +44,34 @@ const AllRecentDebriefingsSection: React.FC = () => {
       })
       .catch(err => {
         console.error(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
+
   return (
     <div>
+      {isLoading && <RefreshIcon className={classes.refreshIcon} />}
 
-      <div className={classes.tableHeader}>
-        <Typography className={cx(classes.text, classes.openDebriefing)} variant="h6">פתח תחקיר</Typography>
-        <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">שם תחקיר</Typography>
-        <Typography className={cx(classes.text, classes.system)} variant="h6">מערכת</Typography>
-        <Typography className={cx(classes.text, classes.status)} variant="h6">סטטוס</Typography>
-        <Typography className={cx(classes.text, classes.lastUpdateTime)} variant="h6">זמן עדכון אחרון</Typography>
-        <Typography className={cx(classes.text, classes.creationTime)} variant="h6">זמן יצירה</Typography>
+      {!isLoading && recentDebriefingsItemList.length === 0 &&
+        <Typography className={classes.text} variant="h6">אין תחקירים</Typography>
+      }
+
+      {!isLoading && <div>
+        <div className={classes.tableHeader}>
+          <Typography className={cx(classes.text, classes.openDebriefing)} variant="h6">פתח תחקיר</Typography>
+          <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">שם תחקיר</Typography>
+          <Typography className={cx(classes.text, classes.system)} variant="h6">מערכת</Typography>
+          <Typography className={cx(classes.text, classes.status)} variant="h6">סטטוס</Typography>
+          <Typography className={cx(classes.text, classes.lastUpdateTime)} variant="h6">זמן עדכון אחרון</Typography>
+          <Typography className={cx(classes.text, classes.creationTime)} variant="h6">זמן יצירה</Typography>
+        </div>
+
+        <RecentDebriefingsList items={recentDebriefingsItemList} />
       </div>
-
-      <RecentDebriefingsList items={recentDebriefingsItemList} />
+      }
 
     </div>
   );
