@@ -20,6 +20,11 @@ const useStyles = makeStyles()(() => ({
         marginTop: "20px"
     },
 
+    text: {
+        fontFamily: '"Noto Sans Hebrew", sans-serif',
+        textAlign: "center"
+    }
+
 }));
 
 export default useStyles;

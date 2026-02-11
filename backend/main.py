@@ -352,19 +352,51 @@ def get_opened_debriefing_people(id, role):
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM debriefing_project.debriefing_people WHERE debriefing_id = %s AND role = %s", (id,role,))
-    row = cur.fetchone()
-    cur.close()
-    conn.close()
+    cur.execute(
+        "SELECT * FROM debriefing_project.debriefing_people WHERE debriefing_id = %s AND role = %s",
+        (id, role,)
+    )
 
-    if not row:
-        return jsonify({"error": "Not found"}), 404
+    if role == "Dealer":
+        row = cur.fetchone()  # only one row expected
+        if not row:
+            cur.close()
+            conn.close()
+            return jsonify({"error": "Not found"}), 404
 
-    # Map the row to your field names
-    return jsonify({
-        "id": row[0],
-        "row": row[1]
-    })
+        person = {
+            "id": row[0],
+            "debriefing_id": row[1],
+            "person_name": row[2],
+            "phone": row[3],
+            "role": row[4],
+            "created_at": row[5],
+            "updated_at": row[6]
+        }
+
+        cur.close()
+        conn.close()
+        return jsonify(person)
+
+    else:
+        # multiple rows possible
+        rows = cur.fetchall()
+        people = []
+        for row in rows:
+            people.append({
+                "id": row[0],
+                "debriefing_id": row[1],
+                "person_name": row[2],
+                "phone": row[3],
+                "role": row[4],
+                "created_at": row[5],
+                "updated_at": row[6]
+            })
+
+        cur.close()
+        conn.close()
+        return jsonify(people)
+
 
 
 if __name__ == "__main__":

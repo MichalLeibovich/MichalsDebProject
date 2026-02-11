@@ -1,7 +1,7 @@
 import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()(() => ({
-        wholePage: {
+    wholePage: {
         display: "flex",
         flex: 1,
         justifyContent: "center",
@@ -19,6 +19,11 @@ const useStyles = makeStyles()(() => ({
         width: "80%",
         marginTop: "20px"
     },
+
+    text: {
+        fontFamily: '"Noto Sans Hebrew", sans-serif',
+        textAlign: "center"
+    }
 }));
 
 export default useStyles;

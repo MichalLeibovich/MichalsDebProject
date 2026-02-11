@@ -134,23 +134,49 @@ const OpenedDebriefing: React.FC = () => {
 
     const fetchDealers = async () => {
         try {
-            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_people/${id}/Dealer`);
-            setFormData((prev) => ({ ...prev, [formData.errorDealers]: res.data.errorDealers }))
-        }
-        catch (error) {
+            const res = await axios.get(
+                `http://localhost:3001/api/opened_debriefing_people/${id}/Dealer`
+            );
+
+            setFormData((prev) => ({
+                ...prev,
+                errorDealers: res.data.person_name  // just the name
+            }));
+
+        } catch (error) {
             console.error(error);
         }
-    }
+    };
 
     const fetchErrorDiscoverers = async () => {
         try {
-            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_people/${id}/Discoverer`);
-            setFormData((prev) => ({ ...prev, errorDiscoverers: res.data.errorDiscoverers }))
-        }
-        catch (error) {
+            const res = await axios.get(
+                `http://localhost:3001/api/opened_debriefing_people/${id}/Discoverer`
+            );
+
+            // If res.data exists, map to PersonInvolved, else use empty array
+            const people: PersonInvolved[] = res.data
+                ? [{
+                    id: res.data.id,
+                    name: res.data.person_name, // map backend field
+                    phone: res.data.phone || ""
+                }]
+                : [];
+
+            setFormData((prev) => ({
+                ...prev,
+                errorDiscoverers: people  // ✅ always an array of PersonInvolved
+            }));
+        } catch (error) {
             console.error(error);
+
+            setFormData((prev) => ({
+                ...prev,
+                errorDiscoverers: []  // fallback empty array
+            }));
         }
-    }
+    };
+
 
     const fetchErrorSolvers = async () => {
         try {
@@ -308,27 +334,29 @@ const OpenedDebriefing: React.FC = () => {
                                 <TextField className={cx(classes.allFields, classes.errorDealersTextField)}
                                     id="errorDealers" type="text"
                                     value={formData.errorDealers}
-                                    onChange={(e) => setFormData({ ...formData, errorDealers: e.target.value })}
-                                    disabled={!isEditing} required />
+                                    onChange={(e) => handleChange("errorDealers", e.target.value)}
+                                    disabled={!isEditing} required
+                                />
                             </div>
                             <div className={classes.generalInfoErrorSelversAndDescoverers}>
                                 <div>
                                     <Typography className={cx(classes.text, classes.errorSolverOrDiscoverer)} variant="h6">מגלה התקלה</Typography>
 
-                                    {errorDiscoverers.map((person) => (
-                                        <div key={person.id} style={{ marginBottom: "16px" }}>
+                                    {formData.errorDiscoverers?.map((person, index) => (
+                                        <div key={`${person.id}-${index}`} style={{ marginBottom: "16px" }}>
                                             <div>
                                                 <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
                                                 <TextField className={cx(classes.allFields, classes.personInfoFields)}
-                                                    id="errorDealersName" type="text" value={person.name} required
+                                                    id={`errorDiscovererName-${person.id}`} type="text"
+                                                    value={person.name}
+                                                    required
                                                     onChange={(e) =>
-                                                        setErrorDiscoverers((prev) =>
-                                                            prev.map((p) =>
-                                                                p.id === person.id
-                                                                    ? { ...p, name: e.target.value }
-                                                                    : p
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            errorDiscoverers: prev.errorDiscoverers.map((p) =>
+                                                                p.id === person.id ? { ...p, name: e.target.value } : p
                                                             )
-                                                        )
+                                                        }))
                                                     }
                                                 />
                                             </div>
@@ -336,15 +364,15 @@ const OpenedDebriefing: React.FC = () => {
                                             <div>
                                                 <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
                                                 <TextField className={cx(classes.allFields, classes.personInfoFields)}
-                                                    id="errorDealerPhone" type="number" value={person.phone} required
+                                                    id={`errorDiscovererPhone-${person.id}`} type="number"
+                                                    value={person.phone} required
                                                     onChange={(e) =>
-                                                        setErrorDiscoverers((prev) =>
-                                                            prev.map((p) =>
-                                                                p.id === person.id
-                                                                    ? { ...p, phone: e.target.value }
-                                                                    : p
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            errorDiscoverers: prev.errorDiscoverers.map((p) =>
+                                                                p.id === person.id ? { ...p, phone: e.target.value } : p
                                                             )
-                                                        )
+                                                        }))
                                                     }
                                                 />
                                             </div>
