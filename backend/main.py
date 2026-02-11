@@ -270,7 +270,7 @@ def get_all_debriefings():
 
 @app.route("/api/user", methods=["GET"])
 def get_user():
-    system = request.args.get("system")  # optional
+    user = request.args.get("user")  # optional
 
     try:
         conn = get_db_connection()
@@ -284,9 +284,9 @@ def get_user():
                 created_at,
                 updated_at
             FROM debriefing_project.debriefings
-            WHERE system = %s
+            WHERE user = %s
             ORDER BY updated_at DESC;
-        """, (system,))
+        """, (user,))
 
         rows = cur.fetchall()
 
@@ -344,6 +344,26 @@ def get_opened_debriefing(id):
         "monitoringConclusion": row[16],
         "additionalNotes": row[17],
         "status": row[18]
+    })
+
+
+@app.route("/api/opened_debriefing_people/<int:id>/<string:role>", methods=["GET"])
+def get_opened_debriefing_people(id, role):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM debriefing_project.debriefing_people WHERE debriefing_id = %s AND role = %s", (id,role,))
+    row = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    if not row:
+        return jsonify({"error": "Not found"}), 404
+
+    # Map the row to your field names
+    return jsonify({
+        "id": row[0],
+        "row": row[1]
     })
 
 

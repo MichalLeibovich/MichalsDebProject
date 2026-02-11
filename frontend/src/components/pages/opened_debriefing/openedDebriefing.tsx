@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type FormEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import useStyles from './openedDebriefingStyles';
 import dayjs, { Dayjs } from 'dayjs';
@@ -81,15 +81,7 @@ const OpenedDebriefing: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
 
 
-    const [title, setTitle] = useState("");
-    const [system, setSystem] = useState("");
 
-    // personal info
-    const [documentFillerName, setDocumentFillerName] = useState("");
-    const [personalNumber, setPersonalNumber] = useState(0);
-    const [date, setDate] = useState<Dayjs | null>(dayjs()); // today
-    // people involved
-    const [errorDealers, setErrorDealers] = useState(""); //מנהלי התקלה
     const [errorDiscoverers, setErrorDiscoverers] = useState<PersonInvolved[]>([
         { id: 0, name: "", phone: "" }
     ]);
@@ -98,65 +90,95 @@ const OpenedDebriefing: React.FC = () => {
     ]);
     const teams = ["אפקט הפרפר", "גאוסיין", "גואט", "הרמוניה", "מגן עליון", "סוויטץ'", "סופרנובה", "סטארלייט"]
     const [selectedTeams, setSelectedTeams] = useState<Record<string, string>>({});
-    // error description
-    const [errorDescription, setErrorDescription] = useState("");
-    const [discoveryTime, setDiscoveryTime] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
-    // error elaboration
     const [chainOfEvents, setChainOfEvents] = useState<Event[]>([
         { id: 0, time: "", occurrence: "" }
     ]);
-    // error solution
-    const [errorSolution, setErrorSolution] = useState("");
-    const [totalTime, setTotalTime] = useState("");
-    // error summary
-    const [howErrorWasFound, setHowErrorWasFound] = useState("");
-    const [errorCause, setErrorCause] = useState("");
-    const [whatWasDamagedDueError, setWhatWasDamagedDueError] = useState("");
-    // error conclusion
-    const [errorManagingConclusion, setErrorManagingConclusion] = useState("");
-    const [monitoringConclusion, setMonitoringConclusion] = useState("");
-    // additional notes
-    const [additionalNotes, setAdditionalNotes] = useState("");
-    // status
-    const [status, setStatus] = useState("");
     // message if there's an error
     const [message, setMessage] = useState("");
 
 
-    useEffect(() => {
-        axios.get(`http://localhost:3001/api/opened_debriefing/${id}`)
-            .then(res => {
+    const fetchData = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/api/opened_debriefing/${id}`);
+            setFormData({
+                title: res.data.title,
+                system: res.data.system,
+                description: res.data.description,
+                documentFillerName: res.data.documentFillerName,
+                personalNumber: res.data.personalNumber,
+                date: res.data.date ? dayjs(res.data.date) : null,
+                errorDealers: res.data.errorDealers,
+                errorDiscoverers: res.data.errorDiscoverers,
+                errorSolvers: res.data.errorSolvers,
+                selectedTeams: res.data.selectedTeams,
+                errorDescription: res.data.errorDescription,
+                discoveryTime: res.data.discoveryTime,
+                startTime: res.data.startTime,
+                endTime: res.data.endTime,
+                chainOfEvents: res.data.chainOfEvents,
+                errorSolution: res.data.errorSolution,
+                totalTime: res.data.totalTime,
+                howErrorWasFound: res.data.howErrorWasFound,
+                errorCause: res.data.errorCause,
+                whatWasDamagedDueError: res.data.whatWasDamagedDueError,
+                errorManagingConclusion: res.data.errorManagingConclusion,
+                monitoringConclusion: res.data.monitoringConclusion,
+                additionalNotes: res.data.additionalNotes,
+                status: res.data.status
+            })
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
 
-                // Set all the state you need from DB
-                setFormData({
-                    title: res.data.title,
-                    system: res.data.system,
-                    description: res.data.description,
-                    documentFillerName: res.data.documentFillerName,
-                    personalNumber: res.data.personalNumber,
-                    date: res.data.date ? dayjs(res.data.date) : null,
-                    errorDealers: res.data.errorDealers,
-                    errorDiscoverers: res.data.errorDiscoverers,
-                    errorSolvers: res.data.errorSolvers,
-                    selectedTeams: res.data.selectedTeams,
-                    errorDescription: res.data.errorDescription,
-                    discoveryTime: res.data.discoveryTime,
-                    startTime: res.data.startTime,
-                    endTime: res.data.endTime,
-                    chainOfEvents: res.data.chainOfEvents,
-                    errorSolution: res.data.errorSolution,
-                    totalTime: res.data.totalTime,
-                    howErrorWasFound: res.data.howErrorWasFound,
-                    errorCause: res.data.errorCause,
-                    whatWasDamagedDueError: res.data.whatWasDamagedDueError,
-                    errorManagingConclusion: res.data.errorManagingConclusion,
-                    monitoringConclusion: res.data.monitoringConclusion,
-                    additionalNotes: res.data.additionalNotes,
-                    status: res.data.status
-                })
-            });
+    const fetchDealers = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_people/${id}/Dealer`);
+            setFormData((prev) => ({ ...prev, [formData.errorDealers]: res.data.errorDealers }))
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    const fetchErrorDiscoverers = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_people/${id}/Discoverer`);
+            setFormData((prev) => ({ ...prev, errorDiscoverers: res.data.errorDiscoverers }))
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    const fetchErrorSolvers = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_people/${id}/Solver`);
+            setFormData((prev) => ({ ...prev, errorDiserrorSolverscoverers: res.data.errorSolvers }))
+            // selectedTeams: res.data.selectedTeams,
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    // const fetchSelectedTeams = async () => {
+    //     try {
+    //         const res = await axios.get(`http://localhost:3001/api/data/${id}/${"Dealer"}`);
+    //         setFormData((prev) => ({ ...prev, selectedTeams: res.data.selectedTeams }))
+    //     }
+    //     catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+
+    useEffect(() => {
+        fetchDealers();
+        fetchErrorDiscoverers();
+        fetchErrorSolvers();
+        fetchData();
+        // fetchSelectedTeams();
     }, [id]);
 
     const toggle = (team: string) => {
@@ -716,7 +738,6 @@ const OpenedDebriefing: React.FC = () => {
                             </div>
                         )}
                     </div>
-
 
                     <div className={classes.submitButtonContainer}>
                         <Link to="/recentDebriefings">
