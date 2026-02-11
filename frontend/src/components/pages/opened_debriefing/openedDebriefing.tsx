@@ -246,7 +246,7 @@ const OpenedDebriefing: React.FC = () => {
                     </Typography>
                 </div>
 
-                <Typography variant="h3" className={cx(classes.text, classes.titleNewDebriefing)}>תחקיר חדש</Typography>
+                <Typography variant="h3" className={cx(classes.text, classes.titleNewDebriefing)}>תחקיר</Typography>
 
                 <form onSubmit={handleSave}>
                     <div className={classes.titleContainer}>
