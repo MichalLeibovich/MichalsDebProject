@@ -630,7 +630,7 @@ const NewDebriefing: React.FC = () => {
                   id="demo-simple-select"
                   value={status}
                   label="סטטוס התחקיר"
-                  onChange={(e) => setStatus(e.target.value)}>
+                  onChange={(e) => setStatus(e.target.value)} required>
                   <MenuItem value="בתהליך">עדיין לא</MenuItem>
                   <MenuItem value="מוכן">סיימתי</MenuItem>
                 </Select>

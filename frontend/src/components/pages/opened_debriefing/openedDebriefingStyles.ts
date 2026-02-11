@@ -29,10 +29,26 @@ const useStyles = makeStyles()(() => ({
         borderRadius: "30px"
     },
 
-
-    clickEdit: {
-        cursor: "pointer"
+    viewersMode: {
+        display: "flex",
+        gap: "10px",
+        padding: "10px",
+        alignItems: "center"
     },
+    clickEdit: {
+        cursor: "pointer",
+        backgroundColor: "#6f0f45c7",
+        width: "30px",
+        height: "30px",
+        borderRadius: "30px",
+        padding: "10px",
+        "& ,fading-border-element": {
+            "&,fading-shadow-element": {
+                boxShadow: "0 0 30px 5px rgba(0, 0, 0, 0.5)" /* Fades a black shadow outwards */
+            }
+        },
+    },
+
 
 
 
@@ -102,6 +118,11 @@ const useStyles = makeStyles()(() => ({
         /* hide required asterisk */
         "& .MuiInputLabel-asterisk": {
             display: "none",
+        },
+
+        // ✅ When disabled
+        "& .MuiInputBase-input.Mui-disabled": {
+            WebkitTextFillColor: "white", // important for disabled inputs
         },
     },
 
@@ -401,6 +422,10 @@ const useStyles = makeStyles()(() => ({
         /* dropdown arrow color */
         "& .MuiSelect-icon": {
             color: "white",
+        },
+
+        "& .MuiInputBase-input.Mui-disabled": {
+            WebkitTextFillColor: "white", // important for disabled inputs
         },
     },
 

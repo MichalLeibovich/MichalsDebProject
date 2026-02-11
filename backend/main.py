@@ -310,12 +310,12 @@ def get_user():
         return jsonify({"message": "Failed to fetch debriefings"}), 500
 
 
-@app.route("/openedDebriefing/<int:id>", methods=["GET"])
+@app.route("/api/opened_debriefing/<int:id>", methods=["GET"])
 def get_opened_debriefing(id):
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM debriefings WHERE id = %s", (id,))
+    cur.execute("SELECT * FROM debriefing_project.debriefings WHERE id = %s", (id,))
     row = cur.fetchone()
     cur.close()
     conn.close()

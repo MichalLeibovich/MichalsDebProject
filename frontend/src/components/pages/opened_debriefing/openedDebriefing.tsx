@@ -6,7 +6,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 
 type PersonInvolved = {
@@ -21,15 +21,44 @@ type Event = {
     occurrence: string;
 };
 
+interface FormData {
+    title: string;
+    system: string;
+    description: string;
+    documentFillerName: string;
+    personalNumber: string;
+    date: Dayjs | null;
+    errorDealers: string;
+    errorDiscoverers: PersonInvolved[];
+    errorSolvers: PersonInvolved[];
+    selectedTeams: Record<string, string>;
+    errorDescription: string,
+    discoveryTime: string,
+    startTime: string,
+    endTime: string,
+    chainOfEvents: Event[],
+    errorSolution: string,
+    totalTime: string,
+    howErrorWasFound: string,
+    errorCause: string,
+    whatWasDamagedDueError: string,
+    errorManagingConclusion: string,
+    monitoringConclusion: string,
+    additionalNotes: string,
+    status: string
+}
+
 const OpenedDebriefing: React.FC = () => {
     const { classes, cx } = useStyles();
 
     const { id } = useParams<{ id: string }>();
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         title: "",
+        system: "",
         description: "",
         documentFillerName: "",
         personalNumber: "",
+        date: dayjs(),
         errorDealers: "",
         errorDiscoverers: [],
         errorSolvers: [],
@@ -97,34 +126,37 @@ const OpenedDebriefing: React.FC = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/openedDebriefing/${id}`)
-        .then(res => {
+        axios.get(`http://localhost:3001/api/opened_debriefing/${id}`)
+            .then(res => {
 
-        // Set all the state you need from DB
-        setFormData({
-            title: res.data.title,
-            description: res.data.description,
-            documentFillerName: res.data.documentFillerName,
-            personalNumber: res.data.personalNumber,
-            errorDealers: res.data.errorDealers,
-            errorDiscoverers: res.data.errorDiscoverers,
-            errorSolvers: res.data.errorSolvers,
-            selectedTeams: res.data.selectedTeams,
-            errorDescription: res.data.errorDescription,
-            discoveryTime: res.data.discoveryTime,
-            startTime: res.data.startTime,
-            endTime: res.data.endTime,
-            chainOfEvents: res.data.chainOfEvents,
-            errorSolution: res.data.errorSolution,
-            totalTime: res.data.totalTime,
-            howErrorWasFound: res.data.howErrorWasFound,
-            errorCause: res.data.errorCause,
-            whatWasDamagedDueError: res.data.whatWasDamagedDueError,
-            errorManagingConclusion: res.data.errorManagingConclusion,
-            monitoringConclusion: res.data.monitoringConclusion,
-            additionalNotes: res.data.additionalNotes,
-            status: res.data.status
-        })});
+                // Set all the state you need from DB
+                setFormData({
+                    title: res.data.title,
+                    system: res.data.system,
+                    description: res.data.description,
+                    documentFillerName: res.data.documentFillerName,
+                    personalNumber: res.data.personalNumber,
+                    date: res.data.date ? dayjs(res.data.date) : null,
+                    errorDealers: res.data.errorDealers,
+                    errorDiscoverers: res.data.errorDiscoverers,
+                    errorSolvers: res.data.errorSolvers,
+                    selectedTeams: res.data.selectedTeams,
+                    errorDescription: res.data.errorDescription,
+                    discoveryTime: res.data.discoveryTime,
+                    startTime: res.data.startTime,
+                    endTime: res.data.endTime,
+                    chainOfEvents: res.data.chainOfEvents,
+                    errorSolution: res.data.errorSolution,
+                    totalTime: res.data.totalTime,
+                    howErrorWasFound: res.data.howErrorWasFound,
+                    errorCause: res.data.errorCause,
+                    whatWasDamagedDueError: res.data.whatWasDamagedDueError,
+                    errorManagingConclusion: res.data.errorManagingConclusion,
+                    monitoringConclusion: res.data.monitoringConclusion,
+                    additionalNotes: res.data.additionalNotes,
+                    status: res.data.status
+                })
+            });
     }, [id]);
 
     const toggle = (team: string) => {
@@ -145,21 +177,36 @@ const OpenedDebriefing: React.FC = () => {
         setIsEditing(false); // back to read-only
     };
 
+    const handleChange = (field: string, value: any) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
     console.log(formData);
 
     return (
         <div className={classes.wholePageContainer}>
             <div className={classes.allPartsContainer}>
-                <EditIcon className={classes.clickEdit} onClick={() => setIsEditing(true)} />
+                <div className={classes.viewersMode}>
+                    <EditIcon className={classes.clickEdit} onClick={() => setIsEditing(true)} />
+                    <Typography variant="h5" className={cx(classes.text)}>
+                        {(isEditing && "Edit Mode")
+                            ||
+                            (!isEditing && "Read Mode")}
+                    </Typography>
+                </div>
 
                 <Typography variant="h3" className={cx(classes.text, classes.titleNewDebriefing)}>תחקיר חדש</Typography>
+
                 <form onSubmit={handleSave}>
                     <div className={classes.titleContainer}>
                         <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                             <Typography variant="h5" className={cx(classes.text, classes.fieldsTitle)}>כותרת:</Typography>
                             <TextField className={cx(classes.allFields, classes.titleField)} id="title" type="text"
                                 value={formData.title}
-                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                onChange={(e) => handleChange("title", e.target.value)}
                                 disabled={!isEditing} required />
                         </div>
                         <div className={classes.fieldsTextAndFieldInOneLineContainer}>
@@ -171,9 +218,10 @@ const OpenedDebriefing: React.FC = () => {
                                     className={classes.selectField}
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={system}
-                                    label="מערכת"
-                                    onChange={(e) => setSystem(e.target.value)}>
+                                    value={formData.system}
+                                    onChange={(e) => handleChange("system", e.target.value)}
+                                    disabled={!isEditing}
+                                    label="מערכת">
                                     <MenuItem value="אפקט הפרפר">אפקט הפרפר</MenuItem>
                                     <MenuItem value="גאוסיין">גאוסיין</MenuItem>
                                     <MenuItem value="הרמוניה">הרמוניה</MenuItem>
@@ -195,18 +243,20 @@ const OpenedDebriefing: React.FC = () => {
 
                                 <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                                     <Typography variant="h6" className={classes.text}>שם ממלא המסמך:</Typography>
-                                    <TextField className={cx(classes.allFields, classes.personInfoFields)} id="documentFillerName" type="text" value={documentFillerName} onChange={(e) => setDocumentFillerName(e.target.value)} required />
+                                    <TextField className={cx(classes.allFields, classes.personInfoFields)}
+                                        id="documentFillerName" type="text"
+                                        value={formData.documentFillerName}
+                                        onChange={(e) => handleChange("documentFillerName", e.target.value)}
+                                        disabled={!isEditing} required />
                                 </div>
 
                                 <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                                     <Typography variant="h6" className={classes.text}>מ.א:</Typography>
-                                    <TextField className={cx(classes.allFields, classes.personInfoFields)} id="personalNumber" type="number" value={personalNumber} required
-                                        onChange={(e) => {
-                                            if (Number(e.target.value)) {
-                                                setPersonalNumber(Number(e.target.value))
-                                            }
-                                        }
-                                        }
+                                    <TextField className={cx(classes.allFields, classes.personInfoFields)}
+                                        id="personalNumber" type="number"
+                                        value={formData.personalNumber}
+                                        onChange={(e) => handleChange("personalNumber", e.target.value)}
+                                        disabled={!isEditing} required
                                     />
                                 </div>
 
@@ -216,8 +266,9 @@ const OpenedDebriefing: React.FC = () => {
                                         <DatePicker
                                             className={classes.datePickerField}
                                             label="תאריך התחקיר"
-                                            value={date}
-                                            onChange={(newDate) => setDate(newDate)}
+                                            value={formData.date}
+                                            onChange={(newDate) => handleChange("date", newDate)}
+                                            disabled={!isEditing}
                                         />
                                     </LocalizationProvider>
                                 </div>
@@ -232,7 +283,11 @@ const OpenedDebriefing: React.FC = () => {
 
                             <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                                 <Typography variant="h6" className={classes.text}>מנהלי התקלה מצוות נוק:</Typography>
-                                <TextField className={cx(classes.allFields, classes.errorDealersTextField)} id="errorDealers" type="text" value={errorDealers} onChange={(e) => setErrorDealers(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.errorDealersTextField)}
+                                    id="errorDealers" type="text"
+                                    value={formData.errorDealers}
+                                    onChange={(e) => setFormData({ ...formData, errorDealers: e.target.value })}
+                                    disabled={!isEditing} required />
                             </div>
                             <div className={classes.generalInfoErrorSelversAndDescoverers}>
                                 <div>
@@ -242,7 +297,8 @@ const OpenedDebriefing: React.FC = () => {
                                         <div key={person.id} style={{ marginBottom: "16px" }}>
                                             <div>
                                                 <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
-                                                <TextField className={cx(classes.allFields, classes.personInfoFields)} id="errorDealersName" type="text" value={person.name} required
+                                                <TextField className={cx(classes.allFields, classes.personInfoFields)}
+                                                    id="errorDealersName" type="text" value={person.name} required
                                                     onChange={(e) =>
                                                         setErrorDiscoverers((prev) =>
                                                             prev.map((p) =>
@@ -257,7 +313,8 @@ const OpenedDebriefing: React.FC = () => {
 
                                             <div>
                                                 <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
-                                                <TextField className={cx(classes.allFields, classes.personInfoFields)} id="errorDealerPhone" type="number" value={person.phone} required
+                                                <TextField className={cx(classes.allFields, classes.personInfoFields)}
+                                                    id="errorDealerPhone" type="number" value={person.phone} required
                                                     onChange={(e) =>
                                                         setErrorDiscoverers((prev) =>
                                                             prev.map((p) =>
@@ -308,7 +365,8 @@ const OpenedDebriefing: React.FC = () => {
                                         <div key={person.id} style={{ marginBottom: "16px" }}>
                                             <div>
                                                 <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
-                                                <TextField className={cx(classes.allFields, classes.personInfoFields)} id="errorSolverName" type="text" value={person.name}
+                                                <TextField className={cx(classes.allFields, classes.personInfoFields)}
+                                                    id="errorSolverName" type="text" value={person.name}
                                                     onChange={(e) =>
                                                         setErrorSolvers((prev) =>
                                                             prev.map((p) =>
@@ -324,7 +382,8 @@ const OpenedDebriefing: React.FC = () => {
 
                                             <div>
                                                 <Typography variant="h6" className={classes.text}>מספר טלפון:</Typography>
-                                                <TextField className={cx(classes.allFields, classes.personInfoFields)} id="errorSolverPhone" type="number"
+                                                <TextField className={cx(classes.allFields, classes.personInfoFields)}
+                                                    id="errorSolverPhone" type="number"
                                                     value={person.phone}
                                                     onChange={(e) =>
                                                         setErrorSolvers((prev) =>
@@ -419,24 +478,37 @@ const OpenedDebriefing: React.FC = () => {
                         <div className={classes.errorDescribing}>
                             <div>
                                 <Typography variant="h6" className={classes.text}>תיאור התקלה:</Typography>
-                                <TextField className={cx(classes.allFields, classes.errorDescriptionAndSolutionFields)} id="errorDescription" type="text" value={errorDescription}
-                                    onChange={(e) => setErrorDescription(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.errorDescriptionAndSolutionFields)}
+                                    id="errorDescription" type="text"
+                                    value={formData.errorDescription}
+                                    onChange={(e) => handleChange("errorDescription", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
 
                             <div className={classes.times}>
                                 <div>
                                     <Typography variant="h6" className={classes.text}>זמן גילוי:</Typography>
-                                    <TextField className={cx(classes.allFields, classes.timesField)} id="discoveryTime" label="זמן גילוי" value={discoveryTime} onChange={(e) => setDiscoveryTime(e.target.value)} required />
+                                    <TextField className={cx(classes.allFields, classes.timesField)}
+                                        id="discoveryTime" label="זמן גילוי"
+                                        value={formData.discoveryTime}
+                                        onChange={(e) => handleChange("discoveryTime", e.target.value)}
+                                        disabled={!isEditing} required />
                                 </div>
                                 <div>
                                     <Typography variant="h6" className={classes.text}>זמן התחלה:</Typography>
-                                    <TextField className={cx(classes.allFields, classes.timesField)} id="startTime" label="זמן התחלה" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+                                    <TextField className={cx(classes.allFields, classes.timesField)}
+                                        id="startTime" label="זמן התחלה"
+                                        value={formData.startTime}
+                                        onChange={(e) => handleChange("startTime", e.target.value)}
+                                        disabled={!isEditing} required />
                                 </div>
                                 <div>
                                     <Typography variant="h6" className={classes.text}>זמן סיום:</Typography>
-                                    <TextField className={cx(classes.allFields, classes.timesField)} id="endTime" label="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
-                                    // <TextField className={cx(classes.allFields, classes.timesField)} id="endTime" placeholder="זמן סיום" value={endTime} onChange={(e) => setEndTime(e.target.value)} required
-                                    />
+                                    <TextField className={cx(classes.allFields, classes.timesField)}
+                                        id="endTime" label="זמן סיום"
+                                        value={formData.endTime}
+                                        onChange={(e) => handleChange("endTime", e.target.value)}
+                                        disabled={!isEditing} required />
                                 </div>
                             </div>
                         </div>
@@ -539,11 +611,19 @@ const OpenedDebriefing: React.FC = () => {
                         <div className={classes.errorSolutionPart}>
                             <div>
                                 <Typography variant="h6" className={classes.text}>פתרון:</Typography>
-                                <TextField className={cx(classes.allFields, classes.errorDescriptionAndSolutionFields)} id="errorSolution" type="text" value={errorSolution} onChange={(e) => setErrorSolution(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.errorDescriptionAndSolutionFields)}
+                                    id="errorSolution" type="text"
+                                    value={formData.errorSolution}
+                                    onChange={(e) => handleChange("errorSolution", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
                             <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                                 <Typography variant="h6" className={classes.text}>זמן שלקח לפתור את התקלה:</Typography>
-                                <TextField className={cx(classes.allFields, classes.totalTimesField)} id="totalTime" type="text" value={totalTime} onChange={(e) => setTotalTime(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.totalTimesField)}
+                                    id="totalTime" type="text"
+                                    value={formData.totalTime}
+                                    onChange={(e) => handleChange("totalTime", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
                         </div>
                     </div>
@@ -553,15 +633,27 @@ const OpenedDebriefing: React.FC = () => {
                         <div className={classes.sumerizingPart}>
                             <div>
                                 <Typography variant="h6" className={classes.text}>כיצד נודע לנו על התקלה:</Typography>
-                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="howErrorWasFound" type="text" value={howErrorWasFound} onChange={(e) => setHowErrorWasFound(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)}
+                                    id="howErrorWasFound" type="text"
+                                    value={formData.howErrorWasFound}
+                                    onChange={(e) => handleChange("howErrorWasFound", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
                             <div>
                                 <Typography variant="h6" className={classes.text}>מה נפגע במערכת:</Typography>
-                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="whatWasDamagedDueError" type="text" value={whatWasDamagedDueError} onChange={(e) => setWhatWasDamagedDueError(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)}
+                                    id="whatWasDamagedDueError" type="text"
+                                    value={formData.howErrorWasFound}
+                                    onChange={(e) => handleChange("whatWasDamagedDueError", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
                             <div>
                                 <Typography variant="h6" className={classes.text}>מה גרם לתקלה:</Typography>
-                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="errorCause" type="text" value={errorCause} onChange={(e) => setErrorCause(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)}
+                                    id="errorCause" type="text"
+                                    value={formData.errorCause}
+                                    onChange={(e) => handleChange("errorCause", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
                         </div>
                     </div>
@@ -571,11 +663,19 @@ const OpenedDebriefing: React.FC = () => {
                         <div className={classes.conclusionPart}>
                             <div>
                                 <Typography variant="h6" className={classes.text}>מסקנות לגבי הניטור:</Typography>
-                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="monitoringConclusion" type="text" value={monitoringConclusion} onChange={(e) => setMonitoringConclusion(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)}
+                                    id="monitoringConclusion" type="text"
+                                    value={formData.monitoringConclusion}
+                                    onChange={(e) => handleChange("monitoringConclusion", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
                             <div>
                                 <Typography variant="h6" className={classes.text}>מסקנות לגבי ניהול התקלה:</Typography>
-                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="errorManagingConclusion" type="text" value={errorManagingConclusion} onChange={(e) => setErrorManagingConclusion(e.target.value)} required />
+                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)}
+                                    id="errorManagingConclusion" type="text"
+                                    value={formData.errorManagingConclusion}
+                                    onChange={(e) => handleChange("errorManagingConclusion", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
                         </div>
                     </div>
@@ -591,9 +691,10 @@ const OpenedDebriefing: React.FC = () => {
                                     className={classes.selectField}
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={status}
                                     label="סטטוס התחקיר"
-                                    onChange={(e) => setStatus(e.target.value)}>
+                                    value={formData.status}
+                                    onChange={(e) => handleChange("status", e.target.value)}
+                                    disabled={!isEditing} required>
                                     <MenuItem value="בתהליך">עדיין לא</MenuItem>
                                     <MenuItem value="מוכן">סיימתי</MenuItem>
                                 </Select>
@@ -605,18 +706,26 @@ const OpenedDebriefing: React.FC = () => {
                         {status === "בתהליך" && (
                             <div>
                                 <Typography variant="h6" className={classes.text}>הערות נוספות:</Typography>
-                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)} id="additionalNotes"
+                                <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)}
+                                    id="additionalNotes"
                                     placeholder="מה לא סיימת בתחקיר..."
-                                    type="text" value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} required />
+                                    type="text"
+                                    value={formData.additionalNotes}
+                                    onChange={(e) => handleChange("additionalNotes", e.target.value)}
+                                    disabled={!isEditing} required />
                             </div>
                         )}
                     </div>
 
 
                     <div className={classes.submitButtonContainer}>
-                        <Button className={cx(classes.submitButton, classes.text)} type="submit" variant="contained">שמירת תחקיר</Button>
+                        <Link to="/recentDebriefings">
+                            <Button className={cx(classes.submitButton, classes.text)}
+                                type="submit" variant="contained">שמירת שינויים</Button>
+                        </Link>
                     </div>
                 </form>
+
                 {message && <p>{message}</p>}
             </div >
         </div >

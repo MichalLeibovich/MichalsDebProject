@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import type { RecentDebriefingsItem } from "../../../../../interfaces/recentDebriefingsItem";
 import { Typography } from "@mui/material";
 import useStyles from "./folderStyles";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 type FolderProps = {
   title: string;
@@ -14,7 +15,7 @@ type FolderProps = {
 const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
   const { classes, cx } = useStyles();
   const [open, setOpen] = useState(false);
-  const [listLength, setListLength] = useState(0);
+  const [listLength, setListLength] = useState(-1);
 
   const getDebriefingSystem = () => {
     if (title === "התחקירים בגאוסיין") return "גאוסיין"
@@ -78,12 +79,13 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
           {children}
         </div>}
 
-
       {open && listLength === 0 &&
         <div style={{ marginLeft: 24, marginTop: 4 }}>
           <Typography className={classes.text} variant="h6">אין תחקירים</Typography>
         </div>
       }
+
+      {open && listLength === -1 && <RefreshIcon/>}
     </div>
   );
 };
