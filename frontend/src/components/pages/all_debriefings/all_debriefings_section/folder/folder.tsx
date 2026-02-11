@@ -6,12 +6,15 @@ import useStyles from "./folderStyles";
 
 type FolderProps = {
   title: string;
+  // listLength: number;
   setter: React.Dispatch<React.SetStateAction<RecentDebriefingsItem[]>>
   children: ReactNode;
 };
 
 const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
   const { classes, cx } = useStyles();
+  const [open, setOpen] = useState(false);
+  const [listLength, setListLength] = useState(0);
 
   const getDebriefingSystem = () => {
     if (title === "התחקירים בגאוסיין") return "גאוסיין"
@@ -42,14 +45,15 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
         { params: { system } }
       );
       setter(res.data);
+      // listLength = res.data.length;
+      setListLength(res.data.length)
     }
     catch (err) {
       console.error(err);
     }
   };
 
-  const [open, setOpen] = useState(false);
-
+  console.log(listLength);
   return (
     <div>
       <div onClick={() => {
@@ -62,16 +66,24 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
         <span>{title}</span>
       </div>
 
-      {open && <div style={{ marginLeft: 24, marginTop: 4 }}>
-        {<div className={classes.tableHeader}>
-          <Typography className={cx(classes.text, classes.openDebriefing)} variant="h6">פתח תחקיר</Typography>
-          <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">שם תחקיר</Typography>
-          <Typography className={cx(classes.text, classes.status)} variant="h6">סטטוס</Typography>
-          <Typography className={cx(classes.text, classes.lastUpdateTime)} variant="h6">זמן עדכון אחרון</Typography>
-          <Typography className={cx(classes.text, classes.creationTime)} variant="h6">זמן יצירה</Typography>
+      {open && listLength > 0 &&
+        <div style={{ marginLeft: 24, marginTop: 4 }}>
+          {<div className={classes.tableHeader}>
+            <Typography className={cx(classes.text, classes.openDebriefing)} variant="h6">פתח תחקיר</Typography>
+            <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">שם תחקיר</Typography>
+            <Typography className={cx(classes.text, classes.status)} variant="h6">סטטוס</Typography>
+            <Typography className={cx(classes.text, classes.lastUpdateTime)} variant="h6">זמן עדכון אחרון</Typography>
+            <Typography className={cx(classes.text, classes.creationTime)} variant="h6">זמן יצירה</Typography>
+          </div>}
+          {children}
         </div>}
-        {children}
-      </div>}
+
+
+      {open && listLength === 0 &&
+        <div style={{ marginLeft: 24, marginTop: 4 }}>
+          <Typography className={classes.text} variant="h6">אין תחקירים</Typography>
+        </div>
+      }
     </div>
   );
 };

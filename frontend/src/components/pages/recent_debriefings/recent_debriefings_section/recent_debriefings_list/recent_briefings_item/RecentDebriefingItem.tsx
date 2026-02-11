@@ -17,7 +17,7 @@ const RecentDebriefingsItem: React.FC<ItemProps> = ({ title, status, system, las
 
   return (
     <div className={classes.row}>
-      <div className={classes.openDebriefing}>
+      <div className={classes.openDebriefing} onClick={() => window.open("openedDebriefing", "_blank")}>
         <DescriptionIcon />
       </div>
       <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">{title}</Typography>

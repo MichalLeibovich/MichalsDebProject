@@ -7,7 +7,7 @@ import axios from "axios";
 
 const AllRecentDebriefingsSection: React.FC = () => {
   const { classes, cx } = useStyles();
-  const [ recentDebriefingsItemList, setRecentDebriefingsItemList ] = useState<RecentDebriefingsItem[]>([]);
+  const [recentDebriefingsItemList, setRecentDebriefingsItemList] = useState<RecentDebriefingsItem[]>([]);
 
   // const recentDebriefingsItemList: RecentDebriefingsItem[] = [
   //   {

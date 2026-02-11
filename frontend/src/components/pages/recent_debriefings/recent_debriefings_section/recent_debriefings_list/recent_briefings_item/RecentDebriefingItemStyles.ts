@@ -15,6 +15,7 @@ const useStyles = makeStyles()(() => ({
     openDebriefing: {
         width: "9%",
         textAlign: "center",
+        cursor: "pointer"
         // backgroundColor: "green"
 
     },

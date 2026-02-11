@@ -19,6 +19,7 @@ const App: React.FC = () => {
           <Route path="/recentDebriefings" element={<RecentDebriefings />} />
           <Route path="/newDebriefing" element={<NewDebriefing />} />
           <Route path="/myAccount" element={<MyAccount />} />
+          <Route path="/openedDebriefing" element={<AllDebriefings />} />
         </Routes>
       </BrowserRouter>
     </div>
