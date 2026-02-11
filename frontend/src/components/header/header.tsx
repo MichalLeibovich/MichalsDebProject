@@ -9,7 +9,7 @@ const Header: React.FC = () => {
     return (
         <header className={classes.headerContainer}>
             <div className={classes.rightSideContainer}>
-                <Button className={classes.myAccountButton} component={NavLink} to="/myAccount" end>לחשבון שלי</Button>
+                {/* <Button className={classes.myAccountButton} component={NavLink} to="/myAccount" end>לחשבון שלי</Button> */}
             </div>
 
             <div className={classes.headerTitlesContainer}>
