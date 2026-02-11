@@ -753,7 +753,7 @@ const OpenedDebriefing: React.FC = () => {
                     </div>
 
                     <div className={classes.additionalNotesPart}>
-                        {status === "בתהליך" && (
+                        {formData.status === "בתהליך" && (
                             <div>
                                 <Typography variant="h6" className={classes.text}>הערות נוספות:</Typography>
                                 <TextField className={cx(classes.allFields, classes.summaryAndConclusionFields)}
@@ -767,12 +767,14 @@ const OpenedDebriefing: React.FC = () => {
                         )}
                     </div>
 
-                    <div className={classes.submitButtonContainer}>
-                        <Link to="/recentDebriefings">
-                            <Button className={cx(classes.submitButton, classes.text)}
-                                type="submit" variant="contained">שמירת שינויים</Button>
-                        </Link>
-                    </div>
+                    {isEditing &&
+                        <div className={classes.submitButtonContainer}>
+                            <Link to="/recentDebriefings">
+                                <Button className={cx(classes.submitButton, classes.text)}
+                                    type="submit" variant="contained">שמירת שינויים</Button>
+                            </Link>
+                        </div>
+                    }
                 </form>
 
                 {message && <p>{message}</p>}

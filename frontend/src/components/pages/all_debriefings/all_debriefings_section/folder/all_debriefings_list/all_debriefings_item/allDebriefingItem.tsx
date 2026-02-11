@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 
 
 type ItemProps = {
+  id: number,
   title: string,
   status: status,
   last_update_time: string,
@@ -13,12 +14,12 @@ type ItemProps = {
 };
 
 
-const AllDebriefingsItem: React.FC<ItemProps> = ({ title, status, last_update_time, creation_time }: ItemProps) => {
+const AllDebriefingsItem: React.FC<ItemProps> = ({ id, title, status, last_update_time, creation_time }: ItemProps) => {
   const { classes, cx } = useStyles();
 
   return (
     <div className={classes.row}>
-      <div className={classes.openDebriefing}>
+      <div className={classes.openDebriefing} onClick={() => window.open(`/openedDebriefing/${id}`, "_blank")}>
         <DescriptionIcon />
       </div>
       <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">{title}</Typography>

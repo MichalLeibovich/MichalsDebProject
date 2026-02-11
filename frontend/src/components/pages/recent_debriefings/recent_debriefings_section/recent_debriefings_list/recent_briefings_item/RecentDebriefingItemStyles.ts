@@ -23,8 +23,8 @@ const useStyles = makeStyles()(() => ({
             color: "#6F0F46", //#6F0F46
         } 
         // backgroundColor: "green"
-
     },
+    
     debriefingName: {
         width: "35%",
         textAlign: "center",

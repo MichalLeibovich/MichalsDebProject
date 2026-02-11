@@ -6,15 +6,22 @@ const useStyles = makeStyles()(() => ({
         backgroundColor: "#6f0f4582", //#6F0F46
         borderRadius: "3px",
         marginTop: "4px",
-        width: "100%"
+        width: "100%",
+        "&:hover": {
+            backgroundColor: "#98306b7f", //#6F0F46
+        }
     },
     text: {
         fontFamily: '"Noto Sans Hebrew", sans-serif',
     },
 
     openDebriefing: {
-        width: "9%",
         textAlign: "center",
+        width: "11%",
+        cursor: "pointer",
+        "&:hover": {
+            color: "#6F0F46", //#6F0F46
+        }
         // backgroundColor: "green"
 
     },
@@ -24,25 +31,19 @@ const useStyles = makeStyles()(() => ({
         // backgroundColor: "blue"
 
     },
-    system: {
-        width: "17%",
-        textAlign: "center",
-        // backgroundColor: "pink"
-
-    },
     status: {
-        width: "5%",
+        width: "12%",
         textAlign: "center",
         // backgroundColor: "red"
 
     },
     lastUpdateTime: {
-        width: "17%",
+        width: "21%",
         textAlign: "center",
         // backgroundColor: "salmon"
     },
     creationTime: {
-        width: "17%",
+        width: "21%",
         textAlign: "center",
         // backgroundColor: "red"
 

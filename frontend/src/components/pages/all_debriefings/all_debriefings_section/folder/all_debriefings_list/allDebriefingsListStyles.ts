@@ -5,7 +5,7 @@ const useStyles = makeStyles()(() => ({
         fontSize: "30px",
         display: "flex",
         flexDirection: "column",
-        marginRight: "50px"
+        width: "100%"
     }
 }));
 

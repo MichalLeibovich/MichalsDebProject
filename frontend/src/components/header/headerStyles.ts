@@ -71,8 +71,15 @@ const useStyles = makeStyles()(() => ({
     logo: {
         width: "50px",
         height: "50px",
-        marginLeft: "10px"
+        marginLeft: "10px",
     },
+
+    logoDebriefingIcon: {
+        width: "50px",
+        height: "50px",
+        marginLeft: "10px",
+        color: "rgb(114, 12, 70)",
+    }
 }));
 
 export default useStyles;

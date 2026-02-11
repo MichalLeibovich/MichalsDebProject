@@ -53,7 +53,10 @@ const AllRecentDebriefingsSection: React.FC = () => {
 
   return (
     <div>
-      {isLoading && <RefreshIcon className={classes.refreshIcon} />}
+      {isLoading &&
+        <div className={classes.refreshIconContainer}>
+          <RefreshIcon className={classes.refreshIcon} />
+        </div>}
 
       {!isLoading && recentDebriefingsItemList.length === 0 &&
         <Typography className={classes.text} variant="h6">אין תחקירים</Typography>

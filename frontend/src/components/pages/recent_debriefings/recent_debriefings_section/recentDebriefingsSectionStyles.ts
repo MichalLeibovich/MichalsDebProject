@@ -11,6 +11,10 @@ const useStyles = makeStyles()(() => ({
         borderRadius: "3px",
     },
 
+    refreshIconContainer: {
+        textAlign: "center"
+    },
+
     text: {
         fontFamily: '"Noto Sans Hebrew", sans-serif',
     },

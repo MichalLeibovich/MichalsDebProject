@@ -18,17 +18,20 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
   const [listLength, setListLength] = useState(-1);
 
   const getDebriefingSystem = () => {
-    if (title === "התחקירים בגאוסיין") return "גאוסיין"
+    if (title === "התחקירים באפקט הפרפר") return "אפקט הפרפר"
     else {
-      if (title === "התחקירים בהרמוניה") return "הרמוניה"
+      if (title === "התחקירים בגאוסיין") return "גאוסיין"
       else {
-        if (title === "התחקירים במגן עליון") return "מגן עליון"
+        if (title === "התחקירים בהרמוניה") return "הרמוניה"
         else {
-          if (title === "התחקירים בסוויטץ'") return "מגן עליון"
+          if (title === "התחקירים במגן עליון") return "מגן עליון"
           else {
-            if (title === "התחקירים בסופרנובה") return "סופרנובה"
+            if (title === "התחקירים בסוויטץ'") return "מגן עליון"
             else {
-              if (title === "התחקירים בסטארלייט") return "סטארלייט"
+              if (title === "התחקירים בסופרנובה") return "סופרנובה"
+              else {
+                if (title === "התחקירים בסטארלייט") return "סטארלייט"
+              }
             }
           }
         }
@@ -46,7 +49,6 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
         { params: { system } }
       );
       setter(res.data);
-      // listLength = res.data.length;
       setListLength(res.data.length)
     }
     catch (err) {
@@ -68,7 +70,7 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
       </div>
 
       {open && listLength > 0 &&
-        <div style={{ marginLeft: 24, marginTop: 4 }}>
+        <div className={classes.folderStyles}>
           {<div className={classes.tableHeader}>
             <Typography className={cx(classes.text, classes.openDebriefing)} variant="h6">פתח תחקיר</Typography>
             <Typography className={cx(classes.text, classes.debriefingName)} variant="h6">שם תחקיר</Typography>
@@ -85,7 +87,11 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
         </div>
       }
 
-      {open && listLength === -1 && <RefreshIcon/>}
+      {open && listLength === -1 &&
+        <div>
+          <RefreshIcon className={classes.refreshIcon} />
+        </div>
+      }
     </div>
   );
 };

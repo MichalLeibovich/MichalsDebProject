@@ -1,6 +1,7 @@
 import { Button } from '@mui/material'
 import useStyles from './headerStyles';
 import { Link, NavLink } from 'react-router-dom';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const Header: React.FC = () => {
     const { classes } = useStyles();
@@ -18,8 +19,9 @@ const Header: React.FC = () => {
 
             </div>
             <Link to="/">
-                <img className={classes.logo} src="src/assets/smiling_cat.png" alt="logo.png"
-                    width="750px" height="750px" />
+                {/* <img className={classes.logo} src="src/assets/debriefing_icon.png" alt="logo.png"
+                    width="750px" height="750px" /> */}
+                    <AssignmentIcon className={classes.logoDebriefingIcon}/>
             </Link>
         </header>
     )
