@@ -29,7 +29,7 @@ const useStyles = makeStyles()(() => ({
 
     sortingSection: {
         display: "flex",
-        gap: "5vw"
+        gap: "2vw"
     },
 
     sortingButtons: {
@@ -41,16 +41,20 @@ const useStyles = makeStyles()(() => ({
     },
 
     button: {
+        fontFamily: '"Noto Sans Hebrew", sans-serif',
         backgroundColor: "#6f0f4582",
         "&:hover": {
             backgroundColor: "#98306b7f",
         },
+        // "&.active": {
+        //     backgroundColor: "grey"
+        // },
     },
 
-text: {
-    fontFamily: '"Noto Sans Hebrew", sans-serif',
+    text: {
+        fontFamily: '"Noto Sans Hebrew", sans-serif',
         textAlign: "center"
-}
+    }
 
 }));
 

@@ -1,9 +1,12 @@
 import { Button, Typography } from "@mui/material";
 import RecentDebriefingsSection from "./recent_debriefings_section/recentDebriefingsSection";
 import useStyles from "./recentDebriefingsStyles";
+import { useState } from "react";
 
 const RecentDebriefings: React.FC = () => {
     const { classes, cx } = useStyles();
+    // const [activeButton, setActiveButton] = useState("recentUpdate");
+
     return (
         <div className={classes.wholePage}>
             <div className={classes.allPartsContainer}>
@@ -12,7 +15,7 @@ const RecentDebriefings: React.FC = () => {
                     <div className={classes.sortingSection}>
                         <Typography className={classes.text} variant="h6">מיון לפי:</Typography>
                         <div className={classes.sortingButtons}>
-                            <Button className={classes.button} variant="contained">זמן עדכון אחרון</Button>
+                            <Button className={classes.button} variant="contained">זמן עדכון אחרון - ברירת מחדל</Button>
                             <Button className={classes.button} variant="contained">זמן יצירה</Button>
                         </div>
                     </div>
@@ -20,7 +23,7 @@ const RecentDebriefings: React.FC = () => {
                         <Button className={classes.button} variant="contained">סינון לפי תהליכים בתהליך</Button>
                     </div>
                     <div>
-                        <Button variant="contained">חיפוש- בהמשך</Button>
+                        <Button style={{ backgroundColor: "#87466b87" }} variant="contained">חיפוש- בהמשך</Button>
                     </div>
                 </div>
                 <RecentDebriefingsSection />
