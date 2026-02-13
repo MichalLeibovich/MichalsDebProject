@@ -2,10 +2,14 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()(() => ({
 
-    tableHeader: {
+
+
+    folderHeader: {
         display: "flex",
-        backgroundColor: "#6F0F46", //#6F0F46
-        borderRadius: "3px",
+        alignItems: "center",
+        cursor: "pointer",
+        userSelect: "none",
+        gap: "5px"
     },
 
     folderStyles: {
@@ -13,6 +17,12 @@ const useStyles = makeStyles()(() => ({
         marginTop: "4px"
     },
 
+    
+    tableHeader: {
+        display: "flex",
+        backgroundColor: "#6F0F46", //#6F0F46
+        borderRadius: "3px",
+    },
     text: {
         fontFamily: '"Noto Sans Hebrew", sans-serif',
     },

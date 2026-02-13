@@ -59,13 +59,12 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
   console.log(listLength);
   return (
     <div>
-      <div onClick={() => {
-        setOpen(!open);
-        fetchDebriefingsByTitle();
-      }}
-        style={{ display: "flex", alignItems: "center", cursor: "pointer", userSelect: "none" }}
-      >
-        <span style={{ width: 16 }}>{open ? "▾" : "▸"}</span>
+      <div className={classes.folderHeader}
+        onClick={() => {
+          setOpen(!open);
+          fetchDebriefingsByTitle();
+        }}>
+        <span>{open ? "▾" : "▸"}</span>
         <span>{title}</span>
       </div>
 
@@ -82,7 +81,7 @@ const Folder: React.FC<FolderProps> = ({ title, setter, children }) => {
         </div>}
 
       {open && listLength === 0 &&
-        <div style={{ marginLeft: 24, marginTop: 4 }}>
+        <div className={classes.folderStyles}>
           <Typography className={classes.text} variant="h6">אין תחקירים</Typography>
         </div>
       }
