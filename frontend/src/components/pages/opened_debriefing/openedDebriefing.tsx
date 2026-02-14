@@ -100,17 +100,18 @@ const OpenedDebriefing: React.FC = () => {
     const fetchData = async () => {
         try {
             const res = await axios.get(`http://localhost:3001/api/opened_debriefing/${id}`);
-            setFormData({
+            setFormData((prev) => ({
+                ...prev,
                 title: res.data.title,
                 system: res.data.system,
                 description: res.data.description,
                 documentFillerName: res.data.documentFillerName,
                 personalNumber: res.data.personalNumber,
                 date: res.data.date ? dayjs(res.data.date) : null,
-                errorDealers: res.data.errorDealers,
-                errorDiscoverers: res.data.errorDiscoverers,
-                errorSolvers: res.data.errorSolvers,
-                selectedTeams: res.data.selectedTeams,
+                // errorDealers: res.data.errorDealers,
+                // errorDiscoverers: res.data.errorDiscoverers,
+                // errorSolvers: res.data.errorSolvers,
+                // selectedTeams: res.data.selectedTeams,
                 errorDescription: res.data.errorDescription,
                 discoveryTime: res.data.discoveryTime,
                 startTime: res.data.startTime,
@@ -125,7 +126,7 @@ const OpenedDebriefing: React.FC = () => {
                 monitoringConclusion: res.data.monitoringConclusion,
                 additionalNotes: res.data.additionalNotes,
                 status: res.data.status
-            })
+            }))
         }
         catch (error) {
             console.error(error);
@@ -149,30 +150,32 @@ const OpenedDebriefing: React.FC = () => {
     };
 
     const fetchErrorDiscoverers = async () => {
+        if (!id) return;  // make sure ID exists
+
         try {
             const res = await axios.get(
                 `http://localhost:3001/api/opened_debriefing_people/${id}/Discoverer`
             );
 
-            // If res.data exists, map to PersonInvolved, else use empty array
-            const people: PersonInvolved[] = res.data
-                ? [{
-                    id: res.data.id,
-                    name: res.data.person_name, // map backend field
-                    phone: res.data.phone || ""
-                }]
+            const people: PersonInvolved[] = Array.isArray(res.data)
+                ? res.data.map((person) => ({
+                    id: person.id,
+                    name: person.person_name,
+                    phone: person.phone
+                }))
                 : [];
 
             setFormData((prev) => ({
                 ...prev,
-                errorDiscoverers: people  // ✅ always an array of PersonInvolved
+                errorDiscoverers: people
             }));
+
         } catch (error) {
             console.error(error);
 
             setFormData((prev) => ({
                 ...prev,
-                errorDiscoverers: []  // fallback empty array
+                errorDiscoverers: []
             }));
         }
     };
@@ -181,11 +184,26 @@ const OpenedDebriefing: React.FC = () => {
     const fetchErrorSolvers = async () => {
         try {
             const res = await axios.get(`http://localhost:3001/api/opened_debriefing_people/${id}/Solver`);
-            setFormData((prev) => ({ ...prev, errorDiserrorSolverscoverers: res.data.errorSolvers }))
-            // selectedTeams: res.data.selectedTeams,
-        }
-        catch (error) {
+            const people: PersonInvolved[] = Array.isArray(res.data)
+                ? res.data.map((person) => ({
+                    id: person.id,
+                    name: person.person_name,
+                    phone: person.phone
+                }))
+                : [];
+
+            setFormData((prev) => ({
+                ...prev,
+                errorSolvers: people
+            }));
+
+        } catch (error) {
             console.error(error);
+
+            setFormData((prev) => ({
+                ...prev,
+                errorSolvers: []
+            }));
         }
     }
 

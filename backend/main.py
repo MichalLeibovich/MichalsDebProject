@@ -353,7 +353,7 @@ def get_opened_debriefing_people(id, role):
     cur = conn.cursor()
 
     cur.execute(
-        "SELECT * FROM debriefing_project.debriefing_people WHERE debriefing_id = %s AND role = %s",
+        "SELECT * FROM debriefing_project.debriefing_people WHERE debriefing_id = %s AND LOWER(role) = LOWER(%s)",
         (id, role,)
     )
 
