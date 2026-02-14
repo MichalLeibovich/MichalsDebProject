@@ -62,7 +62,7 @@ const OpenedDebriefing: React.FC = () => {
         errorDealers: "",
         errorDiscoverers: [],
         errorSolvers: [],
-        selectedTeams: {},
+        selectedTeams: {} as { [key: string]: string },
         errorDescription: "",
         discoveryTime: "",
         startTime: "",
@@ -82,17 +82,8 @@ const OpenedDebriefing: React.FC = () => {
 
 
 
-    const [errorDiscoverers, setErrorDiscoverers] = useState<PersonInvolved[]>([
-        { id: 0, name: "", phone: "" }
-    ]);
-    const [errorSolvers, setErrorSolvers] = useState<PersonInvolved[]>([
-        { id: 0, name: "", phone: "" }
-    ]);
     const teams = ["אפקט הפרפר", "גאוסיין", "גואט", "הרמוניה", "מגן עליון", "סוויטץ'", "סופרנובה", "סטארלייט"]
     const [selectedTeams, setSelectedTeams] = useState<Record<string, string>>({});
-    const [chainOfEvents, setChainOfEvents] = useState<Event[]>([
-        { id: 0, time: "", occurrence: "" }
-    ]);
     // message if there's an error
     const [message, setMessage] = useState("");
 
@@ -116,7 +107,7 @@ const OpenedDebriefing: React.FC = () => {
                 discoveryTime: res.data.discoveryTime,
                 startTime: res.data.startTime,
                 endTime: res.data.endTime,
-                chainOfEvents: res.data.chainOfEvents,
+                // chainOfEvents: res.data.chainOfEvents,
                 errorSolution: res.data.errorSolution,
                 totalTime: res.data.totalTime,
                 howErrorWasFound: res.data.howErrorWasFound,
@@ -207,33 +198,64 @@ const OpenedDebriefing: React.FC = () => {
         }
     }
 
-    // const fetchSelectedTeams = async () => {
-    //     try {
-    //         const res = await axios.get(`http://localhost:3001/api/data/${id}/${"Dealer"}`);
-    //         setFormData((prev) => ({ ...prev, selectedTeams: res.data.selectedTeams }))
-    //     }
-    //     catch (error) {
-    //         console.error(error);
-    //     }
-    // }
+    const fetchSelectedTeams = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_seleted_teams`);
+            setFormData((prev) => ({ ...prev, selectedTeams: res.data.selectedTeams }))
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    const fetchChainOfEvents = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_events/${id}`);
+            const events: Event[] = Array.isArray(res.data)
+                ? res.data.map((event) => ({
+                    id: event.id,
+                    time: event.time,
+                    occurrence: event.occurrence
+                }))
+                : [];
+
+            setFormData((prev) => ({
+                ...prev,
+                chainOfEvents: events
+            }));
+
+        } catch (error) {
+            console.error(error);
+
+            setFormData((prev) => ({
+                ...prev,
+                chainOfEvents: []
+            }));
+        }
+    }
 
     useEffect(() => {
         fetchDealers();
         fetchErrorDiscoverers();
         fetchErrorSolvers();
+        fetchChainOfEvents();
         fetchData();
         // fetchSelectedTeams();
     }, [id]);
 
     const toggle = (team: string) => {
-        setSelectedTeams((prev) => {
-            if (team in prev) {
-                const copy = { ...prev };
-                delete copy[team];   // uncheck → remove & clear
-                return copy;
-            }
+        setFormData(prev => {
+            const currentTeams = prev.selectedTeams;
 
-            return { ...prev, [team]: "" }; // check → add empty text
+            if (team in currentTeams) {
+                // Uncheck → remove
+                const copy = { ...currentTeams };
+                delete copy[team];
+                return { ...prev, selectedTeams: copy };
+            } else {
+                // Check → add empty text
+                return { ...prev, selectedTeams: { ...currentTeams, [team]: "" } };
+            }
         });
     };
 
@@ -396,34 +418,35 @@ const OpenedDebriefing: React.FC = () => {
                                             </div>
                                         </div>
                                     ))}
+                                    {isEditing &&
+                                        <div className={classes.plusOrMinusButtonContainer}>
+                                            <Button
+                                                className={classes.plusOrMinusButton}
+                                                variant="contained"
+                                                onClick={() =>
+                                                    setErrorDiscoverers((prev) => [
+                                                        ...prev,
+                                                        { id: Date.now(), name: "", phone: "" }
+                                                    ])
+                                                }
+                                            >
+                                                +
+                                            </Button>
 
-                                    <div className={classes.plusOrMinusButtonContainer}>
-                                        <Button
-                                            className={classes.plusOrMinusButton}
-                                            variant="contained"
-                                            onClick={() =>
-                                                setErrorDiscoverers((prev) => [
-                                                    ...prev,
-                                                    { id: Date.now(), name: "", phone: "" }
-                                                ])
-                                            }
-                                        >
-                                            +
-                                        </Button>
-
-                                        <Button
-                                            className={classes.plusOrMinusButton}
-                                            variant="contained"
-                                            onClick={() => {
-                                                setErrorDiscoverers((prev) => {
-                                                    if (prev.length <= 1) return prev; // leave at least one field
-                                                    return prev.slice(0, prev.length - 1) // remove last
-                                                })
-                                            }}
-                                        >
-                                            -
-                                        </Button>
-                                    </div>
+                                            <Button
+                                                className={classes.plusOrMinusButton}
+                                                variant="contained"
+                                                onClick={() => {
+                                                    setErrorDiscoverers((prev) => {
+                                                        if (prev.length <= 1) return prev; // leave at least one field
+                                                        return prev.slice(0, prev.length - 1) // remove last
+                                                    })
+                                                }}
+                                            >
+                                                -
+                                            </Button>
+                                        </div>
+                                    }
                                 </div>
 
                                 <div>
@@ -467,34 +490,35 @@ const OpenedDebriefing: React.FC = () => {
 
 
                                     ))}
+                                    {isEditing &&
+                                        <div className={classes.plusOrMinusButtonContainer}>
+                                            <Button
+                                                className={classes.plusOrMinusButton}
+                                                variant="contained"
+                                                onClick={() =>
+                                                    setErrorSolvers((prev) => [
+                                                        ...prev,
+                                                        { id: Date.now(), name: "", phone: "" }
+                                                    ])
+                                                }
+                                            >
+                                                +
+                                            </Button>
 
-                                    <div className={classes.plusOrMinusButtonContainer}>
-                                        <Button
-                                            className={classes.plusOrMinusButton}
-                                            variant="contained"
-                                            onClick={() =>
-                                                setErrorSolvers((prev) => [
-                                                    ...prev,
-                                                    { id: Date.now(), name: "", phone: "" }
-                                                ])
-                                            }
-                                        >
-                                            +
-                                        </Button>
-
-                                        <Button
-                                            className={classes.plusOrMinusButton}
-                                            variant="contained"
-                                            onClick={() => {
-                                                setErrorSolvers((prev) => {
-                                                    if (prev.length <= 1) return prev; // leave at least one field
-                                                    return prev.slice(0, prev.length - 1) // remove last
-                                                })
-                                            }}
-                                        >
-                                            -
-                                        </Button>
-                                    </div>
+                                            <Button
+                                                className={classes.plusOrMinusButton}
+                                                variant="contained"
+                                                onClick={() => {
+                                                    setErrorSolvers((prev) => {
+                                                        if (prev.length <= 1) return prev; // leave at least one field
+                                                        return prev.slice(0, prev.length - 1) // remove last
+                                                    })
+                                                }}
+                                            >
+                                                -
+                                            </Button>
+                                        </div>
+                                    }
                                 </div>
                             </div>
 
@@ -521,7 +545,7 @@ const OpenedDebriefing: React.FC = () => {
                                                         className={cx(classes.allFields, classes.personInfoFields)}
                                                         id="selectedTeamsNames"
                                                         type="text"
-                                                        value={selectedTeams[team]}
+                                                        value={formData.selectedTeams[team]}
                                                         onChange={(e) => setSelectedTeams((prev) => ({
                                                             ...prev,
                                                             [team]: e.target.value,
@@ -594,7 +618,7 @@ const OpenedDebriefing: React.FC = () => {
                                 </div>
 
                                 <div>
-                                    {chainOfEvents.map((event) => (
+                                    {formData.chainOfEvents.map((event) => (
                                         <div className={classes.eventsTable} key={event.id}>
                                             <div>
                                                 <TextField
@@ -604,13 +628,14 @@ const OpenedDebriefing: React.FC = () => {
                                                     label="זמן"
                                                     value={event.time}
                                                     onChange={(e) =>
-                                                        setChainOfEvents((prev) =>
-                                                            prev.map((p) =>
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            chainOfEvents: prev.chainOfEvents.map((p) =>
                                                                 p.id === event.id
                                                                     ? { ...p, time: e.target.value }
                                                                     : p
                                                             )
-                                                        )
+                                                        }))
                                                     }
                                                     required
                                                 />
@@ -624,46 +649,50 @@ const OpenedDebriefing: React.FC = () => {
                                                     label="התרחשות"
                                                     value={event.occurrence}
                                                     onChange={(e) =>
-                                                        setChainOfEvents((prev) =>
-                                                            prev.map((p) =>
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            chainOfEvents: prev.chainOfEvents.map((p) =>
                                                                 p.id === event.id
                                                                     ? { ...p, occurrence: e.target.value }
                                                                     : p
                                                             )
-                                                        )
+                                                        }))
                                                     }
                                                     required
                                                 />
                                             </div>
                                         </div>
                                     ))}
-                                    <div className={classes.plusOrMinusButtonContainer}>
-                                        <Button
-                                            className={classes.plusOrMinusButton}
-                                            variant="contained"
-                                            onClick={() =>
-                                                setChainOfEvents((prev) => [
-                                                    ...prev,
-                                                    { id: Date.now(), time: "", occurrence: "" }
-                                                ])
-                                            }
-                                        >
-                                            +
-                                        </Button>
 
-                                        <Button
-                                            className={classes.plusOrMinusButton}
-                                            variant="contained"
-                                            onClick={() => {
-                                                setChainOfEvents((prev) => {
-                                                    if (prev.length <= 1) return prev; // leave at least one field
-                                                    return prev.slice(0, prev.length - 1) // remove last
-                                                })
-                                            }}
-                                        >
-                                            -
-                                        </Button>
-                                    </div>
+                                    {isEditing &&
+                                        <div className={classes.plusOrMinusButtonContainer}>
+                                            <Button
+                                                className={classes.plusOrMinusButton}
+                                                variant="contained"
+                                                onClick={() =>
+                                                    setChainOfEvents((prev) => [
+                                                        ...prev,
+                                                        { id: Date.now(), time: "", occurrence: "" }
+                                                    ])
+                                                }
+                                            >
+                                                +
+                                            </Button>
+
+                                            <Button
+                                                className={classes.plusOrMinusButton}
+                                                variant="contained"
+                                                onClick={() => {
+                                                    setChainOfEvents((prev) => {
+                                                        if (prev.length <= 1) return prev; // leave at least one field
+                                                        return prev.slice(0, prev.length - 1) // remove last
+                                                    })
+                                                }}
+                                            >
+                                                -
+                                            </Button>
+                                        </div>
+                                    }
                                 </div>
 
                             </div>

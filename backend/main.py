@@ -398,6 +398,33 @@ def get_opened_debriefing_people(id, role):
         return jsonify(people)
 
 
+@app.route("/api/opened_debriefing_events/<int:id>", methods=["GET"])
+def get_opened_debriefing_events(id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM debriefing_project.debriefing_events WHERE debriefing_id = %s",
+        (id,)
+    )
+
+    rows = cur.fetchall()
+    events = []
+    for row in rows:
+        events.append({
+            "id": row[0],
+            "debriefing_id": row[1],
+            "time": row[2],
+            "occurrence": row[3],
+            "created_at": row[4],
+            "updated_at": row[5]
+        })
+
+    cur.close()
+    conn.close()
+    return jsonify(events)
+
+
 
 if __name__ == "__main__":
     app.run(port=3001, debug=True)
