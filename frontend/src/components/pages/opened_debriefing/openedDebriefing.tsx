@@ -429,20 +429,19 @@ const OpenedDebriefing: React.FC = () => {
                                 <div>
                                     <Typography className={cx(classes.text, classes.errorSolverOrDiscoverer)} variant="h6">פותר התקלה</Typography>
 
-                                    {errorSolvers.map((person) => (
-                                        <div key={person.id} style={{ marginBottom: "16px" }}>
+                                    {formData.errorSolvers?.map((person, index) => (
+                                        <div key={`${person.id}-${index}`} style={{ marginBottom: "16px" }}>
                                             <div>
                                                 <Typography variant="h6" className={classes.text}>שם מלא:</Typography>
                                                 <TextField className={cx(classes.allFields, classes.personInfoFields)}
                                                     id="errorSolverName" type="text" value={person.name}
                                                     onChange={(e) =>
-                                                        setErrorSolvers((prev) =>
-                                                            prev.map((p) =>
-                                                                p.id === person.id
-                                                                    ? { ...p, name: e.target.value }
-                                                                    : p
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            errorSolvers: prev.errorSolvers.map((p) =>
+                                                                p.id === person.id ? { ...p, name: e.target.value } : p
                                                             )
-                                                        )
+                                                        }))
                                                     }
                                                     required
                                                 />
@@ -454,13 +453,12 @@ const OpenedDebriefing: React.FC = () => {
                                                     id="errorSolverPhone" type="number"
                                                     value={person.phone}
                                                     onChange={(e) =>
-                                                        setErrorSolvers((prev) =>
-                                                            prev.map((p) =>
-                                                                p.id === person.id
-                                                                    ? { ...p, phone: e.target.value }
-                                                                    : p
+                                                        setFormData((prev) => ({
+                                                            ...prev,
+                                                            errorSolvers: prev.errorSolvers.map((p) =>
+                                                                p.id === person.id ? { ...p, phone: e.target.value } : p
                                                             )
-                                                        )
+                                                        }))
                                                     }
                                                     required
                                                 />
@@ -509,14 +507,14 @@ const OpenedDebriefing: React.FC = () => {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        checked={team in selectedTeams}
+                                                        checked={team in formData.selectedTeams}
                                                         onChange={() => toggle(team)}
                                                     />
                                                 }
                                                 label={team}
                                             />
 
-                                            {team in selectedTeams && (
+                                            {team in formData.selectedTeams && (
                                                 <div className={classes.fieldsTextAndFieldInOneLineContainer}>
                                                     <Typography variant="h6" className={classes.text}>שם/ות:</Typography>
                                                     <TextField
