@@ -7,7 +7,7 @@ type ListProps = {
 };
 
 const AllDebriefingsList: React.FC<ListProps> = ({ items }: ListProps) => {
-  const { classes, cx } = useStyles();
+  const { classes } = useStyles();
 
   return (
     <div className={classes.debriefingsList}>

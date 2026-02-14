@@ -1,14 +1,13 @@
 import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()(() => ({
-    debriefingsList: {
-        fontSize: "30px",
+    list: {
         display: "flex",
         flexDirection: "column",
-        width: "100%",
         gap: "5px",
-        marginTop: "5px",
+        marginTop: "5px"
     }
+
 }));
 
 export default useStyles;

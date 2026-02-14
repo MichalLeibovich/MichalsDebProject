@@ -38,6 +38,7 @@ const AllRecentDebriefingsSection: React.FC = () => {
 
   useEffect(() => {
     axios.get("http://localhost:3001/api/recent_debriefings")
+    // { params: { sort } }
       .then(res => {
         console.log(res.data);
         setRecentDebriefingsItemList(res.data);

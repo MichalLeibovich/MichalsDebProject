@@ -5,14 +5,16 @@ const useStyles = makeStyles()(() => ({
         display: "flex",
         backgroundColor: "#6f0f4582", //#6F0F46
         borderRadius: "3px",
-        marginTop: "4px",
+        height: "35px",
+        alignItems: "center",
         width: "100%",
         "&:hover": {
             backgroundColor: "#98306b7f", //#6F0F46
-        } 
+        }
     },
     text: {
-        fontFamily: '"Noto Sans Hebrew", sans-serif',
+        fontFamily: "Inter, system-ui, Avenir, Helvetica, Arial, sans-serif",
+        // fontFamily: '"Noto Sans Hebrew", sans-serif',
     },
 
     openDebriefing: {
@@ -21,10 +23,10 @@ const useStyles = makeStyles()(() => ({
         cursor: "pointer",
         "&:hover": {
             color: "#6F0F46", //#6F0F46
-        } 
+        }
         // backgroundColor: "green"
     },
-    
+
     debriefingName: {
         width: "35%",
         textAlign: "center",
