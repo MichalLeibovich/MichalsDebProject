@@ -312,78 +312,65 @@ def get_user():
 
 @app.route("/api/opened_debriefing/<int:id>", methods=["GET"])
 def get_opened_debriefing(id):
-    conn = get_db_connection()
-    cur = conn.cursor()
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
 
-    cur.execute("SELECT * FROM debriefing_project.debriefings WHERE id = %s", (id,))
-    row = cur.fetchone()
-    cur.close()
-    conn.close()
+        cur.execute("SELECT * FROM debriefing_project.debriefings WHERE id = %s", (id,))
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
 
-    if not row:
-        return jsonify({"error": "Not found"}), 404
+        if not row:
+            return jsonify({"error": "Not found"}), 404
 
-    # Map the row to your field names
-    return jsonify({
-        "id": row[0],
-        "title": row[1],
-        "system": row[2],
-        "documentFillerName": row[3],
-        "personalNumber": row[4],
-        "date": row[5],
-        "errorDescription": row[6],
-        "discoveryTime": row[7],
-        "startTime": row[8],
-        "endTime": row[9],
-        "errorSolution": row[10],
-        "totalTime": row[11],
-        "howErrorWasFound": row[12],
-        "errorCause": row[13],
-        "whatWasDamagedDueError": row[14],
-        "errorManagingConclusion": row[15],
-        "monitoringConclusion": row[16],
-        "additionalNotes": row[17],
-        "status": row[18]
-    })
+        # Map the row to your field names
+        return jsonify({
+            "id": row[0],
+            "title": row[1],
+            "system": row[2],
+            "documentFillerName": row[3],
+            "personalNumber": row[4],
+            "date": row[5],
+            "errorDescription": row[6],
+            "discoveryTime": row[7],
+            "startTime": row[8],
+            "endTime": row[9],
+            "errorSolution": row[10],
+            "totalTime": row[11],
+            "howErrorWasFound": row[12],
+            "errorCause": row[13],
+            "whatWasDamagedDueError": row[14],
+            "errorManagingConclusion": row[15],
+            "monitoringConclusion": row[16],
+            "additionalNotes": row[17],
+            "status": row[18]
+        })
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Failed to fetch debriefings"}), 500
 
 
 @app.route("/api/opened_debriefing_people/<int:id>/<string:role>", methods=["GET"])
 def get_opened_debriefing_people(id, role):
-    conn = get_db_connection()
-    cur = conn.cursor()
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
 
-    cur.execute(
-        "SELECT * FROM debriefing_project.debriefing_people WHERE debriefing_id = %s AND LOWER(role) = LOWER(%s)",
-        (id, role,)
-    )
+        cur.execute(
+            "SELECT * FROM debriefing_project.debriefing_people WHERE debriefing_id = %s AND LOWER(role) = LOWER(%s)",
+            (id, role,)
+        )
 
-    if role == "Dealer":
-        row = cur.fetchone()  # only one row expected
-        if not row:
-            cur.close()
-            conn.close()
-            return jsonify({"error": "Not found"}), 404
+        if role == "Dealer":
+            row = cur.fetchone()  # only one row expected
+            if not row:
+                cur.close()
+                conn.close()
+                return jsonify({"error": "Not found"}), 404
 
-        person = {
-            "id": row[0],
-            "debriefing_id": row[1],
-            "person_name": row[2],
-            "phone": row[3],
-            "role": row[4],
-            "created_at": row[5],
-            "updated_at": row[6]
-        }
-
-        cur.close()
-        conn.close()
-        return jsonify(person)
-
-    else:
-        # multiple rows possible
-        rows = cur.fetchall()
-        people = []
-        for row in rows:
-            people.append({
+            person = {
                 "id": row[0],
                 "debriefing_id": row[1],
                 "person_name": row[2],
@@ -391,39 +378,103 @@ def get_opened_debriefing_people(id, role):
                 "role": row[4],
                 "created_at": row[5],
                 "updated_at": row[6]
-            })
+            }
 
-        cur.close()
-        conn.close()
-        return jsonify(people)
+            cur.close()
+            conn.close()
+            return jsonify(person)
+
+        else:
+            # multiple rows possible
+            rows = cur.fetchall()
+            people = []
+            for row in rows:
+                people.append({
+                    "id": row[0],
+                    "debriefing_id": row[1],
+                    "person_name": row[2],
+                    "phone": row[3],
+                    "role": row[4],
+                    "created_at": row[5],
+                    "updated_at": row[6]
+                })
+
+            cur.close()
+            conn.close()
+            return jsonify(people)
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Failed to fetch debriefings"}), 500
 
 
 @app.route("/api/opened_debriefing_events/<int:id>", methods=["GET"])
 def get_opened_debriefing_events(id):
-    conn = get_db_connection()
-    cur = conn.cursor()
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
 
-    cur.execute(
-        "SELECT * FROM debriefing_project.debriefing_events WHERE debriefing_id = %s",
-        (id,)
-    )
+        cur.execute(
+            "SELECT * FROM debriefing_project.debriefing_events WHERE debriefing_id = %s",
+            (id,)
+        )
 
-    rows = cur.fetchall()
-    events = []
-    for row in rows:
-        events.append({
-            "id": row[0],
-            "debriefing_id": row[1],
-            "time": row[2],
-            "occurrence": row[3],
-            "created_at": row[4],
-            "updated_at": row[5]
-        })
+        rows = cur.fetchall()
+        events = []
+        for row in rows:
+            events.append({
+                "id": row[0],
+                "debriefing_id": row[1],
+                "time": row[2],
+                "occurrence": row[3],
+                "created_at": row[4],
+                "updated_at": row[5]
+            })
 
-    cur.close()
-    conn.close()
-    return jsonify(events)
+        cur.close()
+        conn.close()
+        return jsonify(events)
 
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Failed to fetch debriefings"}), 500
+
+
+@app.route("/api/opened_debriefing_selected_teams/<int:id>", methods=["GET"])
+def get_opened_debriefing_selected_teams(id):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            "SELECT * FROM debriefing_project.debriefing_selected_teams WHERE debriefing_id = %s",
+            (id,)
+        )
+
+        rows = cur.fetchall()
+        # selected_teams = []
+        # for row in rows:
+        #     selected_teams.append({
+        #         "team_name": row[2],
+        #         "people_names": row[3],
+        #     })
+
+        selected_teams = {}
+        for row in rows:
+            team_name = row[2]
+            people_names = row[3]
+            selected_teams[team_name] = people_names
+
+            # selected_teams[row[2]] = row[3]
+
+        cur.close()
+        conn.close()
+        conn.close()
+        return jsonify(selected_teams)
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Failed to fetch debriefings"}), 500
 
 
 if __name__ == "__main__":

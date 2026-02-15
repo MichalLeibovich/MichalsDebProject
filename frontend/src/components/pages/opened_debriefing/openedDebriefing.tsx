@@ -200,8 +200,10 @@ const OpenedDebriefing: React.FC = () => {
 
     const fetchSelectedTeams = async () => {
         try {
-            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_seleted_teams`);
-            setFormData((prev) => ({ ...prev, selectedTeams: res.data.selectedTeams }))
+            const res = await axios.get(`http://localhost:3001/api/opened_debriefing_selected_teams/${id}`);
+            setFormData((prev) => ({
+                 ...prev, 
+                 selectedTeams: res.data }))
         }
         catch (error) {
             console.error(error);
@@ -240,7 +242,7 @@ const OpenedDebriefing: React.FC = () => {
         fetchErrorSolvers();
         fetchChainOfEvents();
         fetchData();
-        // fetchSelectedTeams();
+        fetchSelectedTeams();
     }, [id]);
 
     const toggle = (team: string) => {
