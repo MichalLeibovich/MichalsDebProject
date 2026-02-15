@@ -431,7 +431,7 @@ const useStyles = makeStyles()(() => ({
     submitButtonContainer: {
         display: "flex",
         justifyContent: "center",
-
+        color: "white",
     },
     submitButton: {
         backgroundColor: "#6f0f45",
@@ -440,6 +440,9 @@ const useStyles = makeStyles()(() => ({
         width: "200px",
         height: "50px",
         marginBottom: "50px",
+        "&:hover": {
+            color: "white",
+        },
     }
 
 
