@@ -188,21 +188,67 @@ def create_user():
 
 @app.route("/api/recent_debriefings", methods=["GET"])
 def get_recent_debriefings():
+    filter_value = request.args.get("filterValue")
+    sort_value = request.args.get("sortValue")
+
     try:
         conn = get_db_connection()
         cur = conn.cursor()
 
-        cur.execute("""
-            SELECT
-                id,
-                title,
-                system,
-                status,
-                created_at,
-                updated_at
-            FROM debriefing_project.debriefings
-            ORDER BY updated_at DESC;
-        """)
+        if check_filter_equals_no_filter(filter_value) and sort_value == "lastUpdateTime":
+            cur.execute("""
+                SELECT
+                    id,
+                    title,
+                    system,
+                    status,
+                    created_at,
+                    updated_at
+                FROM debriefing_project.debriefings
+                ORDER BY updated_at DESC;
+            """)
+
+        elif check_filter_equals_no_filter(filter_value) and sort_value == "creationTime":
+            cur.execute("""
+                SELECT
+                    id,
+                    title,
+                    system,
+                    status,
+                    created_at,
+                    updated_at
+                FROM debriefing_project.debriefings
+                ORDER BY created_at DESC;
+            """)
+
+        elif sort_value == "lastUpdateTime":
+            cur.execute("""
+                SELECT
+                    id,
+                    title,
+                    system,
+                    status,
+                    created_at,
+                    updated_at
+                FROM debriefing_project.debriefings
+                WHERE status = 'בתהליך'
+                ORDER BY updated_at DESC;
+            """)
+
+        elif sort_value == "creationTime":
+            cur.execute("""
+                SELECT
+                    id,
+                    title,
+                    system,
+                    status,
+                    created_at,
+                    updated_at
+                FROM debriefing_project.debriefings
+                WHERE status = 'בתהליך'
+                ORDER BY created_at DESC;
+            """)
+
 
         rows = cur.fetchall()
 
@@ -225,6 +271,11 @@ def get_recent_debriefings():
     except Exception as e:
         print(e)
         return jsonify({"message": "Failed to fetch debriefings"}), 500
+
+
+def check_filter_equals_no_filter(filter_value: str):
+    return filter_value == "ללא"
+
 
 
 @app.route("/api/all_debriefings", methods=["GET"])

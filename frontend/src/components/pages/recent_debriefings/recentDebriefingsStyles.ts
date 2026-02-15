@@ -38,6 +38,8 @@ const useStyles = makeStyles()(() => ({
     },
 
     filteringSection: {
+        display: "flex",
+        gap: "2vw"
     },
 
     button: {
