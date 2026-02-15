@@ -217,8 +217,15 @@ const useStyles = makeStyles()(() => ({
             fontFamily: '"Noto Sans Hebrew", sans-serif',
         },
 
+        // "&.MuiPickersInputBase-root-MuiPickersOutlinedInput-root.Mui":{
+        //     color: "white",
+        // },
+
         /* calendar icon */
         "& .MuiSvgIcon-root": {
+            color: "white",
+        },
+        "& .MuiPickersSectionList-root": {
             color: "white",
         },
     },

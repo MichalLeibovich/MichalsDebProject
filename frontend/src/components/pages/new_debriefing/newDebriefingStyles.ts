@@ -177,10 +177,6 @@ const useStyles = makeStyles()(() => ({
             fontFamily: '"Noto Sans Hebrew", sans-serif',
         },
 
-        /* label */
-        "& .MuiInputLabel-root": {
-            color: "#6f0f45ab",
-        },
         "& .MuiInputLabel-root.Mui-focused": {
             color: "#6f0f45ab",
         },
@@ -193,6 +189,10 @@ const useStyles = makeStyles()(() => ({
         "& .MuiSvgIcon-root": {
             color: "white",
         },
+        "& .MuiPickersSectionList-root": {
+            color: "white",
+        },
+
     },
 
 
@@ -231,6 +231,20 @@ const useStyles = makeStyles()(() => ({
         "&.MuiCheckbox-root.Mui-checked": {
             color: "#6f0f457b !important",
         }
+    },
+    menuItemSelectTeam: {
+        backgroundColor: "#560d36",
+        color: "white",
+        "&:hover": {
+            backgroundColor: "#6f0f45", // change to your desired hover color
+            color: "white", // keep text white on hover
+        },
+        "&.Mui-selected": {
+            backgroundColor: "#530c34", // selected color
+            color: "white",
+        },
+        // Selected state
+
     },
 
 

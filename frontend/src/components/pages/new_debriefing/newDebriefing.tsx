@@ -211,13 +211,13 @@ const NewDebriefing: React.FC = () => {
                   value={system}
                   label="מערכת"
                   onChange={(e) => setSystem(e.target.value)}>
-                  <MenuItem value="אפקט הפרפר">אפקט הפרפר</MenuItem>
-                  <MenuItem value="גאוסיין">גאוסיין</MenuItem>
-                  <MenuItem value="הרמוניה">הרמוניה</MenuItem>
-                  <MenuItem value="מגן עליון">מגן עליון</MenuItem>
-                  <MenuItem value="סוויטץ'">סוויטץ'</MenuItem>
-                  <MenuItem value="סופרנובה">סופרנובה</MenuItem>
-                  <MenuItem value="סטארלייט">סטארלייט</MenuItem>
+                  <MenuItem className={classes.menuItemSelectTeam} value="אפקט הפרפר">אפקט הפרפר</MenuItem>
+                  <MenuItem className={classes.menuItemSelectTeam} value="גאוסיין">גאוסיין</MenuItem>
+                  <MenuItem className={classes.menuItemSelectTeam} value="הרמוניה">הרמוניה</MenuItem>
+                  <MenuItem className={classes.menuItemSelectTeam} value="מגן עליון">מגן עליון</MenuItem>
+                  <MenuItem className={classes.menuItemSelectTeam} value="סוויטץ'">סוויטץ'</MenuItem>
+                  <MenuItem className={classes.menuItemSelectTeam} value="סופרנובה">סופרנובה</MenuItem>
+                  <MenuItem className={classes.menuItemSelectTeam} value="סטארלייט">סטארלייט</MenuItem>
                 </Select>
               </FormControl>
             </div>
