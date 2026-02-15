@@ -226,6 +226,12 @@ const useStyles = makeStyles()(() => ({
             minWidth: "50px"
         }
     },
+    checkbox_selected_teams: {
+        color: "#6f0f457b",
+        "&.MuiCheckbox-root.Mui-checked": {
+            color: "#6f0f457b !important",
+        }
+    },
 
 
 

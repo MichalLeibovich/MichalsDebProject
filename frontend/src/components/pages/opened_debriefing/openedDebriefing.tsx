@@ -536,7 +536,7 @@ const OpenedDebriefing: React.FC = () => {
                                         <div key={team}>
                                             <FormControlLabel
                                                 control={
-                                                    <Checkbox
+                                                    <Checkbox className={classes.checkbox_selected_teams}
                                                         checked={team in formData.selectedTeams}
                                                         onChange={() => toggle(team)}
                                                     />
