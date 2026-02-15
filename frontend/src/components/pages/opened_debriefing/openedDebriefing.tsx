@@ -202,8 +202,9 @@ const OpenedDebriefing: React.FC = () => {
         try {
             const res = await axios.get(`http://localhost:3001/api/opened_debriefing_selected_teams/${id}`);
             setFormData((prev) => ({
-                 ...prev, 
-                 selectedTeams: res.data }))
+                ...prev,
+                selectedTeams: res.data
+            }))
         }
         catch (error) {
             console.error(error);
@@ -246,19 +247,22 @@ const OpenedDebriefing: React.FC = () => {
     }, [id]);
 
     const toggle = (team: string) => {
-        setFormData(prev => {
-            const currentTeams = prev.selectedTeams;
+        {
+            isEditing &&
+            setFormData(prev => {
+                const currentTeams = prev.selectedTeams;
 
-            if (team in currentTeams) {
-                // Uncheck → remove
-                const copy = { ...currentTeams };
-                delete copy[team];
-                return { ...prev, selectedTeams: copy };
-            } else {
-                // Check → add empty text
-                return { ...prev, selectedTeams: { ...currentTeams, [team]: "" } };
-            }
-        });
+                if (team in currentTeams) {
+                    // Uncheck → remove
+                    const copy = { ...currentTeams };
+                    delete copy[team];
+                    return { ...prev, selectedTeams: copy };
+                } else {
+                    // Check → add empty text
+                    return { ...prev, selectedTeams: { ...currentTeams, [team]: "" } };
+                }
+            });
+        }
     };
 
     // Save changes to DB
